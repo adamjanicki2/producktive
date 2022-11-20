@@ -191,7 +191,7 @@ Renders the `index.html` file that will be used to interact with the backend
 - `403` if the user is not logged in
 - `400` if the user has already purchased the item (not including food)
 
-### `DELETE /api/store/:itemId?` - Delete an existing purchased item
+#### `DELETE /api/store/:itemId?` - Delete an existing purchased item
 
 **Returns**
 - A success message
