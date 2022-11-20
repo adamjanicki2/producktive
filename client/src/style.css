@@ -1,0 +1,22 @@
+:root {
+    --primary: #FE64A3;
+}
+
+.bg-primary {
+    background-color: var(--primary);
+}
+
+.bordering {
+  border: 2px solid green
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 300;
+}
