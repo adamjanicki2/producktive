@@ -5,11 +5,7 @@ const About = () => {
   return (
     <div className="flex flex-column">
       <h1 className="tc f-subheadline ma0 pa0">About</h1>
-      <h2 className="tc mh4">
-        This is a skeleton that can you can use to build a web app. It uses a
-        React frontend, an express backend, and a MongoDB database. You can
-        deploy it to Vercel for free.
-      </h2>
+      <h2 className="tc mh4">Write about Producktive here!</h2>
       <img src={logo} className="App-logo" alt="Donut" />
     </div>
   );

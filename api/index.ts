@@ -6,7 +6,9 @@ import path from "path";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import MongoStore from "connect-mongo";
+import logger from "morgan";
 import { OK } from "../server/util";
+import { userRouter } from "../server/user/router";
 
 dotenv.config();
 
@@ -34,6 +36,8 @@ app.use(express.json());
 app.use(cors());
 app.set("port", process.env.PORT ?? 8000);
 
+app.use(logger("dev"));
+
 // sessions
 app.use(
   session({
@@ -48,11 +52,11 @@ app.use(
     }),
   })
 );
-
+const API_PREFIX = "/api";
 // Add sub routers here:
-// app.use(API_PREFIX + "/announcement", announcementRouter);
-app.get("/", (req: Request, res: Response) => {
-  return res.status(OK).json({ message: "Hello World" });
+app.use(API_PREFIX + "/users", userRouter);
+app.get(API_PREFIX + "/", (req: Request, res: Response) => {
+  return res.status(OK).json({ message: "Welcome to Producktive API!" });
 });
 
 const buildDir = path.resolve(__dirname, "..", "client", "build");
