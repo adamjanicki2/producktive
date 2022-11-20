@@ -5,6 +5,7 @@ import HomePage from "./components/pages/HomePage";
 import NotFoundPage from "./components/pages/NotFoundPage";
 import AboutPage from "./components/pages/AboutPage";
 import LoginPage from "./components/pages/LoginPage";
+import Profile from "./components/pages/Profile";
 import "./app.css";
 import { get, post, del } from "./util";
 import type { User } from "./util";
@@ -14,28 +15,28 @@ const { useState, useEffect } = React;
 const App = () => {
   const [user, setUser] = useState<User>();
 
-  // useEffect(() => {
-  //   get("/api/users/session").then((user) => {
-  //     user && setUser(user.user);
-  //   });
-  // }, []);
+  useEffect(() => {
+    get("/api/users/session").then((user) => {
+      user && setUser(user.user);
+    });
+  }, []);
 
-  const login = (email: string, password: string) => {
+  const login = async (email: string, password: string) => {
     post("/api/users/session", { email, password }).then((user) => {
-      if (user) {
+      if (user?.user) {
         setUser(user.user);
       } else {
-        window.alert("Invalid email or password");
+        window.alert(user?.error ?? "Error logging in.");
       }
     });
   };
 
-  const createAccount = (email: string, password: string) => {
+  const createAccount = async (email: string, password: string) => {
     post("/api/users", { email, password }).then((user) => {
-      if (user) {
+      if (user?.user) {
         setUser(user.user);
       } else {
-        window.alert("Invalid email or password");
+        window.alert(user?.error ?? "Error logging in.");
       }
     });
   };
@@ -62,6 +63,7 @@ const App = () => {
             <LoginPage type="create" onFormSubmitCallback={createAccount} />
           }
         />
+        <Route path="/profile/" element={<Profile user={user} />} />
         {/* Make sure this is the last route */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

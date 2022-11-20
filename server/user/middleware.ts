@@ -11,13 +11,13 @@ const isCurrentSessionUserExists = async (
   res: Response,
   next: NextFunction
 ) => {
-  if ((req.session.cookie as any).userId) {
+  if ((req.session as any).userId) {
     const user = await UserCollection.findOneByUserId(
-      (req.session.cookie as any).userId
+      (req.session as any).userId
     );
 
     if (!user) {
-      (req.session.cookie as any).userId = undefined;
+      (req.session as any).userId = undefined;
       res.status(500).json({
         error: {
           userNotFound: "User session was not recognized.",
@@ -121,7 +121,7 @@ const isUsernameNotAlreadyInUse = async (
 
   // If the current session user wants to change their username to one which matches
   // the current one irrespective of the case, we should allow them to do so
-  if (!user || user?._id.toString() === (req.session.cookie as any).userId) {
+  if (!user || user?._id.toString() === (req.session as any).userId) {
     next();
     return;
   }
@@ -137,7 +137,7 @@ const isUsernameNotAlreadyInUse = async (
  * Checks if the user is logged in, that is, whether the userId is set in session
  */
 const isUserLoggedIn = (req: Request, res: Response, next: NextFunction) => {
-  if (!(req.session.cookie as any).userId) {
+  if (!(req.session as any).userId) {
     res.status(403).json({
       error: {
         auth: "You must be logged in to complete this action.",
@@ -153,7 +153,7 @@ const isUserLoggedIn = (req: Request, res: Response, next: NextFunction) => {
  * Checks if the user is signed out, that is, userId is undefined in session
  */
 const isUserLoggedOut = (req: Request, res: Response, next: NextFunction) => {
-  if ((req.session.cookie as any).userId) {
+  if ((req.session as any).userId) {
     res.status(403).json({
       error: "You are already signed in.",
     });

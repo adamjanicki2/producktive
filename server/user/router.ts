@@ -36,8 +36,7 @@ router.post(
     if (!user) {
       return res.status(401).json({ error: "Unable to create user session" });
     }
-    (req.session.cookie as any).userId = user._id.toString();
-    console.log({ session: req.session.cookie });
+    (req.session as any).userId = user._id.toString();
     res.status(201).json({
       message: "You have logged in successfully",
       user: util.constructUserResponse(user),
@@ -46,16 +45,25 @@ router.post(
 );
 
 router.get("/tempy", (req, res) => {
-  res.json({ session: req.session.cookie });
+  res.json({ session: req.session });
+});
+
+router.get("/setSession", (req, res) => {
+  (req.session as any).userId = "HAHAHAHA";
+  res.json({ msg: "session set" });
+});
+
+router.get("/clearSession", (req, res) => {
+  (req.session as any).userId = undefined;
+  res.json({ msg: "session cleared" });
 });
 
 router.get("/session", async (req: Request, res: Response) => {
-  console.log({ session: req.session.cookie });
-  if (!(req.session.cookie as any).userId) {
+  if (!(req.session as any).userId) {
     return res.status(401).json({ error: "You are not logged in." });
   }
   const user = await UserCollection.findOneByUserId(
-    (req.session.cookie as any).userId
+    (req.session as any).userId
   );
   if (!user) {
     return res.status(401).json({ error: "You are not logged in." });
@@ -76,7 +84,7 @@ router.delete(
   "/session",
   [userValidator.isUserLoggedIn],
   (req: Request, res: Response) => {
-    (req.session.cookie as any).userId = undefined;
+    (req.session as any).userId = undefined;
     res.status(200).json({
       message: "You have been logged out successfully.",
     });
@@ -105,7 +113,7 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const user = await UserCollection.addOne(req.body.email, req.body.password);
-    (req.session.cookie as any).userId = user._id.toString();
+    (req.session as any).userId = user._id.toString();
     res.status(201).json({
       message: `Your account was created successfully. You have been logged in as ${user.username}`,
       user: util.constructUserResponse(user),
@@ -125,9 +133,9 @@ router.delete(
   "/",
   [userValidator.isUserLoggedIn],
   async (req: Request, res: Response) => {
-    const userId = ((req.session.cookie as any).userId as string) ?? "";
+    const userId = ((req.session as any).userId as string) ?? "";
     await UserCollection.deleteOne(userId);
-    (req.session.cookie as any).userId = undefined;
+    (req.session as any).userId = undefined;
     res.status(200).json({
       message: "Your account has been deleted successfully.",
     });

@@ -20,6 +20,11 @@ const Nav = ({ user, logout }: { user?: User; logout: () => void }) => {
           <Link className={LINK_CLASS_NAME} to="/about/">
             About
           </Link>
+          {user && (
+            <Link className={LINK_CLASS_NAME} to="/profile/">
+              {user.username}
+            </Link>
+          )}
           {user ? (
             <div className={LINK_CLASS_NAME + " pointer"} onClick={logout}>
               Logout

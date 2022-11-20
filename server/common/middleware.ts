@@ -19,7 +19,7 @@ export const isInfoSupplied = (
     for (const field of fields) {
       if (!information[field]) {
         return res.status(400).json({
-          message: `field '${field}' not supplied in req.${reqInfoType}`,
+          error: `field '${field}' not supplied in req.${reqInfoType}`,
         });
       }
     }
@@ -43,7 +43,7 @@ export const isInfoValidId = (
     for (const field of fields) {
       if (!Types.ObjectId.isValid(information[field])) {
         return res.status(400).json({
-          message: `field '${field}' is not a valid 12-byte Mongo ID in req.${reqInfoType}`,
+          error: `field '${field}' is not a valid 12-byte Mongo ID in req.${reqInfoType}`,
         });
       }
     }

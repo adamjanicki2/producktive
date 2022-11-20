@@ -4,7 +4,8 @@ export async function get(endpoint: string, params: Object = {}) {
   const pathString: string = endpoint + "?" + stringify(params);
   try {
     const res = await fetch(pathString, { method: "GET" });
-    return res.ok ? res.json() : null;
+    const json = await res.json();
+    return json;
   } catch (error) {
     return null;
   }
@@ -18,7 +19,8 @@ export async function post(endpoint: string, body: Object = {}) {
       headers: { "Content-Type": "application/json" },
       credentials: "same-origin",
     });
-    return res.ok ? res.json() : null;
+    const json = await res.json();
+    return json;
   } catch (error) {
     console.log(`POST req to ${endpoint} failed:\n${error}`);
     return null;
@@ -26,8 +28,7 @@ export async function post(endpoint: string, body: Object = {}) {
 }
 
 export async function del(endpoint: string, params: Object = {}) {
-  const pathString: string =
-    endpoint + "?" + new URLSearchParams(JSON.stringify(params)).toString();
+  const pathString: string = endpoint + "?" + stringify(params);
   try {
     const res = await fetch(pathString, {
       method: "DELETE",
