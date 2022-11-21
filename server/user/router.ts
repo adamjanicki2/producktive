@@ -96,7 +96,6 @@ router.delete(
  *
  * @name POST /api/users
  *
- * @param {string} username - username of user
  * @param {string} password - user's password
  * @param {string} email - user's email
  * @return {UserResponse} - The created user
@@ -111,8 +110,6 @@ router.post(
     userValidator.isUserLoggedOut,
     userValidator.isValidEmail,
     userValidator.isValidPassword,
-    userValidator.isValidUsername,
-    userValidator.isUsernameNotAlreadyInUse
     // need check for whether email is already taken
   ],
   async (req: Request, res: Response) => {
@@ -171,7 +168,7 @@ router.patch(
     //need to check if notif period is valid option
   ],
   async (req: Request, res: Response) => {
-    const userId = (req.session.userId as string) ?? '';
+    const userId = ((req.session as any).userId as string) ?? '';
     const user = await UserCollection.updateOne(userId, req.body);
     res.status(200).json({
       message: 'Your profile was updated successfully',
