@@ -200,5 +200,58 @@ Renders the `index.html` file that will be used to interact with the backend
 - `403` if the user is not logged in
 - `404` if the itemId is invalid
 
+<!---List Router--->
+#### `GET /api/lists` - Get all the lists
 
-Joey TODO
+**Returns**
+- An array of all the lists sorted in descending alphabetical order by username, list name
+
+#### `POST /api/lists` - Create a new list for the signed in user
+
+**Body** 
+
+- `name` _{string}_ - The name of the list
+- `date` _{string}_ - The optional date of completion 
+
+**Returns**
+- A success message
+- An object with the newly created list
+
+**Throws**
+- `403` if the user is not logged in
+- `409` if the name for the list already exists for a different list owned by signed in user
+- `400` if nonempty date is in the wrong format
+- `402` if name is left blank
+
+#### `PUT /api/lists/:listId?item=itemId` - Updates an existing list
+
+**Returns**
+- A success message
+- An object with the updated list
+
+**Throws**
+- `403` if the user is not logged in
+- `400` if item is not given
+- `404` if the listId, item is invalid
+- `401` if the user is not owner of the list
+
+#### `DELETE /api/lists/:listId?` - Delete an existing list
+
+**Returns**
+- A success message
+
+**Throws**
+- `403` if the user is not logged in
+- `404` if the listId is invalid
+- `401` if the user is not owner of the list
+
+#### `DELETE /api/lists/:listId?item=itemId` - Delete an existing item from an existing list
+
+**Returns**
+- A success message
+
+**Throws**
+- `403` if the user is not logged in
+- `400` if item is not given
+- `404` if the listId, item is invalid
+- `401` if the user is not owner of the list
