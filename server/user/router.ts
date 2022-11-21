@@ -100,8 +100,8 @@ router.delete(
  * @param {string} email - user's email
  * @return {UserResponse} - The created user
  * @throws {403} - If there is a user already logged in
- * @throws {409} - If username or email is already taken
- * @throws {400} - If password, username, or email is not in correct format
+ * @throws {409} - If email is already taken
+ * @throws {400} - If password or email is not in correct format
  *
  */
 router.post(
