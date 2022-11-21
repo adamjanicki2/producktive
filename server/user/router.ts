@@ -164,8 +164,8 @@ router.patch(
     userValidator.isValidEmail,
     userValidator.isValidPassword,
     userValidator.isUsernameNotAlreadyInUse,
-    //need to check if email is already in use,
-    //need to check if notif period is valid option
+    userValidator.isEmailNotAlreadyInUse,
+    userValidator.isValidPeriod
   ],
   async (req: Request, res: Response) => {
     const userId = ((req.session as any).userId as string) ?? '';
@@ -195,7 +195,7 @@ router.get(
   },
   [
     userValidator.isUserLoggedIn,
-    //need check for if username is one that exists
+    userValidator.isUsernameNotAlreadyInUse
   ],
   async (req: Request, res: Response) => {
     //functions to get return image

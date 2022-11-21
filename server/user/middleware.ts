@@ -81,6 +81,23 @@ const isValidPassword = (req: Request, res: Response, next: NextFunction) => {
 };
 
 /**
+ * Checks if a period in req.body is valid
+ */
+ const isValidPeriod = (req: Request, res: Response, next: NextFunction) => {
+  const validPeriod = [];//todo, fill with valid periods
+  if (!validPeriod.includes(req.body.period.toString())) {
+    res.status(400).json({
+      error: {
+        password: `Period must be one of the following: ${validPeriod}`,
+      },
+    });
+    return;
+  }
+
+  next();
+};
+
+/**
  * Checks if a user with username and password in req.body exists
  */
 const isAccountExists = async (
@@ -196,5 +213,6 @@ export {
   isValidUsername,
   isValidPassword,
   isValidEmail,
-  isEmailNotAlreadyInUse
+  isEmailNotAlreadyInUse,
+  isValidPeriod
 };
