@@ -8,6 +8,7 @@ class UserCollection {
    * Add a new user
    *
    * @param {string} email - The email of the user
+   * @param {string} username - the username of the user
    * @param {string} password - The password of the user
    * @return {Promise<HydratedDocument<User>>} - The newly created user
    */

@@ -51,7 +51,7 @@ const isValidUsername = (req: Request, res: Response, next: NextFunction) => {
  * Checks if a email in req.body is valid, that is, it matches the email regex
  */
 const isValidEmail = (req: Request, res: Response, next: NextFunction) => {
-  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+  const emailRegex = /^[\w-.]+@([\w-]+.)+[\w-]{2,4}$/g;
   if (!emailRegex.test(req.body.email)) {
     res.status(400).json({
       error: {
