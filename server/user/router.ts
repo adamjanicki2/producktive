@@ -112,8 +112,8 @@ router.post(
     userValidator.isValidEmail,
     userValidator.isValidPassword,
     userValidator.isValidUsername,
-    userValidator.isUsernameNotAlreadyInUse
-    // need check for whether email is already taken
+    userValidator.isUsernameNotAlreadyInUse,
+    userValidator.isEmailNotAlreadyInUse
   ],
   async (req: Request, res: Response) => {
     const user = await UserCollection.addOne(req.body.email, req.body.password);

@@ -163,6 +163,30 @@ const isUserLoggedOut = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
+/**
+ * Checks if a email in req.body is already in use
+ */
+ const isEmailNotAlreadyInUse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = await UserCollection.findOneByEmail(req.body.email);
+
+  // If the current session user wants to change their username to one which matches
+  // the current one irrespective of the case, we should allow them to do so
+  if (!user) {
+    next();
+    return;
+  }
+
+  res.status(409).json({
+    error: {
+      username: "An account with this email already exists.",
+    },
+  });
+};
+
 export {
   isCurrentSessionUserExists,
   isUserLoggedIn,
@@ -172,4 +196,5 @@ export {
   isValidUsername,
   isValidPassword,
   isValidEmail,
+  isEmailNotAlreadyInUse
 };
