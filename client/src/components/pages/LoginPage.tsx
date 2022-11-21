@@ -1,7 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { post } from "../../util";
 
 const otherType = (type: "login" | "create") =>
   type === "login" ? "create" : "login";
