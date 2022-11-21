@@ -54,7 +54,7 @@ Renders the `index.html` file that will be used to interact with the backend
 - `400` if username or password is in the wrong format
 - `409` if username or email is already in use
 
-#### `PUT /api/users` - Update a user's profile
+#### `PATCH /api/users` - Update a user's profile
 
 **Body** _(no need to add fields that are not being changed)_
 
@@ -72,7 +72,7 @@ Renders the `index.html` file that will be used to interact with the backend
 
 - `403` if the user is not logged in
 - `400` if username or password is in the wrong format
-- `409` if the username is already in use
+- `409` if the username or email is already in use
 - `406` if the period is not a valid option
 
 #### `DELETE /api/users` - Delete user
