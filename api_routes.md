@@ -211,7 +211,6 @@ Renders the `index.html` file that will be used to interact with the backend
 **Body** 
 
 - `name` _{string}_ - The name of the list
-- `date` _{string}_ - The optional date of completion 
 
 **Returns**
 - A success message
@@ -220,7 +219,6 @@ Renders the `index.html` file that will be used to interact with the backend
 **Throws**
 - `403` if the user is not logged in
 - `409` if the name for the list already exists for a different list owned by signed in user
-- `400` if nonempty date is in the wrong format
 - `402` if name is left blank
 
 #### `PUT /api/lists/:listId?item=itemId` - Updates an existing list
@@ -255,3 +253,69 @@ Renders the `index.html` file that will be used to interact with the backend
 - `400` if item is not given
 - `404` if the listId, item is invalid
 - `401` if the user is not owner of the list
+
+
+<!---Pet Router--->
+#### `GET /api/pets` - Get all the pets
+
+**Returns**
+- An array of all the pets sorted in descending alphabetical order by username
+
+#### `POST /api/pets` - Create a new pet for the signed in user
+
+**Returns**
+- A success message
+- An object with the newly created pet
+
+**Throws**
+- `403` if the user is not logged in
+- `409` if user already has a pet
+
+#### `DELETE /api/pets:petId?` - Delete an existing pet
+
+**Returns**
+- A success message
+
+**Throws**
+- `403` if the user is not logged in
+- `404` if the petId is invalid
+- `409` if is not owner of the pet with petId
+
+#### `PUT /api/pets:petId?health=true` - Update health of an existing pet
+
+**Returns**
+- A success message
+- An object with the updated pet
+
+**Throws**
+- `403` if the user is not logged in
+- `404` if the petId is invalid
+- `409` if is not owner of the pet with petId
+
+#### `PUT /api/pets:petId?items=true` - Update items of an existing pet
+
+**Returns**
+- A success message
+- An object with the updated pet
+
+**Throws**
+- `403` if the user is not logged in
+- `404` if the petId is invalid
+- `409` if is not owner of the pet with petId
+
+
+<!---Notification Router--->
+
+#### `GET /api/notifications` - Get all the notifications
+
+**Returns**
+- An array of all the pets sorted in descending order by date
+
+#### `POST /api/notifications` - Create a new notification for the signed in user
+
+**Returns**
+- A success message
+- An object with the newly created notification
+
+**Throws**
+- `403` if the user is not logged in
