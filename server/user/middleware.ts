@@ -84,7 +84,7 @@ const isValidPassword = (req: Request, res: Response, next: NextFunction) => {
  * Checks if a period in req.body is valid
  */
  const isValidPeriod = (req: Request, res: Response, next: NextFunction) => {
-  const validPeriod = [];//todo, fill with valid periods
+  const validPeriod = ["daily", "weekly", "monthly"];
   if (!validPeriod.includes(req.body.period.toString())) {
     res.status(400).json({
       error: {
