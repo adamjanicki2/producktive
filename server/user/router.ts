@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import express from "express";
 import UserCollection from "./collection";
 import * as userValidator from "../user/middleware";
@@ -98,10 +98,11 @@ router.delete(
  *
  * @param {string} username - username of user
  * @param {string} password - user's password
+ * @param {string} email - user's email
  * @return {UserResponse} - The created user
  * @throws {403} - If there is a user already logged in
- * @throws {409} - If username is already taken
- * @throws {400} - If password or username is not in correct format
+ * @throws {409} - If username or email is already taken
+ * @throws {400} - If password, username, or email is not in correct format
  *
  */
 router.post(
@@ -110,6 +111,9 @@ router.post(
     userValidator.isUserLoggedOut,
     userValidator.isValidEmail,
     userValidator.isValidPassword,
+    userValidator.isValidUsername,
+    userValidator.isUsernameNotAlreadyInUse
+    // need check for whether email is already taken
   ],
   async (req: Request, res: Response) => {
     const user = await UserCollection.addOne(req.body.email, req.body.password);
@@ -139,6 +143,65 @@ router.delete(
     res.status(200).json({
       message: "Your account has been deleted successfully.",
     });
+  }
+);
+
+/**
+ * Update a user's information
+ * 
+ * @param {string} username - the user's new username
+ * @param {string} password - the user's new password
+ * @param {string} email - the user's new email
+ * @param {string} period - the user's new notificaiton period
+ * @return {UserResponse} - The updated user
+ * @throws {403} - If the user is not logged in
+ * @throws {400} - if the username, email, or password is in the wrong format
+ * @throws {409} - if the username or email is already in use
+ * @throws {406} - if the period is not a valid option
+ */
+router.patch(
+  "/",
+  [
+    userValidator.isUserLoggedIn,
+    userValidator.isValidUsername,
+    userValidator.isValidEmail,
+    userValidator.isValidPassword,
+    userValidator.isUsernameNotAlreadyInUse,
+    //need to check if email is already in use,
+    //need to check if notif period is valid option
+  ],
+  async (req: Request, res: Response) => {
+    const userId = (req.session.userId as string) ?? '';
+    const user = await UserCollection.updateOne(userId, req.body);
+    res.status(200).json({
+      message: 'Your profile was updated successfully',
+      user: util.constructUserResponse(user)
+    });
+  }
+);
+
+/**
+ * Get a user's pet
+ * 
+ * @return {Image} - the current image of that user's pet
+ * @throws {403} - if the user is not logged in
+ * @throws {404} - if username is not a valid username
+ *
+ */
+router.get(
+  '/',
+  async (req: Request, res: Response, next: NextFunction) => {
+    if(req.query.username !== undefined) {
+      next();
+      return;
+    }
+  },
+  [
+    userValidator.isUserLoggedIn,
+    //need check for if username is one that exists
+  ],
+  async (req: Request, res: Response) => {
+    //functions to get return image
   }
 );
 
