@@ -3,7 +3,7 @@ import logo from "../../logo.svg";
 
 const Home = () => {
   return (
-    <div className="flex flex-column">
+    <div className="flex flex-column primary-text">
       <h1 className="tc f-subheadline ma0 pa0">Home</h1>
       <h2 className="tc">
         Check the <code>README.md</code> file for a full breakdown of how this
