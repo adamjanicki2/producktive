@@ -35,7 +35,7 @@ const Login = ({
   };
 
   return (
-    <div className="flex flex-column">
+    <div className="flex flex-column primary-text">
       <h1 className="tc f-subheadline ma0 pa0">{PAGE_TITLE[type]}</h1>
       <h2 className="tc">{PAGE_MESSAGE[type]}</h2>
       <div className="flex flex-column w-70 m-auto items-center">
