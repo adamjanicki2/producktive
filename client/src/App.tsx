@@ -6,7 +6,8 @@ import HomePage from "./components/pages/HomePage";
 import NotFoundPage from "./components/pages/NotFoundPage";
 import AboutPage from "./components/pages/AboutPage";
 import LoginPage from "./components/pages/LoginPage";
-import Profile from "./components/pages/Profile";
+import ProfilePage from "./components/pages/ProfilePage";
+import SettingsPage from "./components/pages/SettingsPage";
 import "./app.css";
 import { get, post, del } from "./util";
 import type { User } from "./util";
@@ -22,24 +23,31 @@ const App = () => {
     });
   }, []);
 
-  const login = async (email: string, password: string) => {
-    post("/api/users/session", { email, password }).then((user) => {
-      if (user?.user) {
-        setUser(user.user);
-      } else {
-        window.alert(user?.error ?? "Error logging in.");
-      }
-    });
+  const updateUser = (user: User) => {
+    setUser(user);
   };
 
-  const createAccount = async (email: string, password: string) => {
-    post("/api/users", { email, password }).then((user) => {
-      if (user?.user) {
-        setUser(user.user);
-      } else {
-        window.alert(user?.error ?? "Error logging in.");
-      }
-    });
+  const login = async (email: string, password: string): Promise<boolean> => {
+    const user = await post("/api/users/session", { email, password });
+    if (user?.user) {
+      setUser(user.user);
+      return true;
+    }
+    window.alert(user?.error ?? "Error logging in.");
+    return false;
+  };
+
+  const createAccount = async (
+    email: string,
+    password: string
+  ): Promise<boolean> => {
+    const user = await post("/api/users", { email, password });
+    if (user?.user) {
+      setUser(user.user);
+      return true;
+    }
+    window.alert(user?.error ?? "Error logging in.");
+    return false;
   };
 
   const logout = () => {
@@ -64,7 +72,11 @@ const App = () => {
             <LoginPage type="create" onFormSubmitCallback={createAccount} />
           }
         />
-        <Route path="/profile/" element={<Profile user={user} />} />
+        <Route path="/profile/" element={<ProfilePage user={user} />} />
+        <Route
+          path="/settings/"
+          element={<SettingsPage user={user} updateUser={updateUser} />}
+        />
         {/* Make sure this is the last route */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

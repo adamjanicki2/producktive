@@ -42,4 +42,24 @@ export async function del(endpoint: string, params: Object = {}) {
   }
 }
 
-export type User = { email: string; username: string };
+export async function patch(endpoint: string, body: Object = {}) {
+  try {
+    const res = await fetch(endpoint, {
+      body: JSON.stringify(body),
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+    });
+    const json = await res.json();
+    return json;
+  } catch (error) {
+    console.log(`PATCH req to ${endpoint} failed:\n${error}`);
+    return null;
+  }
+}
+
+export type User = {
+  email: string;
+  username: string;
+  notifPeriod: "daily" | "weekly" | "montly" | "none";
+};

@@ -35,7 +35,7 @@ const isCurrentSessionUserExists = async (
  */
 const isValidUsername = (req: Request, res: Response, next: NextFunction) => {
   const usernameRegex = /^\w+$/i;
-  if (!usernameRegex.test(req.body.username)) {
+  if (req.body.username && !usernameRegex.test(req.body.username)) {
     res.status(400).json({
       error: {
         username: "Username must be a nonempty alphanumeric string.",
@@ -52,11 +52,9 @@ const isValidUsername = (req: Request, res: Response, next: NextFunction) => {
  */
 const isValidEmail = (req: Request, res: Response, next: NextFunction) => {
   const emailRegex = /^[\w-.]+@([\w-]+.)+[\w-]{2,4}$/g;
-  if (!emailRegex.test(req.body.email)) {
+  if (req.body.email && !emailRegex.test(req.body.email)) {
     res.status(400).json({
-      error: {
-        email: "Email must be a valid email!",
-      },
+      error: "Email must be a valid email!",
     });
     return;
   }
@@ -68,11 +66,9 @@ const isValidEmail = (req: Request, res: Response, next: NextFunction) => {
  */
 const isValidPassword = (req: Request, res: Response, next: NextFunction) => {
   const passwordRegex = /^\S+$/;
-  if (!passwordRegex.test(req.body.password)) {
+  if (req.body.password && !passwordRegex.test(req.body.password)) {
     res.status(400).json({
-      error: {
-        password: "Password must be a nonempty string.",
-      },
+      error: "Password must be a nonempty string.",
     });
     return;
   }
@@ -83,13 +79,14 @@ const isValidPassword = (req: Request, res: Response, next: NextFunction) => {
 /**
  * Checks if a period in req.body is valid
  */
- const isValidPeriod = (req: Request, res: Response, next: NextFunction) => {
-  const validPeriod = ["daily", "weekly", "monthly"];
-  if (!validPeriod.includes(req.body.period.toString())) {
+const isValidPeriod = (req: Request, res: Response, next: NextFunction) => {
+  const validPeriod = ["daily", "weekly", "monthly", "none"];
+  if (
+    req.body.notifPeriod &&
+    !validPeriod.includes(req.body.notifPeriod.toString())
+  ) {
     res.status(400).json({
-      error: {
-        password: `Period must be one of the following: ${validPeriod}`,
-      },
+      error: `Period must be one of the following: ${validPeriod}`,
     });
     return;
   }
@@ -134,6 +131,7 @@ const isUsernameNotAlreadyInUse = async (
   res: Response,
   next: NextFunction
 ) => {
+  if (!req.body.username) return next();
   const user = await UserCollection.findOneByUsername(req.body.username);
 
   // If the current session user wants to change their username to one which matches
@@ -183,16 +181,17 @@ const isUserLoggedOut = (req: Request, res: Response, next: NextFunction) => {
 /**
  * Checks if a email in req.body is already in use
  */
- const isEmailNotAlreadyInUse = async (
+const isEmailNotAlreadyInUse = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  if (!req.body.email) return next();
   const user = await UserCollection.findOneByEmail(req.body.email);
 
   // If the current session user wants to change their username to one which matches
   // the current one irrespective of the case, we should allow them to do so
-  if (!user) {
+  if (!user || user?._id.toString() === (req.session as any).userId) {
     next();
     return;
   }
@@ -214,5 +213,5 @@ export {
   isValidPassword,
   isValidEmail,
   isEmailNotAlreadyInUse,
-  isValidPeriod
+  isValidPeriod,
 };
