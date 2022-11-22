@@ -81,6 +81,23 @@ const isValidPassword = (req: Request, res: Response, next: NextFunction) => {
 };
 
 /**
+ * Checks if a period in req.body is valid
+ */
+ const isValidPeriod = (req: Request, res: Response, next: NextFunction) => {
+  const validPeriod = ["daily", "weekly", "monthly"];
+  if (!validPeriod.includes(req.body.period.toString())) {
+    res.status(400).json({
+      error: {
+        password: `Period must be one of the following: ${validPeriod}`,
+      },
+    });
+    return;
+  }
+
+  next();
+};
+
+/**
  * Checks if a user with username and password in req.body exists
  */
 const isAccountExists = async (
@@ -163,6 +180,30 @@ const isUserLoggedOut = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
+/**
+ * Checks if a email in req.body is already in use
+ */
+ const isEmailNotAlreadyInUse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = await UserCollection.findOneByEmail(req.body.email);
+
+  // If the current session user wants to change their username to one which matches
+  // the current one irrespective of the case, we should allow them to do so
+  if (!user) {
+    next();
+    return;
+  }
+
+  res.status(409).json({
+    error: {
+      username: "An account with this email already exists.",
+    },
+  });
+};
+
 export {
   isCurrentSessionUserExists,
   isUserLoggedIn,
@@ -172,4 +213,6 @@ export {
   isValidUsername,
   isValidPassword,
   isValidEmail,
+  isEmailNotAlreadyInUse,
+  isValidPeriod
 };
