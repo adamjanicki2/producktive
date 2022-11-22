@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from "express";
+import type { Request, Response } from "express";
 import express from "express";
 import UserCollection from "./collection";
 import * as userValidator from "../user/middleware";
@@ -177,29 +177,5 @@ router.patch(
   }
 );
 
-/**
- * Get a user's pet
- * 
- * @return {Image} - the current image of that user's pet
- * @throws {403} - if the user is not logged in
- * @throws {404} - if username is not a valid username
- *
- */
-router.get(
-  '/',
-  async (req: Request, res: Response, next: NextFunction) => {
-    if(req.query.username !== undefined) {
-      next();
-      return;
-    }
-  },
-  [
-    userValidator.isUserLoggedIn,
-    //need check for if username is one that exists
-  ],
-  async (req: Request, res: Response) => {
-    //functions to get return image
-  }
-);
 
 export { router as userRouter };

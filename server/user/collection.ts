@@ -8,7 +8,6 @@ class UserCollection {
    * Add a new user
    *
    * @param {string} email - The email of the user
-   * @param {string} username - the username of the user
    * @param {string} password - The password of the user
    * @return {Promise<HydratedDocument<User>>} - The newly created user
    */
@@ -17,7 +16,8 @@ class UserCollection {
     password: string
   ): Promise<HydratedDocument<User>> {
     const username = await getRandomUsername();
-    const user = new UserModel({ email, password, username });
+    const notif_period = "daily";
+    const user = new UserModel({ email, password, username, notif_period });
     await user.save(); // Saves user to MongoDB
     return user;
   }
@@ -74,6 +74,32 @@ class UserCollection {
   static async deleteOne(userId: Types.ObjectId | string): Promise<boolean> {
     const user = await UserModel.deleteOne({ _id: userId });
     return user !== null;
+  }
+
+  /**
+   * Updates a user from the collection
+   * 
+   * @param {string} userId - the id of the signed in user
+   * @param {Object} userDetails - An object with the user's updated credentials
+   * @return {Promise<HydratedDocument<User>>} - the updated user
+   */
+  static async updateOne(userId: Types.ObjectId | string, userDetails: any): Promise<HydratedDocument<User>> {
+    const user = await UserModel.findOne({_id: userId});
+    if(userDetails.username){
+      user!.username = userDetails.username as string;
+    }
+    if(userDetails.password){
+      user!.password = userDetails.password as string;
+    }
+    if(userDetails.email){
+      user!.email = userDetails.email as string;
+    }
+    if(userDetails.period){
+      user!.notif_period = userDetails.period as string;
+    }
+
+    await user!.save();
+    return user!;
   }
 }
 
