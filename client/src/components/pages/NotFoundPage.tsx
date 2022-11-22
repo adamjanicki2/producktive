@@ -3,7 +3,7 @@ import logo from "../../logo.svg";
 
 const Oops = () => {
   return (
-    <div className="flex flex-column">
+    <div className="flex flex-column primary-text">
       <h1 className="tc f-subheadline ma0 pa0">404</h1>
       <h2 className="tc">
         The requested page '{window.location.pathname}' could not be found.

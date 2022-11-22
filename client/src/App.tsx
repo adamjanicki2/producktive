@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Nav from "./components/modules/Nav";
+import Footer from "./components/modules/Footer";
 import HomePage from "./components/pages/HomePage";
 import NotFoundPage from "./components/pages/NotFoundPage";
 import AboutPage from "./components/pages/AboutPage";
@@ -67,6 +68,7 @@ const App = () => {
         {/* Make sure this is the last route */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 };
