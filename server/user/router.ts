@@ -96,12 +96,12 @@ router.delete(
  *
  * @name POST /api/users
  *
- * @param {string} username - username of user
  * @param {string} password - user's password
+ * @param {string} email - user's email
  * @return {UserResponse} - The created user
  * @throws {403} - If there is a user already logged in
- * @throws {409} - If username is already taken
- * @throws {400} - If password or username is not in correct format
+ * @throws {409} - If email is already taken
+ * @throws {400} - If password or email is not in correct format
  *
  */
 router.post(
@@ -110,6 +110,7 @@ router.post(
     userValidator.isUserLoggedOut,
     userValidator.isValidEmail,
     userValidator.isValidPassword,
+    // need check for whether email is already taken
   ],
   async (req: Request, res: Response) => {
     const user = await UserCollection.addOne(req.body.email, req.body.password);
@@ -141,5 +142,40 @@ router.delete(
     });
   }
 );
+
+/**
+ * Update a user's information
+ * 
+ * @param {string} username - the user's new username
+ * @param {string} password - the user's new password
+ * @param {string} email - the user's new email
+ * @param {string} period - the user's new notificaiton period
+ * @return {UserResponse} - The updated user
+ * @throws {403} - If the user is not logged in
+ * @throws {400} - if the username, email, or password is in the wrong format
+ * @throws {409} - if the username or email is already in use
+ * @throws {406} - if the period is not a valid option
+ */
+router.patch(
+  "/",
+  [
+    userValidator.isUserLoggedIn,
+    userValidator.isValidUsername,
+    userValidator.isValidEmail,
+    userValidator.isValidPassword,
+    userValidator.isUsernameNotAlreadyInUse,
+    //need to check if email is already in use,
+    //need to check if notif period is valid option
+  ],
+  async (req: Request, res: Response) => {
+    const userId = ((req.session as any).userId as string) ?? '';
+    const user = await UserCollection.updateOne(userId, req.body);
+    res.status(200).json({
+      message: 'Your profile was updated successfully',
+      user: util.constructUserResponse(user)
+    });
+  }
+);
+
 
 export { router as userRouter };

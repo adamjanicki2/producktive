@@ -39,7 +39,6 @@ Renders the `index.html` file that will be used to interact with the backend
 
 **Body**
 
-- `username` _{string}_ - The user's username
 - `password` _{string}_ - The user's password
 - `email` _{string}_ -The user's email
 
@@ -51,10 +50,10 @@ Renders the `index.html` file that will be used to interact with the backend
 **Throws**
 
 - `403` if there is a user already logged in
-- `400` if username or password is in the wrong format
-- `409` if username or email is already in use
+- `400` if email or password is in the wrong format
+- `409` if email is already in use
 
-#### `PUT /api/users` - Update a user's profile
+#### `PATCH /api/users` - Update a user's profile
 
 **Body** _(no need to add fields that are not being changed)_
 
@@ -72,7 +71,7 @@ Renders the `index.html` file that will be used to interact with the backend
 
 - `403` if the user is not logged in
 - `400` if username or password is in the wrong format
-- `409` if the username is already in use
+- `409` if the username or email is already in use
 - `406` if the period is not a valid option
 
 #### `DELETE /api/users` - Delete user

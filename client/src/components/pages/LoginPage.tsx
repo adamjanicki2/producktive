@@ -2,6 +2,7 @@ import { Button, TextField } from "@mui/material";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+
 const otherType = (type: "login" | "create") =>
   type === "login" ? "create" : "login";
 
