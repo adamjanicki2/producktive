@@ -66,6 +66,21 @@ class UserCollection {
   }
 
   /**
+   * Find a user by username (case insensitive).
+   *
+   * @param {string} email - The username of the user to find
+   * @param {string} password - The password of the user to find
+   * @return {Promise<HydratedDocument<User>> | Promise<null>} - The user with the given username, if any
+   */
+     static async findOneByEmail(
+      email: string
+    ): Promise<HydratedDocument<User> | null> {
+      return UserModel.findOne({
+        email: new RegExp(`^${email.trim()}$`, "i")
+      });
+    }
+
+  /**
    * Delete a user from the collection.
    *
    * @param {string} userId - The userId of user to delete

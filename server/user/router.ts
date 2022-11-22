@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import express from "express";
 import UserCollection from "./collection";
 import * as userValidator from "../user/middleware";
@@ -110,7 +110,7 @@ router.post(
     userValidator.isUserLoggedOut,
     userValidator.isValidEmail,
     userValidator.isValidPassword,
-    // need check for whether email is already taken
+    userValidator.isEmailNotAlreadyInUse,
   ],
   async (req: Request, res: Response) => {
     const user = await UserCollection.addOne(req.body.email, req.body.password);
@@ -145,7 +145,7 @@ router.delete(
 
 /**
  * Update a user's information
- * 
+ *
  * @param {string} username - the user's new username
  * @param {string} password - the user's new password
  * @param {string} email - the user's new email
@@ -164,18 +164,39 @@ router.patch(
     userValidator.isValidEmail,
     userValidator.isValidPassword,
     userValidator.isUsernameNotAlreadyInUse,
-    //need to check if email is already in use,
-    //need to check if notif period is valid option
+    userValidator.isEmailNotAlreadyInUse,
+    userValidator.isValidPeriod,
   ],
   async (req: Request, res: Response) => {
-    const userId = ((req.session as any).userId as string) ?? '';
+    const userId = ((req.session as any).userId as string) ?? "";
     const user = await UserCollection.updateOne(userId, req.body);
     res.status(200).json({
-      message: 'Your profile was updated successfully',
-      user: util.constructUserResponse(user)
+      message: "Your profile was updated successfully",
+      user: util.constructUserResponse(user),
     });
   }
 );
 
+/**
+ * Get a user's pet
+ *
+ * @return {Image} - the current image of that user's pet
+ * @throws {403} - if the user is not logged in
+ * @throws {404} - if username is not a valid username
+ *
+ */
+router.get(
+  "/",
+  async (req: Request, res: Response, next: NextFunction) => {
+    if (req.query.username !== undefined) {
+      next();
+      return;
+    }
+  },
+  [userValidator.isUserLoggedIn, userValidator.isUsernameNotAlreadyInUse],
+  async (req: Request, res: Response) => {
+    //functions to get return image
+  }
+);
 
 export { router as userRouter };
