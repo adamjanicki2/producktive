@@ -6,7 +6,7 @@ export type User = {
   email: string;
   username: string;
   password: string;
-  notif_period: string;
+  notifPeriod: "daily" | "weekly" | "monthly";
 };
 
 const UserSchema = new Schema({
@@ -25,11 +25,11 @@ const UserSchema = new Schema({
     required: true,
   },
   // The user's notification period
-  notif_period: {
+  notifPeriod: {
     type: String,
     required: true,
-    default: "daily"
-  }
+    default: "daily",
+  },
 });
 
 const UserModel = model<User>("User", UserSchema);

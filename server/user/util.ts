@@ -7,6 +7,7 @@ type UserResponse = {
   _id: string;
   username: string;
   email: string;
+  notifPeriod: "daily" | "weekly" | "monthly";
 };
 
 /**
@@ -24,6 +25,7 @@ export const constructUserResponse = (
     _id: user._id.toString(),
     username: user.username,
     email: user.email,
+    notifPeriod: user.notifPeriod,
   };
 };
 
