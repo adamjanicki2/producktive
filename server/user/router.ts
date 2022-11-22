@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response } from "express";
 import express from "express";
 import UserCollection from "./collection";
 import * as userValidator from "../user/middleware";
@@ -174,28 +174,6 @@ router.patch(
       message: "Your profile was updated successfully",
       user: util.constructUserResponse(user),
     });
-  }
-);
-
-/**
- * Get a user's pet
- *
- * @return {Image} - the current image of that user's pet
- * @throws {403} - if the user is not logged in
- * @throws {404} - if username is not a valid username
- *
- */
-router.get(
-  "/",
-  async (req: Request, res: Response, next: NextFunction) => {
-    if (req.query.username !== undefined) {
-      next();
-      return;
-    }
-  },
-  [userValidator.isUserLoggedIn, userValidator.isUsernameNotAlreadyInUse],
-  async (req: Request, res: Response) => {
-    //functions to get return image
   }
 );
 

@@ -2,7 +2,6 @@ import { Button, TextField } from "@mui/material";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-
 const otherType = (type: "login" | "create") =>
   type === "login" ? "create" : "login";
 
@@ -21,7 +20,7 @@ const Login = ({
   onFormSubmitCallback,
 }: {
   type: "login" | "create";
-  onFormSubmitCallback: (email: string, password: string) => Promise<void>;
+  onFormSubmitCallback: (email: string, password: string) => Promise<boolean>;
 }) => {
   const navigate = useNavigate();
   const [email, setEmail] = React.useState<string>("");
@@ -29,8 +28,8 @@ const Login = ({
 
   const handleSubmit = async () => {
     if (email && password) {
-      await onFormSubmitCallback(email, password);
-      navigate("/");
+      const success = await onFormSubmitCallback(email, password);
+      success && navigate("/");
     }
   };
 

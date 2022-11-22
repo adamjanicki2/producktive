@@ -17,12 +17,14 @@ const Nav = ({ user, logout }: { user?: User; logout: () => void }) => {
           <h1 className="i">PRODUCKTIVE</h1>
         </Link>
         <div className="flex flex-row items-center justify-around mr3">
-          <Link className={LINK_CLASS_NAME} to="/about/">
-            About
-          </Link>
           {user && (
             <Link className={LINK_CLASS_NAME} to="/profile/">
               {user.username}
+            </Link>
+          )}
+          {user && (
+            <Link className={LINK_CLASS_NAME} to="/settings/">
+              Settings
             </Link>
           )}
           {user ? (

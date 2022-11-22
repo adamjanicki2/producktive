@@ -7,7 +7,7 @@ type UserResponse = {
   _id: string;
   username: string;
   email: string;
-  notifPeriod: "daily" | "weekly" | "monthly";
+  notifPeriod: "daily" | "weekly" | "monthly" | "none";
 };
 
 /**

@@ -72,13 +72,13 @@ class UserCollection {
    * @param {string} password - The password of the user to find
    * @return {Promise<HydratedDocument<User>> | Promise<null>} - The user with the given username, if any
    */
-     static async findOneByEmail(
-      email: string
-    ): Promise<HydratedDocument<User> | null> {
-      return UserModel.findOne({
-        email: new RegExp(`^${email.trim()}$`, "i")
-      });
-    }
+  static async findOneByEmail(
+    email: string
+  ): Promise<HydratedDocument<User> | null> {
+    return UserModel.findOne({
+      email: new RegExp(`^${email.trim()}$`, "i"),
+    });
+  }
 
   /**
    * Delete a user from the collection.
@@ -112,8 +112,8 @@ class UserCollection {
     if (userDetails.email) {
       user!.email = userDetails.email as string;
     }
-    if (userDetails.period) {
-      user!.notifPeriod = userDetails.period as User["notifPeriod"];
+    if (userDetails.notifPeriod) {
+      user!.notifPeriod = userDetails.notifPeriod as User["notifPeriod"];
     }
 
     await user!.save();
