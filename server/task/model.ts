@@ -1,9 +1,11 @@
 import type { Types } from "mongoose";
 import { Schema, model } from "mongoose";
 import {List} from '../list/model';
+import { User } from "../user/model";
 
 export type Task = {
   _id: Types.ObjectId;
+  user: User;
   list: List;
   name: string;
   deadline: Date;
@@ -12,6 +14,12 @@ export type Task = {
 };
 
 const TaskSchema = new Schema({
+  //the user who made the task
+  user: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  },
   //the list the task belongs to
   list: {
     type: Schema.Types.ObjectId,
