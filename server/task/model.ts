@@ -1,51 +1,42 @@
 import type { Types } from "mongoose";
 import { Schema, model } from "mongoose";
-import {List} from '../list/model';
-import { User } from "../user/model";
+import { List } from "../list/model";
 
 export type Task = {
   _id: Types.ObjectId;
-  user: User;
-  list: List;
-  name: string;
-  deadline: Date;
+  userId: Types.ObjectId;
+  parent: List;
+  content: string;
+  deadline?: Date;
   difficulty: string;
-  notes: string;
 };
 
 const TaskSchema = new Schema({
-  //the user who made the task
-  user: {
+  userId: {
     type: Schema.Types.ObjectId,
     required: true,
-    ref: 'User'
   },
   //the list the task belongs to
-  list: {
+  parent: {
     type: Schema.Types.ObjectId,
     required: true,
-    ref: 'List'
+    ref: "List",
   },
-  //the name of the task
-  name: {
+  //the content of the task
+  content: {
     type: String,
-    required: true
+    required: true,
   },
   //the deadline of the task
   deadline: {
     type: Date,
-    required: true
+    required: false,
   },
   //the difficulty of the task
   difficulty: {
     type: String,
-    required: true
+    required: true,
   },
-  //any notes for the task
-  notes: {
-    type: String,
-    required: false
-  }
 });
 
 const TaskModel = model<Task>("Task", TaskSchema);
