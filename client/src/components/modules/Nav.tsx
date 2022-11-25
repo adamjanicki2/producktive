@@ -18,6 +18,11 @@ const Nav = ({ user, logout }: { user?: User; logout: () => void }) => {
         </Link>
         <div className="flex flex-row items-center justify-around mr3">
           {user && (
+            <Link className={LINK_CLASS_NAME} to="/lists/">
+              Lists
+            </Link>
+          )}
+          {user && (
             <Link className={LINK_CLASS_NAME} to="/profile/">
               {user.username}
             </Link>

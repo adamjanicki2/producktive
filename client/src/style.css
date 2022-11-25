@@ -12,6 +12,12 @@
     background-color: var(--secondary);
 }
 
+hr {
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    width: 100%;
+}
+
 .m-auto {
   margin-left: auto;
   margin-right: auto;
