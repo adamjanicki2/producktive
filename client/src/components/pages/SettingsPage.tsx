@@ -34,7 +34,6 @@ const Settings = ({
       if (updateObject.notifPeriod)
         return window.alert("Notification period updated!");
     } else {
-      console.log(updatedUser);
       window.alert(updatedUser?.error ?? "Error updating account information.");
     }
   };

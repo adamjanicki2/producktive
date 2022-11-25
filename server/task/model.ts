@@ -8,7 +8,7 @@ export type Task = {
   parent: List;
   content: string;
   deadline?: Date;
-  difficulty: string;
+  difficulty: "easy" | "medium" | "hard";
 };
 
 const TaskSchema = new Schema({

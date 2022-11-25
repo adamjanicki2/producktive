@@ -67,12 +67,17 @@ export type User = {
 
 export type Task = {
   _id: string;
+  userId?: string;
+  parent?: List;
   content: string;
+  difficulty: "easy" | "medium" | "hard";
+  date?: string;
   // ADD MORE PROPERTIES HERE
 };
 
 export type List = {
   _id: string;
+  userId?: string;
   title: string;
 };
 

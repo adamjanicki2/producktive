@@ -7,6 +7,16 @@ import * as middleware from "../common/middleware";
 const router = express.Router();
 
 router.get(
+  "/all",
+  [userValidator.isUserLoggedIn],
+  async (req: Request, res: Response) => {
+    const userId = (req.session as any).userId as string;
+    const lists = await ListCollection.findByUserId(userId);
+    return res.status(200).json(lists);
+  }
+);
+
+router.get(
   "/:listId",
   [middleware.isInfoValidId("params", ["listId"])],
   async (req: Request, res: Response) => {

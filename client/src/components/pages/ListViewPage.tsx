@@ -1,12 +1,8 @@
-import { Button, TextField } from "@mui/material";
 import React from "react";
+import { Button, IconButton, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
-import { List, MUI_BUTTON_STYLE } from "../../util";
-
-const TEMP_LISTS = [
-  { _id: "1", title: "Chores" },
-  { _id: "2", title: "Work" },
-];
+import DeleteIcon from "@mui/icons-material/Delete";
+import { del, get, List, MUI_BUTTON_STYLE, post } from "../../util";
 
 const ListView = () => {
   const [lists, setLists] = React.useState<List[]>();
@@ -16,21 +12,50 @@ const ListView = () => {
   });
 
   React.useEffect(() => {
-    setLists(TEMP_LISTS);
+    get("/api/lists/all").then((lists) => {
+      if (lists?.error) {
+        setLists([]);
+        window.alert("Error getting lists");
+      } else {
+        setLists(lists);
+      }
+    });
   }, []);
 
   const submitList = () => {
-    console.log("submitting list: ", newList);
+    post("/api/lists/", { title: newList.title }).then((list) => {
+      if (list?.error) {
+        window.alert(list.error);
+      } else {
+        setLists([...(lists || []), list]);
+      }
+    });
+  };
+
+  const deleteList = (id: string) => {
+    del(`/api/lists/${id}`).then((list) => {
+      if (list?.error) {
+        window.alert(list.error);
+      } else {
+        setLists(lists.filter((l) => l._id !== id));
+      }
+    });
   };
 
   return (
     <div className="flex flex-column primary-text">
       <h1 className="tc f-subheadline ma0 pa0 ">List View</h1>
       <div className="flex flex-column w-70 m-auto">
-        {lists?.map((list) => (
-          <Link className="ma2" to={`/list/${list._id}`}>
-            {list.title}
-          </Link>
+        {(!lists || !lists.length) && <h3>You don't have any lists!</h3>}
+        {lists?.map((list, index) => (
+          <div className="flex flex-row items-center" key={index}>
+            <Link className="ma2" to={`/list/${list._id}`}>
+              {list.title}
+            </Link>
+            <IconButton onClick={() => deleteList(list._id)}>
+              <DeleteIcon />
+            </IconButton>
+          </div>
         ))}
         <hr />
         <TextField
@@ -44,7 +69,7 @@ const ListView = () => {
           style={MUI_BUTTON_STYLE}
           variant="contained"
         >
-          Create Task
+          Create List
         </Button>
       </div>
     </div>

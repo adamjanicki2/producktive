@@ -7,10 +7,10 @@ class TaskCollection {
     userId: Types.ObjectId | string,
     listId: Types.ObjectId | string,
     content: string,
-    difficulty: string,
+    difficulty: "easy" | "medium" | "hard",
     date?: string
   ): Promise<HydratedDocument<Task>> {
-    let taskObj: Object = { userId, listId, content, difficulty };
+    let taskObj: Object = { userId, parent: listId, content, difficulty };
     if (date) {
       taskObj = { ...taskObj, deadline: new Date(date) }; //needs format 'yyyy-mm-dd'
     }
