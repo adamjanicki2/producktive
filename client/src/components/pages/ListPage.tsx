@@ -5,8 +5,16 @@ import { Task, List, MUI_BUTTON_STYLE, get, post, del } from "../../util";
 import Markdown from "../modules/Markdown";
 import NotFound from "./NotFoundPage";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { DesktopDatePicker as DatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-const DEFAULT_TASK: Task = { _id: "Not set", content: "", difficulty: "easy" };
+const DEFAULT_TASK: Task = {
+  _id: "Not set",
+  content: "",
+  difficulty: "easy",
+  deadline: "",
+};
 
 const ListPage = () => {
   const { listId } = useParams();
@@ -27,7 +35,6 @@ const ListPage = () => {
             window.alert("Error getting tasks");
           } else {
             setTasks(tasks);
-            console.log({ list, tasks });
           }
         });
       }
@@ -35,11 +42,15 @@ const ListPage = () => {
   }, [listId]);
 
   const submitTask = () => {
-    post(`/api/tasks/`, {
-      content: newTask.content,
-      difficulty: newTask.difficulty,
-      listId,
-    }).then((task) => {
+    const taskToSubmit = newTask.deadline
+      ? {
+          listId,
+          content: newTask.content,
+          difficulty: newTask.difficulty,
+          deadline: newTask.deadline,
+        }
+      : { listId, content: newTask.content, difficulty: newTask.difficulty };
+    post(`/api/tasks/`, taskToSubmit).then((task) => {
       if (task?.error) {
         window.alert(task.error);
       } else {
@@ -74,7 +85,7 @@ const ListPage = () => {
         ))}
         <hr />
         <TextField
-          placeholder="Write a new task..."
+          placeholder="Write a new task (markdown enabled!)"
           className="bg-near-white mv2"
           value={newTask.content}
           onChange={(e) => setNewTask({ ...newTask, content: e.target.value })}
@@ -93,6 +104,33 @@ const ListPage = () => {
           <MenuItem value="medium">Medium</MenuItem>
           <MenuItem value="hard">Hard</MenuItem>
         </Select>
+        <div className="flex flex-row items-center m-auto">
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              className="bg-near-white mv2"
+              inputFormat="MM/DD/YYYY"
+              value={newTask.deadline}
+              onChange={(value, keyboardInput) => {
+                const date = (value as any).$d.toLocaleDateString() as string;
+                setNewTask({ ...newTask, deadline: date });
+              }}
+              renderInput={(params) => (
+                <TextField
+                  placeholder="leave blank for no deadline"
+                  onKeyDown={(e) => e.preventDefault()}
+                  {...params}
+                />
+              )}
+            />
+          </LocalizationProvider>
+          <Button
+            style={MUI_BUTTON_STYLE}
+            variant="contained"
+            onClick={() => setNewTask({ ...newTask, deadline: null })}
+          >
+            Clear
+          </Button>
+        </div>
         <Button
           onClick={submitTask}
           style={MUI_BUTTON_STYLE}
@@ -126,6 +164,7 @@ const TaskNode = ({
     <IconButton onClick={() => deleteTask(task._id)}>
       <DeleteIcon />
     </IconButton>
+    {task.deadline && <span>Complete by: {task.deadline}</span>}
   </div>
 );
 

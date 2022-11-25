@@ -71,7 +71,7 @@ export type Task = {
   parent?: List;
   content: string;
   difficulty: "easy" | "medium" | "hard";
-  date?: string;
+  deadline?: string;
   // ADD MORE PROPERTIES HERE
 };
 
