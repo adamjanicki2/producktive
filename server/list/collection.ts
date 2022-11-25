@@ -18,6 +18,12 @@ export default class ListCollection {
     return ListModel.findById(listId);
   }
 
+  static async findByUserId(
+    userId: Types.ObjectId | string
+  ): Promise<HydratedDocument<List>[]> {
+    return ListModel.find({ userId });
+  }
+
   static async updateTitle(
     listId: Types.ObjectId | string,
     title: string

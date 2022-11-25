@@ -59,7 +59,29 @@ export async function patch(endpoint: string, body: Object = {}) {
 }
 
 export type User = {
+  _id: string;
   email: string;
   username: string;
   notifPeriod: "daily" | "weekly" | "montly" | "none";
+};
+
+export type Task = {
+  _id: string;
+  userId?: string;
+  parent?: List;
+  content: string;
+  difficulty: "easy" | "medium" | "hard";
+  deadline?: string;
+  // ADD MORE PROPERTIES HERE
+};
+
+export type List = {
+  _id: string;
+  userId?: string;
+  title: string;
+};
+
+export const MUI_BUTTON_STYLE: React.CSSProperties = {
+  textTransform: "none",
+  margin: "4px",
 };

@@ -1,6 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { MUI_BUTTON_STYLE } from "../../util";
 
 const otherType = (type: "login" | "create") =>
   type === "login" ? "create" : "login";
@@ -50,7 +51,7 @@ const Login = ({
         />
         <Button
           onClick={handleSubmit}
-          style={{ textTransform: "none", margin: "4px" }}
+          style={MUI_BUTTON_STYLE}
           variant="contained"
         >
           {PAGE_TITLE[type]}

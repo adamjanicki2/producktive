@@ -1,13 +1,15 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Nav from "./components/modules/Nav";
-import Footer from "./components/modules/Footer";
+// import Footer from "./components/modules/Footer";
 import HomePage from "./components/pages/HomePage";
 import NotFoundPage from "./components/pages/NotFoundPage";
 import AboutPage from "./components/pages/AboutPage";
 import LoginPage from "./components/pages/LoginPage";
 import ProfilePage from "./components/pages/ProfilePage";
 import SettingsPage from "./components/pages/SettingsPage";
+import ListPage from "./components/pages/ListPage";
+import ListViewPage from "./components/pages/ListViewPage";
 import "./app.css";
 import { get, post, del } from "./util";
 import type { User } from "./util";
@@ -77,10 +79,12 @@ const App = () => {
           path="/settings/"
           element={<SettingsPage user={user} updateUser={updateUser} />}
         />
+        <Route path="/list/:listId" element={<ListPage />} />
+        <Route path="/lists/" element={<ListViewPage />} />
         {/* Make sure this is the last route */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
   );
 };

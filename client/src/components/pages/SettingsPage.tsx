@@ -1,6 +1,6 @@
 import React from "react";
 import type { User } from "../../util";
-import { patch } from "../../util";
+import { patch, MUI_BUTTON_STYLE } from "../../util";
 import { Button, TextField } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
@@ -34,7 +34,6 @@ const Settings = ({
       if (updateObject.notifPeriod)
         return window.alert("Notification period updated!");
     } else {
-      console.log(updatedUser);
       window.alert(updatedUser?.error ?? "Error updating account information.");
     }
   };
@@ -56,7 +55,7 @@ const Settings = ({
             <Button
               variant="contained"
               onClick={() => updateAccount({ email })}
-              style={{ textTransform: "none", margin: "4px" }}
+              style={MUI_BUTTON_STYLE}
             >
               Change Email
             </Button>
@@ -70,7 +69,7 @@ const Settings = ({
             <Button
               variant="contained"
               onClick={() => updateAccount({ username })}
-              style={{ textTransform: "none", margin: "4px" }}
+              style={MUI_BUTTON_STYLE}
             >
               Change Username
             </Button>
@@ -84,7 +83,7 @@ const Settings = ({
             <Button
               variant="contained"
               onClick={() => updateAccount({ password })}
-              style={{ textTransform: "none", margin: "4px" }}
+              style={MUI_BUTTON_STYLE}
             >
               Change Password
             </Button>
@@ -110,7 +109,7 @@ const Settings = ({
             <Button
               variant="contained"
               onClick={() => updateAccount({ notifPeriod })}
-              style={{ textTransform: "none", margin: "4px" }}
+              style={MUI_BUTTON_STYLE}
             >
               Change Notifications
             </Button>
