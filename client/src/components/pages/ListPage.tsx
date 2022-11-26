@@ -107,10 +107,11 @@ const ListPage = () => {
         <div className="flex flex-row items-center m-auto">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
+              minDate={new Date()}
               className="bg-near-white mv2"
               inputFormat="MM/DD/YYYY"
               value={newTask.deadline}
-              onChange={(value, keyboardInput) => {
+              onChange={(value) => {
                 const date = (value as any).$d.toLocaleDateString() as string;
                 setNewTask({ ...newTask, deadline: date });
               }}
@@ -145,7 +146,7 @@ const ListPage = () => {
 
 const DIFF_TO_COLOR = {
   easy: "green",
-  medium: "yellow",
+  medium: "orange",
   hard: "dark-red",
 } as const;
 

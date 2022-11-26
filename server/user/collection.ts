@@ -80,6 +80,10 @@ class UserCollection {
     });
   }
 
+  static async findByNotifPeriod(notifPeriod: User["notifPeriod"]) {
+    return UserModel.find({ notifPeriod });
+  }
+
   /**
    * Delete a user from the collection.
    *

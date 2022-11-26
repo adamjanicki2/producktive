@@ -3,6 +3,7 @@ import express from "express";
 import ListCollection from "./collection";
 import * as userValidator from "../user/middleware";
 import * as middleware from "../common/middleware";
+import TaskCollection from "../task/collection";
 
 const router = express.Router();
 
@@ -63,6 +64,7 @@ router.delete(
   async (req: Request, res: Response) => {
     const { listId } = req.params;
     const list = await ListCollection.deleteOne(listId);
+    await TaskCollection.deleteManyByParentId(listId);
     if (!list) {
       return res.status(404).json({ error: "List could not be deleted" });
     }
