@@ -16,17 +16,19 @@ router.get(
     const users = await UserCollection.findByNotifPeriod(
       period as User["notifPeriod"]
     );
-    users.forEach((user) => {
-      TaskCollection.getUpcomingTasks(user._id, user.notifPeriod).then(
-        (tasks) => {
-          if (tasks.length > 0) {
-            const html = constructEmail(user, tasks);
-            sendEmail(user.email, "Quack!", html);
-          }
-        }
+    let userCount = 0;
+    for (const user of users) {
+      const tasks = await TaskCollection.getUpcomingTasks(
+        user._id,
+        user.notifPeriod
       );
-    });
-    return res.status(200).json({ success: true });
+      if (tasks.length > 0) {
+        userCount++;
+        const html = constructEmail(user, tasks);
+        await sendEmail(user.email, "Quack!", html);
+      }
+    }
+    return res.status(200).json({ emailsSent: userCount });
   }
 );
 
