@@ -33,13 +33,15 @@ const ListView = () => {
   };
 
   const deleteList = (id: string) => {
-    del(`/api/lists/${id}`).then((list) => {
-      if (list?.error) {
-        window.alert(list.error);
-      } else {
-        setLists(lists.filter((l) => l._id !== id));
-      }
-    });
+    if (window.confirm("Are you sure you want to delete this list?")) {
+      del(`/api/lists/${id}`).then((list) => {
+        if (list?.error) {
+          window.alert(list.error);
+        } else {
+          setLists(lists.filter((l) => l._id !== id));
+        }
+      });
+    }
   };
 
   return (

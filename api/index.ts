@@ -11,6 +11,7 @@ import { OK } from "../server/util";
 import { userRouter } from "../server/user/router";
 import { listRouter } from "../server/list/router";
 import { taskRouter } from "../server/task/router";
+import { emailRouter } from "../server/email/router";
 
 dotenv.config();
 
@@ -59,6 +60,7 @@ const API_PREFIX = "/api";
 app.use(API_PREFIX + "/users", userRouter);
 app.use(API_PREFIX + "/lists", listRouter);
 app.use(API_PREFIX + "/tasks", taskRouter);
+app.use(API_PREFIX + "/emails", emailRouter);
 app.get(API_PREFIX + "/", (req: Request, res: Response) => {
   return res.status(OK).json({ message: "Welcome to Producktive API!" });
 });

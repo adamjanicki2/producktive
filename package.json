@@ -5,6 +5,7 @@
   "main": "api/index.ts",
   "scripts": {
     "start": "ts-node api/index.ts",
+    "dev:server": "ts-node-dev api/index.ts",
     "dev": "(ts-node-dev api/index.ts) & (cd client && npm start)",
     "build": "cd client && npm run build",
     "lint": "eslint . --ext .ts,.tsx --fix"
@@ -26,6 +27,8 @@
     "moment": "^2.29.4",
     "mongoose": "^6.6.2",
     "morgan": "^1.10.0",
+    "nodemailer": "^6.8.0",
+    "remove-markdown": "^0.5.0",
     "ts-node": "^10.9.1",
     "typescript": "^4.8.4"
   },
@@ -35,6 +38,8 @@
     "@types/express-session": "^1.17.5",
     "@types/mongoose": "^5.11.97",
     "@types/morgan": "^1.9.3",
+    "@types/nodemailer": "^6.4.6",
+    "@types/remove-markdown": "^0.3.1",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-react-hooks": "^4.6.0",

@@ -1,7 +1,14 @@
 import type { HydratedDocument, Types } from "mongoose";
+import { User } from "../user/model";
 import type { Task } from "./model";
 import TaskModel from "./model";
 
+const NOTIF_TO_DELTA = {
+  none: 0,
+  daily: 1,
+  weekly: 7,
+  monthly: 30,
+} as const;
 class TaskCollection {
   static async addOne(
     userId: Types.ObjectId | string,
@@ -64,6 +71,21 @@ class TaskCollection {
     return task!;
   }
 
+  static async getUpcomingTasks(
+    userId: Types.ObjectId | string,
+    notifPeriod: User["notifPeriod"],
+    limit?: number
+  ): Promise<HydratedDocument<Task>[]> {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + NOTIF_TO_DELTA[notifPeriod]);
+    return TaskModel.find({ userId, deadline: { $gte: today, $lt: tomorrow } })
+      .sort({ deadline: "asc" })
+      .limit(limit || 20)
+      .populate("parent");
+  }
+
   /**
    * Deletes a task form the collection
    *
@@ -73,6 +95,10 @@ class TaskCollection {
   static async deleteOne(taskId: Types.ObjectId | string): Promise<Boolean> {
     const task = await TaskModel.deleteOne({ _id: taskId });
     return task !== null;
+  }
+
+  static async deleteManyByParentId(id: Types.ObjectId | string) {
+    return TaskModel.deleteMany({ parent: id });
   }
 }
 
