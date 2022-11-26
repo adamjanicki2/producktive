@@ -17,15 +17,43 @@ const sendEmail = async (
   if (!email || !password) return false;
   const transporter = Nodemailer.createTransport({
     service: "gmail",
+    port: 465,
+    host: "smtp.gmail.com",
+    secure: true,
     auth: { user: email, pass: password },
   });
-  const message = await transporter.sendMail({
-    from: `Producktive Duck <${email}>`,
-    to: recipient,
-    subject,
-    html,
+
+  await new Promise((resolve, reject) => {
+    // verify connection configuration
+    transporter.verify(function (error, success) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(success);
+      }
+    });
   });
-  return !!message;
+  await new Promise((resolve, reject) => {
+    // send mail
+    transporter.sendMail(
+      {
+        from: `Producktive Duck <${email}>`,
+        to: recipient,
+        subject,
+        html,
+      },
+      (err, info) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          console.log(info);
+          resolve(info);
+        }
+      }
+    );
+  });
+  return true;
 };
 
 const TEMPLATE = `<!DOCTYPE html>
