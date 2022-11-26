@@ -23,39 +23,45 @@ const sendEmail = async (
     auth: { user: email, pass: password },
   });
 
-  await new Promise((resolve, reject) => {
-    // verify connection configuration
-    transporter.verify(function (error, success) {
-      if (error) {
-        console.log(error);
-        reject(error);
-      } else {
-        console.log("Server is ready to take our messages");
-        resolve(success);
-      }
-    });
+  // await new Promise((resolve, reject) => {
+  //   // verify connection configuration
+  //   transporter.verify(function (error, success) {
+  //     if (error) {
+  //       console.log(error);
+  //       reject(error);
+  //     } else {
+  //       console.log("Server is ready to take our messages");
+  //       resolve(success);
+  //     }
+  //   });
+  // });
+  // await new Promise((resolve, reject) => {
+  //   // send mail
+  //   transporter.sendMail(
+  //     {
+  //       from: `Producktive Duck <${email}>`,
+  //       to: recipient,
+  //       subject,
+  //       html,
+  //     },
+  //     (err, info) => {
+  //       if (err) {
+  //         console.error(err);
+  //         reject(err);
+  //       } else {
+  //         console.log(info);
+  //         resolve(info);
+  //       }
+  //     }
+  //   );
+  // });
+  const mail = await transporter.sendMail({
+    from: `Producktive Duck <${email}>`,
+    to: recipient,
+    subject,
+    html,
   });
-  await new Promise((resolve, reject) => {
-    // send mail
-    transporter.sendMail(
-      {
-        from: `Producktive Duck <${email}>`,
-        to: recipient,
-        subject,
-        html,
-      },
-      (err, info) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        } else {
-          console.log(info);
-          resolve(info);
-        }
-      }
-    );
-  });
-  return true;
+  return !!mail;
 };
 
 const TEMPLATE = `<!DOCTYPE html>
