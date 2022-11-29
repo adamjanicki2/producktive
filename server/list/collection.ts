@@ -36,7 +36,7 @@ export default class ListCollection {
     return list;
   }
 
-  static async deleteOne(listId: Types.ObjectId | string): Promise<Boolean> {
+  static async deleteOne(listId: Types.ObjectId | string): Promise<boolean> {
     const list = await ListModel.deleteOne({ _id: listId });
     return list !== null;
   }

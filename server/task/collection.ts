@@ -92,7 +92,7 @@ class TaskCollection {
    * @param {string} taskId - the taskId of the task to delete
    * @return {Promise<Boolean>} - true if the task has been deleted, false otherwise
    */
-  static async deleteOne(taskId: Types.ObjectId | string): Promise<Boolean> {
+  static async deleteOne(taskId: Types.ObjectId | string): Promise<boolean> {
     const task = await TaskModel.deleteOne({ _id: taskId });
     return task !== null;
   }
