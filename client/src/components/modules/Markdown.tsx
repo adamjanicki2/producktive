@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
 
-const ALLOWED_ELEMENTS = ["a", "em", "strong", "p", "code"];
+const ALLOWED_ELEMENTS = ["a", "em", "strong", "p", "code", "del"];
 
 const Markdown = ({
   children,
