@@ -4,18 +4,28 @@ import { Schema, model } from "mongoose";
 export type Item = {
   _id: Types.ObjectId;
   userId: Types.ObjectId;
-  storeItem: string;
-}
+  type: string;
+  indentifier: string;
+  properties: Record<string, string>;
+};
 
 const ItemSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
-    required: true
+    required: true,
   },
-  storeItem: {
+  type: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
+  identifier: {
+    type: String,
+    required: true,
+  },
+  properties: {
+    type: Object,
+    required: true,
+  },
 });
 
 const ItemModel = model<Item>("Item", ItemSchema);
