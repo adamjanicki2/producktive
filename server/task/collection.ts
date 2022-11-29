@@ -17,7 +17,13 @@ class TaskCollection {
     difficulty: "easy" | "medium" | "hard",
     date?: string
   ): Promise<HydratedDocument<Task>> {
-    let taskObj: Object = { userId, parent: listId, content, difficulty };
+    let taskObj: Object = {
+      userId,
+      parent: listId,
+      content,
+      difficulty,
+      completed: false,
+    };
     if (date) {
       taskObj = { ...taskObj, deadline: new Date(date) };
     }
@@ -95,6 +101,14 @@ class TaskCollection {
   static async deleteOne(taskId: Types.ObjectId | string): Promise<boolean> {
     const task = await TaskModel.deleteOne({ _id: taskId });
     return task !== null;
+  }
+
+  static async completeOne(taskId: Types.ObjectId | string): Promise<boolean> {
+    const task = await TaskModel.findById(taskId);
+    if (!task) return false;
+    task.completed = true;
+    await task.save();
+    return true;
   }
 
   static async deleteManyByParentId(id: Types.ObjectId | string) {

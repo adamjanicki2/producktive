@@ -45,3 +45,11 @@ body {
   width:100%;
   height:60px; 
 }
+
+.dimmed {
+  opacity: 0.5;
+}
+
+.w-fc {
+  width: fit-content;
+}

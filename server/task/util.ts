@@ -9,6 +9,7 @@ export const constructTaskResponse = (task: Task) => {
     content: task.content,
     difficulty: task.difficulty,
     parent: task.parent,
+    completed: task.completed,
   };
   return task.deadline ? { ...def, deadline: formatDate(task.deadline) } : def;
 };

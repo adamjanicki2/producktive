@@ -1,16 +1,31 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Button, IconButton, MenuItem, Select, TextField } from "@mui/material";
-import { Task, List, MUI_BUTTON_STYLE, get, post, del } from "../../util";
+import {
+  Button,
+  IconButton,
+  MenuItem,
+  Select,
+  TextField,
+  Tooltip,
+} from "@mui/material";
+import {
+  Task,
+  List,
+  MUI_BUTTON_STYLE,
+  get,
+  post,
+  del,
+  patch,
+} from "../../util";
 import Markdown from "../modules/Markdown";
 import NotFound from "./NotFoundPage";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DesktopDatePicker as DatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { CheckCircleOutline, Edit, Lock } from "@mui/icons-material";
 
-const DEFAULT_TASK: Task = {
-  _id: "Not set",
+const DEFAULT_TASK: Partial<Task> = {
   content: "",
   difficulty: "easy",
   deadline: "",
@@ -20,7 +35,9 @@ const ListPage = () => {
   const { listId } = useParams();
   const [tasks, setTasks] = React.useState<Task[]>();
   const [list, setList] = React.useState<List>();
-  const [newTask, setNewTask] = React.useState<Task>({ ...DEFAULT_TASK });
+  const [newTask, setNewTask] = React.useState<Partial<Task>>({
+    ...DEFAULT_TASK,
+  });
 
   useEffect(() => {
     get(`/api/lists/${listId}`).then((list) => {
@@ -72,6 +89,28 @@ const ListPage = () => {
     }
   };
 
+  const completeTask = (id: string) => {
+    patch(`/api/tasks/complete/${id}`).then((res) => {
+      if (res?.error) {
+        return window.alert(res.error);
+      } else {
+        setTasks(
+          tasks.map((t) => (t._id === id ? { ...t, completed: true } : t))
+        );
+      }
+    });
+  };
+
+  const editTask = (id: string, content: string) => {
+    patch(`/api/tasks/${id}`, { content }).then((res) => {
+      if (res?.error) {
+        return window.alert(res.error);
+      } else {
+        setTasks(tasks.map((t) => (t._id === id ? { ...t, content } : t)));
+      }
+    });
+  };
+
   if (list === undefined) return <></>;
   if (list === null) return <NotFound />;
   return (
@@ -81,7 +120,13 @@ const ListPage = () => {
       <div className="flex flex-column w-70 m-auto">
         {!tasks?.length && <h3>You do not have any tasks on this list!</h3>}
         {tasks?.map((task, index) => (
-          <TaskNode key={`task${index}`} task={task} deleteTask={deleteTask} />
+          <TaskNode
+            key={`task${index}`}
+            task={task}
+            deleteTask={deleteTask}
+            completeTask={completeTask}
+            editTask={editTask}
+          />
         ))}
         <hr />
         <TextField
@@ -153,20 +198,73 @@ const DIFF_TO_COLOR = {
 const TaskNode = ({
   task,
   deleteTask,
+  completeTask,
+  editTask,
 }: {
   task: Task;
   deleteTask: (id: string) => void;
-}) => (
-  <div className="pa2 mv2 bg-near-white ba b--near-black">
-    <Markdown>{task.content}</Markdown>{" "}
-    <span className={DIFF_TO_COLOR[task.difficulty] + " b i"}>
-      {task.difficulty}
-    </span>
-    <IconButton onClick={() => deleteTask(task._id)}>
-      <DeleteIcon />
-    </IconButton>
-    {task.deadline && <span>Complete by: {task.deadline}</span>}
-  </div>
-);
+  completeTask: (id: string) => void;
+  editTask: (id: string, content: string) => void;
+}) => {
+  const [editing, setEditing] = React.useState<boolean>(false);
+  const [content, setContent] = React.useState<string>(task.content);
+
+  return (
+    <div
+      className={`flex flex-column pa2 mv2 ba b--near-black ${
+        task.completed ? "bg-moon-gray" : "bg-near-white"
+      }`}
+    >
+      {editing ? (
+        <TextField
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        />
+      ) : (
+        <Markdown>
+          {task.completed ? `~~${task.content}~~` : task.content}
+        </Markdown>
+      )}{" "}
+      <div className="flex flex-row items-center">
+        {!task.completed && (
+          <Tooltip arrow title={editing ? "Done" : "Edit"}>
+            <IconButton
+              onClick={() => {
+                if (editing) {
+                  editTask(task._id, content);
+                }
+                setEditing(!editing);
+              }}
+            >
+              {editing ? (
+                <Lock className="black" />
+              ) : (
+                <Edit className="black" />
+              )}
+            </IconButton>
+          </Tooltip>
+        )}
+        {!task.completed && (
+          <Tooltip arrow title="Complete">
+            <IconButton onClick={() => completeTask(task._id)} className="w-fc">
+              <CheckCircleOutline className="green" />
+            </IconButton>
+          </Tooltip>
+        )}
+        <Tooltip arrow title="Delete">
+          <IconButton onClick={() => deleteTask(task._id)} className="w-fc">
+            <DeleteIcon className="dark-red" />
+          </IconButton>
+        </Tooltip>
+      </div>
+      <span>
+        <span className={DIFF_TO_COLOR[task.difficulty] + " b i"}>
+          {task.difficulty}
+        </span>{" "}
+        {task.deadline && <span>Complete by: {task.deadline}</span>}
+      </span>
+    </div>
+  );
+};
 
 export default ListPage;
