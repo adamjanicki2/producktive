@@ -34,6 +34,17 @@ class ItemCollection {
   ): Promise<HydratedDocument<Item>[]> {
     return ItemModel.find({ userId });
   }
+
+  /**
+   * Find items by userId and identifier
+   */
+  static async findByIdentifier(
+    userId: Types.ObjectId | string,
+    identifier: string
+  ): Promise<HydratedDocument<Item> | null> {
+    const item = await ItemModel.findOne({userId: userId, indentifier: identifier});
+    return item;
+  }
 }
 
 export default ItemCollection;
