@@ -3,6 +3,7 @@ import express from "express";
 import UserCollection from "./collection";
 import * as userValidator from "../user/middleware";
 import * as util from "./util";
+import PetCollection from "../pet/collection";
 
 const router = express.Router();
 
@@ -114,6 +115,7 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const user = await UserCollection.addOne(req.body.email, req.body.password);
+    const pet = await PetCollection.addOne(user._id, user.username);
     (req.session as any).userId = user._id.toString();
     res.status(201).json({
       message: `Your account was created successfully. You have been logged in as ${user.username}`,
@@ -136,6 +138,7 @@ router.delete(
   async (req: Request, res: Response) => {
     const userId = ((req.session as any).userId as string) ?? "";
     await UserCollection.deleteOne(userId);
+    await PetCollection.deleteOne(userId);
     (req.session as any).userId = undefined;
     res.status(200).json({
       message: "Your account has been deleted successfully.",

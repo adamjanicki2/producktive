@@ -36,6 +36,16 @@ class ItemCollection {
   }
 
   /**
+   * Delete item once used (for food)
+   */
+  static async deleteOne(
+    itemId: Types.ObjectId | string
+  ): Promise<boolean> {
+    const item = await ItemModel.deleteOne({ _id: itemId });
+    return item !== null;
+  }
+
+  /**
    * Find items by userId and identifier
    */
   static async findByIdentifier(

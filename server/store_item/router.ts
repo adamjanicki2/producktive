@@ -3,6 +3,7 @@ import express from "express";
 import ItemCollection from "./collection";
 import * as userValidator from "../user/middleware";
 import * as middleware from "../common/middleware";
+import * as ItemValidator from "./middleware";
 
 const router = express.Router();
 
@@ -23,6 +24,8 @@ router.post(
   [
     userValidator.isUserLoggedIn,
     middleware.isInfoSupplied("body", ["type", "identifier", "properties"]),
+    ItemValidator.isAlreadyPurchased
+
   ],
   async (req: Request, res: Response) => {
     const { type, identifier, properties } = req.body;
