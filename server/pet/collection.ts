@@ -38,9 +38,9 @@ class PetCollection {
    * Deletes an existing pet
    */
   static async deleteOne(
-    petId: Types.ObjectId | string
+    userId: Types.ObjectId | string
   ): Promise<boolean> {
-    const pet = await PetModel.deleteOne({ _id: petId });
+    const pet = await PetModel.deleteOne({ userId: userId });
     return pet !== null;
   }
 
@@ -60,10 +60,10 @@ class PetCollection {
    * Updates health for pet
    */
   static async updateHealth(
-    petId: Types.ObjectId | string
+    userId: Types.ObjectId | string
   ): Promise<HydratedDocument<Pet>> {
     const newHealth = 0; //call health algorithm
-    const pet = await PetModel.findOne({ _id: petId });
+    const pet = await PetModel.findOne({ userId: userId });
     pet!.health = newHealth;
     await pet!.save();
     return pet!;
@@ -73,11 +73,11 @@ class PetCollection {
    * Updates items on for pet
    */
   static async updateItemOn(
-    petId: Types.ObjectId | string,
+    userId: Types.ObjectId | string,
     label: string,
     itemId: Types.ObjectId | string
   ): Promise<HydratedDocument<Pet>> {
-    const pet = await PetModel.findOne({ _id: petId });
+    const pet = await PetModel.findOne({ userId: userId });
     const updatedItemsOn = pet!.itemsOn;
     updatedItemsOn[label] = itemId;
     pet!.itemsOn = updatedItemsOn;
@@ -89,9 +89,9 @@ class PetCollection {
    * Updates last feed date
    */
   static async updateLastFeed( //maybe also need to updateHealth differently 
-    petId: Types.ObjectId | string
+    userId: Types.ObjectId | string
   ): Promise<HydratedDocument<Pet>> {
-    const pet = await PetModel.findOne({ _id: petId });
+    const pet = await PetModel.findOne({ userId: userId });
     const newDate = new Date();
     pet!.lastFed = newDate;
     await pet!.save();

@@ -240,4 +240,5 @@ export {
   isValidEmail,
   isEmailNotAlreadyInUse,
   isValidPeriod,
+  isUsernameExists
 };
