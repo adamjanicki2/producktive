@@ -7,7 +7,7 @@ export type Pet = {
   petName: string;
   lastFed: Date;
   health: number;
-  itemsOn: Array<Types.ObjectId>;
+  itemsOn: Record<string, Types.ObjectId>;
 };
 
 const PetSchema = new Schema({
@@ -28,7 +28,7 @@ const PetSchema = new Schema({
     required: true,
   },
   itemsOn: {
-    type: Array<Schema.Types.ObjectId>,
+    type: Object,
     required: true,
     ref: "Item",
   }
