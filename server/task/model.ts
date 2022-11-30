@@ -7,6 +7,7 @@ export type Task = {
   userId: Types.ObjectId;
   parent: List;
   content: string;
+  completed: boolean;
   deadline?: Date;
   difficulty: "easy" | "medium" | "hard";
 };
@@ -25,6 +26,10 @@ const TaskSchema = new Schema({
   //the content of the task
   content: {
     type: String,
+    required: true,
+  },
+  completed: {
+    type: Boolean,
     required: true,
   },
   //the deadline of the task

@@ -1,8 +1,9 @@
 import React from "react";
-import { Button, IconButton, TextField } from "@mui/material";
+import { Button, IconButton, TextField, Tooltip } from "@mui/material";
 import { Link } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { del, get, List, MUI_BUTTON_STYLE, post } from "../../util";
+import { del, get, List, MUI_BUTTON_STYLE, patch, post } from "../../util";
+import { Edit, Lock } from "@mui/icons-material";
 
 const ListView = () => {
   const [lists, setLists] = React.useState<List[]>();
@@ -44,20 +45,28 @@ const ListView = () => {
     }
   };
 
+  const editListName = (id: string, title: string) => {
+    patch(`/api/lists/${id}`, { title }).then((list) => {
+      if (list?.error) {
+        window.alert(list.error);
+      } else {
+        setLists(lists.map((l) => (l._id === id ? list : l)));
+      }
+    });
+  };
+
   return (
     <div className="flex flex-column primary-text">
       <h1 className="tc f-subheadline ma0 pa0 ">List View</h1>
       <div className="flex flex-column w-70 m-auto">
         {(!lists || !lists.length) && <h3>You don't have any lists!</h3>}
         {lists?.map((list, index) => (
-          <div className="flex flex-row items-center" key={index}>
-            <Link className="ma2" to={`/list/${list._id}`}>
-              {list.title}
-            </Link>
-            <IconButton onClick={() => deleteList(list._id)}>
-              <DeleteIcon />
-            </IconButton>
-          </div>
+          <ListNode
+            list={list}
+            key={`listitem${index}`}
+            deleteList={deleteList}
+            editListName={editListName}
+          />
         ))}
         <hr />
         <TextField
@@ -74,6 +83,52 @@ const ListView = () => {
           Create List
         </Button>
       </div>
+    </div>
+  );
+};
+
+const ListNode = ({
+  list,
+  editListName,
+  deleteList,
+}: {
+  list: List;
+  editListName: (id: string, title: string) => void;
+  deleteList: (id: string) => void;
+}) => {
+  const [editing, setEditing] = React.useState<boolean>(false);
+  const [title, setTitle] = React.useState<string>(list.title);
+
+  return (
+    <div className="flex flex-row items-center">
+      {editing ? (
+        <TextField value={title} onChange={(e) => setTitle(e.target.value)} />
+      ) : (
+        <Link
+          className="f2 fw3 no-underline primary-text underline-hover"
+          to={`/list/${list._id}`}
+        >
+          {title}
+        </Link>
+      )}{" "}
+      <Tooltip arrow title={editing ? "Save" : "Edit"}>
+        <IconButton
+          onClick={() => {
+            if (editing) {
+              editListName(list._id, title);
+            }
+            setEditing(!editing);
+          }}
+          className="w-fc"
+        >
+          {editing ? <Lock className="black" /> : <Edit className="black" />}
+        </IconButton>
+      </Tooltip>
+      <Tooltip arrow title="Delete">
+        <IconButton onClick={() => deleteList(list._id)} className="w-fc">
+          <DeleteIcon className="dark-red" />
+        </IconButton>
+      </Tooltip>
     </div>
   );
 };
