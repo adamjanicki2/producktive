@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 /**
  * Coin Algorithm
  * 
@@ -32,8 +25,3 @@ const due = new Date('2022-12-23');
 console.log(`hard: ${coins(due, completed, 'hard')}`);
 console.log(`medium: ${coins(due, completed, 'medium')}`);
 console.log(`easy: ${coins(due, completed, 'easy')}`);
-
-
-
-
-
