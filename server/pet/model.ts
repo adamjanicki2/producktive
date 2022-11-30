@@ -7,7 +7,7 @@ export type Pet = {
   petName: string;
   lastFed: Date;
   health: number;
-  itemsOn: Record<string, Types.ObjectId>;
+  itemsOn: Record<"duckColor" | "beakColor" | "hatColor", Types.ObjectId | string>;
 };
 
 const PetSchema = new Schema({

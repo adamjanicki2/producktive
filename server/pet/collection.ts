@@ -28,7 +28,7 @@ class PetCollection {
   ): Promise<HydratedDocument<Pet>> {
     const lastFed = new Date();
     const health = 100;
-    const itemsOn = [];
+    const itemsOn = {"duckColor": '', "beakColor": '', "hatColor": ''};
     const pet = new PetModel({ userId, petName, lastFed, health, itemsOn });
     await pet.save();
     return pet;
@@ -53,8 +53,52 @@ class PetCollection {
     const user = await UserCollection.findOneByUsername(username);
     const userId = user!._id;
     const pet = await PetModel.findOne({ userId });
-    return pet;
+    return pet!;
   }
+
+  /**
+   * Updates health for pet
+   */
+  static async updateHealth(
+    petId: Types.ObjectId | string
+  ): Promise<HydratedDocument<Pet>> {
+    const newHealth = 0; //call health algorithm
+    const pet = await PetModel.findOne({ _id: petId });
+    pet!.health = newHealth;
+    await pet!.save();
+    return pet!;
+  }
+
+  /**
+   * Updates items on for pet
+   */
+  static async updateItemOn(
+    petId: Types.ObjectId | string,
+    label: string,
+    itemId: Types.ObjectId | string
+  ): Promise<HydratedDocument<Pet>> {
+    const pet = await PetModel.findOne({ _id: petId });
+    const updatedItemsOn = pet!.itemsOn;
+    updatedItemsOn[label] = itemId;
+    pet!.itemsOn = updatedItemsOn;
+    await pet!.save();
+    return pet!;
+  }
+
+  /**
+   * Updates last feed date
+   */
+  static async updateLastFeed( //maybe also need to updateHealth differently 
+    petId: Types.ObjectId | string
+  ): Promise<HydratedDocument<Pet>> {
+    const pet = await PetModel.findOne({ _id: petId });
+    const newDate = new Date();
+    pet!.lastFed = newDate;
+    await pet!.save();
+    return pet!;
+  }
+
+  // need check for last feeding to see if it is past week to update health
 }
 
 export default PetCollection;
