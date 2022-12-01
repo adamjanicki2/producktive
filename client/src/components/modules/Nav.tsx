@@ -23,8 +23,13 @@ const Nav = ({ user, logout }: { user?: User; logout: () => void }) => {
             </Link>
           )}
           {user && (
-            <Link className={LINK_CLASS_NAME} to="/profile/">
-              {user.username}
+            <Link className={LINK_CLASS_NAME} to="/pet/">
+              My Pet
+            </Link>
+          )}
+          {user && (
+            <Link className={LINK_CLASS_NAME} to="/store/">
+              Store
             </Link>
           )}
           {user && (

@@ -115,7 +115,7 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const user = await UserCollection.addOne(req.body.email, req.body.password);
-    const pet = await PetCollection.addOne(user._id, user.username);
+    await PetCollection.addOne(user._id, user.username);
     (req.session as any).userId = user._id.toString();
     res.status(201).json({
       message: `Your account was created successfully. You have been logged in as ${user.username}`,
