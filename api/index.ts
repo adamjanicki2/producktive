@@ -13,6 +13,7 @@ import { listRouter } from "../server/list/router";
 import { taskRouter } from "../server/task/router";
 import { emailRouter } from "../server/email/router";
 import { petRouter } from "../server/pet/router";
+import { itemRouter } from "../server/store_item/router";
 
 dotenv.config();
 
@@ -63,6 +64,7 @@ app.use(API_PREFIX + "/lists", listRouter);
 app.use(API_PREFIX + "/tasks", taskRouter);
 app.use(API_PREFIX + "/emails", emailRouter);
 app.use(API_PREFIX + "/pets", petRouter);
+app.use(API_PREFIX + "/items", itemRouter);
 app.get(API_PREFIX + "/", (req: Request, res: Response) => {
   return res.status(OK).json({ message: "Welcome to Producktive API!" });
 });
