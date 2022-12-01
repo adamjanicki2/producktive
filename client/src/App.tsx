@@ -6,10 +6,11 @@ import HomePage from "./components/pages/HomePage";
 import NotFoundPage from "./components/pages/NotFoundPage";
 import AboutPage from "./components/pages/AboutPage";
 import LoginPage from "./components/pages/LoginPage";
-import ProfilePage from "./components/pages/ProfilePage";
+import PetPage from "./components/pages/PetPage";
 import SettingsPage from "./components/pages/SettingsPage";
 import ListPage from "./components/pages/ListPage";
 import ListViewPage from "./components/pages/ListViewPage";
+import StorePage from "./components/pages/StorePage";
 import "./app.css";
 import { get, post, del } from "./util";
 import type { User } from "./util";
@@ -74,11 +75,12 @@ const App = () => {
             <LoginPage type="create" onFormSubmitCallback={createAccount} />
           }
         />
-        <Route path="/profile/" element={<ProfilePage user={user} />} />
+        <Route path="/pet/" element={<PetPage user={user} />} />
         <Route
           path="/settings/"
           element={<SettingsPage user={user} updateUser={updateUser} />}
         />
+        <Route path="/store/" element={<StorePage user={user} />} />
         <Route path="/list/:listId" element={<ListPage />} />
         <Route path="/lists/" element={<ListViewPage />} />
         {/* Make sure this is the last route */}
