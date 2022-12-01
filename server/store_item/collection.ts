@@ -34,6 +34,27 @@ class ItemCollection {
   ): Promise<HydratedDocument<Item>[]> {
     return ItemModel.find({ userId });
   }
+
+  /**
+   * Delete item once used (for food)
+   */
+  static async deleteOne(
+    itemId: Types.ObjectId | string
+  ): Promise<boolean> {
+    const item = await ItemModel.deleteOne({ _id: itemId });
+    return item !== null;
+  }
+
+  /**
+   * Find items by userId and identifier
+   */
+  static async findByIdentifier(
+    userId: Types.ObjectId | string,
+    identifier: string
+  ): Promise<HydratedDocument<Item> | null> {
+    const item = await ItemModel.findOne({userId: userId, indentifier: identifier});
+    return item;
+  }
 }
 
 export default ItemCollection;
