@@ -75,12 +75,14 @@ const App = () => {
             <LoginPage type="create" onFormSubmitCallback={createAccount} />
           }
         />
-        <Route path="/pet/" element={<PetPage user={user} />} />
-        <Route
-          path="/settings/"
-          element={<SettingsPage user={user} updateUser={updateUser} />}
-        />
-        <Route path="/store/" element={<StorePage user={user} />} />
+        {user && <Route path="/pet/" element={<PetPage user={user} />} />}
+        {user && (
+          <Route
+            path="/settings/"
+            element={<SettingsPage user={user} updateUser={updateUser} />}
+          />
+        )}
+        {user && <Route path="/store/" element={<StorePage user={user} />} />}
         <Route path="/list/:listId" element={<ListPage />} />
         <Route path="/lists/" element={<ListViewPage />} />
         {/* Make sure this is the last route */}
