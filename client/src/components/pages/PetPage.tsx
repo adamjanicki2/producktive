@@ -11,7 +11,7 @@ import {
 } from "../../util";
 import Duck from "../modules/Duck";
 import { Button, IconButton, MenuItem, Select, TextField } from "@mui/material";
-import { Edit, Lock } from "@mui/icons-material";
+import { Edit, Lock, PetsSharp } from "@mui/icons-material";
 
 const PetPage = ({ user }: { user?: User }) => {
   const [pet, setPet] = React.useState<Pet>();
@@ -58,9 +58,24 @@ const PetPage = ({ user }: { user?: User }) => {
     .filter((item) => item.type === "duck")
     .map((item) => item.properties.color) as ColorOption[];
 
-  return pet ? (
+  return pet && user ? (
     <div className="flex flex-column primary-text items-center">
       <h1 className="tc f-subheadline ma0 pa0">Your Duck</h1>
+      <h2>
+        Coins: {user.coins} | Health: {pet.health}
+      </h2>
+      <div className="ba bw1 br2 b--near-black w-50">
+        <div
+          className={
+            pet.health < 33
+              ? "bg-dark-red"
+              : pet.health < 66
+              ? "bg-yellow"
+              : "bg-green"
+          }
+          style={{ height: 20, width: `${pet.health}%` }}
+        ></div>
+      </div>
       <div className="m-auto w-fc">
         <Duck size={450} beakColor={beakColor} bodyColor={bodyColor} />
       </div>
