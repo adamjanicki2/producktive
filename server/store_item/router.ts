@@ -25,6 +25,7 @@ router.post(
     userValidator.isUserLoggedIn,
     middleware.isInfoSupplied("body", ["type", "identifier", "properties"]),
     ItemValidator.isAlreadyPurchased,
+    ItemValidator.hasEnoughCoins
   ],
   async (req: Request, res: Response) => {
     const { type, identifier, properties } = req.body;

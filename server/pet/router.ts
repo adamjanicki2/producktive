@@ -3,6 +3,7 @@ import express from "express";
 import PetCollection from "./collection";
 import * as userValidator from "../user/middleware";
 import * as itemValidator from "../store_item/middleware";
+import * as petValidator from "./middleware";
 
 const router = express.Router();
 
@@ -34,7 +35,7 @@ router.patch(
   "/updateFeed",
   [
     userValidator.isUserLoggedIn,
-    //need to check enough coins to feed
+    petValidator.hasEnoughCoins
     //need to check not overfeeding
   ],
   async (req: Request, res: Response) => {
