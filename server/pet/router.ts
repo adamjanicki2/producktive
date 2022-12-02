@@ -44,17 +44,29 @@ router.patch(
 
 //update items on
 router.patch(
-  "/updateItem",
+  "/updateItemsOn",
   [
     userValidator.isUserLoggedIn,
     //need check if have valid item in closet
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
-    const label = req.body.label;
-    const itemId = req.body.itemId;
-    const pet = await PetCollection.updateItemOn(userId, label, itemId);
+    const { duck, beak } = req.body;
+    if (duck) await PetCollection.updateItemOn(userId, "duck", duck);
+    if (beak) await PetCollection.updateItemOn(userId, "beak", beak);
+    const pet = await PetCollection.findById(userId);
     return res.status(200).json(pet);
+  }
+);
+
+router.patch(
+  "/updateName",
+  [userValidator.isUserLoggedIn],
+  async (req: Request, res: Response) => {
+    const userId = (req.session as any).userId as string;
+    const { petName } = req.body;
+    await PetCollection.updateName(userId, petName);
+    return res.status(200).json({ message: "Pet name updated" });
   }
 );
 

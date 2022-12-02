@@ -1,13 +1,5 @@
 import React from "react";
-
-type ColorOption =
-  | "yellow"
-  | "orange"
-  | "green"
-  | "blue"
-  | "red"
-  | "black"
-  | "purple";
+import type { ColorOption } from "../../util";
 
 const COLOR_TO_HEX = {
   yellow: {

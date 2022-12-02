@@ -63,6 +63,7 @@ export type User = {
   email: string;
   username: string;
   notifPeriod: "daily" | "weekly" | "montly" | "none";
+  coins: number;
 };
 
 export type Task = {
@@ -80,6 +81,46 @@ export type List = {
   _id: string;
   userId?: string;
   title: string;
+};
+
+export type ColorOption =
+  | "yellow"
+  | "orange"
+  | "green"
+  | "blue"
+  | "red"
+  | "black"
+  | "purple";
+
+export const COLOR_OPTIONS = [
+  "yellow",
+  "orange",
+  "green",
+  "blue",
+  "red",
+  "black",
+  "purple",
+] as const;
+
+export type Pet = {
+  _id: string;
+  userId: string;
+  petName: string;
+  lastFed: Date;
+  health: number;
+  itemsOn: {
+    duck: ColorOption;
+    beak: ColorOption;
+    hat: string;
+  };
+};
+
+export type StoreItem = {
+  _id: string;
+  userId: string;
+  properties: Record<string, string>;
+  type: "beak" | "hat" | "duck";
+  identifier: string;
 };
 
 export const MUI_BUTTON_STYLE: React.CSSProperties = {
