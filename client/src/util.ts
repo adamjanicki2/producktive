@@ -82,6 +82,46 @@ export type List = {
   title: string;
 };
 
+export type ColorOption =
+  | "yellow"
+  | "orange"
+  | "green"
+  | "blue"
+  | "red"
+  | "black"
+  | "purple";
+
+export const COLOR_OPTIONS = [
+  "yellow",
+  "orange",
+  "green",
+  "blue",
+  "red",
+  "black",
+  "purple",
+] as const;
+
+export type Pet = {
+  _id: string;
+  userId: string;
+  petName: string;
+  lastFed: Date;
+  health: number;
+  itemsOn: {
+    duckColor: ColorOption;
+    beakColor: ColorOption;
+    hatcolor: string;
+  };
+};
+
+export type StoreItem = {
+  _id: string;
+  userId: string;
+  properties: Record<string, string>;
+  type: "beak" | "hat" | "duck";
+  identifier: string;
+};
+
 export const MUI_BUTTON_STYLE: React.CSSProperties = {
   textTransform: "none",
   margin: "4px",
