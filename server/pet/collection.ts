@@ -3,6 +3,7 @@ import type { Pet } from "./model";
 import PetModel from "./model";
 import UserCollection from "../user/collection";
 
+const HEALTH_HIT = 5;
 class PetCollection {
   /**
    * Get all available pets sorted by alphabetical order
@@ -68,6 +69,16 @@ class PetCollection {
     await PetModel.findOneAndUpdate({ userId }, { petName });
   }
 
+  static async decrementAllHealth() {
+    const pets = await PetModel.find();
+    let count = 0;
+    for (const pet of pets) {
+      pet.health = Math.max(1, pet.health - HEALTH_HIT);
+      await pet.save();
+      count++;
+    }
+    return count;
+  }
   /**
    * Updates health for pet
    */
