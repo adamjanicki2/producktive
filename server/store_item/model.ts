@@ -27,10 +27,6 @@ const ItemSchema = new Schema({
     type: Object,
     required: true,
   },
-  cost: {
-    type: Number,
-    required: true,
-  },
 
 });
 

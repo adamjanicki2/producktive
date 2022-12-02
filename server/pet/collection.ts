@@ -106,6 +106,7 @@ class PetCollection {
     const newDate = new Date();
     pet!.lastFed = newDate;
     await pet!.save();
+    await UserCollection.updateCoins(userId, -15); //subtract cost of food of 15
     return pet!;
   }
 
