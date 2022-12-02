@@ -2,8 +2,10 @@ import type { HydratedDocument, Types } from "mongoose";
 import type { Pet } from "./model";
 import PetModel from "./model";
 import UserCollection from "../user/collection";
-import {updateHealth, feed} from "../common/util"
+// import {updateHealth, feed} from "../common/util"
+import {feed} from "../common/util"
 
+const HEALTH_HIT = 5;
 class PetCollection {
   /**
    * Get all available pets sorted by alphabetical order
@@ -70,17 +72,31 @@ class PetCollection {
   }
 
   /**
-   * Updates health for pet (designed to be called once daily)
+   * Updates health for pet
    */
-  static async updateHealth(
-    userId: Types.ObjectId | string
-  ): Promise<HydratedDocument<Pet>> {
-    const pet = await PetModel.findOne({ userId: userId });
-    const newHealth = updateHealth(pet!.health);
-    pet!.health = newHealth;
-    await pet!.save();
-    return pet!;
+  static async decrementAllHealth() {
+    const pets = await PetModel.find();
+    let count = 0;
+    for (const pet of pets) {
+      pet.health = Math.min(0, pet.health - HEALTH_HIT);
+      await pet.save();
+      count++;
+    }
+    return count;
   }
+
+  // /**
+  //  * Updates health for pet (designed to be called once daily)
+  //  */
+  // static async updateHealth(
+  //   userId: Types.ObjectId | string
+  // ): Promise<HydratedDocument<Pet>> {
+  //   const pet = await PetModel.findOne({ userId: userId });
+  //   const newHealth = updateHealth(pet!.health);
+  //   pet!.health = newHealth;
+  //   await pet!.save();
+  //   return pet!;
+  // }
 
   /**
    * Updates items on for pet
@@ -99,7 +115,7 @@ class PetCollection {
   /**
    * Feed Pet
    */
-  static async updateLastFeed(
+  static async feed(
     //maybe also need to updateHealth differently
     userId: Types.ObjectId | string,
     feedAmount: number

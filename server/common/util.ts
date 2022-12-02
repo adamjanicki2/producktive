@@ -7,6 +7,8 @@ const DIFFICULTY_TO_REWARD = {
   hard: 30,
 } as const;
 
+const MAX_TIME_FACTOR = 3;
+
 /**
  * Coin Algorithm
  *
@@ -24,7 +26,8 @@ export function coins(
   // time difference in days
   // negative if completed late
   const timeDelta = Math.round(Math.floor((due.valueOf() - completed.valueOf()) / (1000 * 3600 * 24)));
-  const onTimeFactor = 1.1 ** timeDelta;
+  let onTimeFactor = 1.1 ** timeDelta;
+  onTimeFactor = Math.min(onTimeFactor, MAX_TIME_FACTOR); //make sure they don't get too many coins for completing a task far out in advance
   const difficultyScale = DIFFICULTY_TO_REWARD[difficulty];
   const coins = Math.round(difficultyScale * onTimeFactor);
   return coins;
@@ -44,7 +47,7 @@ const DAILY_HEALTH_HIT = 5;
  export function updateHealth(
   currentHealth: number
 ): number {
-  //newHealth must be in range[1, 100]
+  //newHealth must be in range[MIN_HEALTH, MAX_HEALTH]
   const newHealth = Math.min(Math.max(currentHealth - DAILY_HEALTH_HIT, MIN_HEALTH), MAX_HEALTH);
   return Math.round(newHealth);
 }
@@ -64,7 +67,7 @@ const FOOD_UNIT_VALUE = 1;
   feedAmount: number
 ): number {
 
-  //newHealth must be in range[1, 100]
+  //newHealth must be in range[MIN_HEALTH, MAX_HEALTH]
   const newHealth = Math.min(Math.max(currentHealth + (feedAmount * FOOD_UNIT_VALUE), MIN_HEALTH), MAX_HEALTH);
   return Math.round(newHealth);
 }

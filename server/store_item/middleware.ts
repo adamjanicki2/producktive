@@ -24,6 +24,7 @@ const isAlreadyPurchased = async(
         return;
     }
   }
+  next();
 };
 
 /**
@@ -41,6 +42,7 @@ const isInStock = async (
     });
     return;
   }
+  next();
 };
 
 /**
@@ -60,7 +62,8 @@ const hasEnoughCoins = async (
     });
     return;
   }
-}
+  next();
+};
 
 export {
     isAlreadyPurchased,

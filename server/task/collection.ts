@@ -2,7 +2,7 @@ import type { HydratedDocument, Types } from "mongoose";
 import { User } from "../user/model";
 import type { Task } from "./model";
 import TaskModel from "./model";
-import coins from "../common/util";
+import { coins } from "../common/util";
 import UserCollection from "../user/collection";
 
 const NOTIF_TO_DELTA = {
@@ -111,7 +111,11 @@ class TaskCollection {
   static async completeOne(userId: Types.ObjectId | string, taskId: Types.ObjectId | string): Promise<boolean> {
     const task = await TaskModel.findById(taskId);
     const completed = new Date();
-    const addedCoins = coins(task!.deadline, completed, task!.difficulty);
+    const deadline = task!.deadline;
+    let addedCoins = 0;
+    if(deadline){
+      addedCoins = coins(deadline, completed, task!.difficulty);
+    }
     await UserCollection.updateCoins(userId, addedCoins);
     if (!task) return false;
     task.completed = true;
