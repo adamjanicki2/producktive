@@ -64,11 +64,13 @@ class PetCollection {
     userId: Types.ObjectId | string
   ): Promise<HydratedDocument<Pet>> {
     const pet = await PetModel.findOne({ userId: userId });
-    const newHealth = health(pet!.lastFed, pet!.healthAfterLastFeed); 
+    const newHealth = health(pet!.lastFed, pet!.healthAfterLastFeed); //todo fix after changing util
     pet!.health = newHealth;
     await pet!.save();
     return pet!;
   }
+
+  //todo decrease all pets by 5 up to min health
 
   /**
    * Updates items on for pet

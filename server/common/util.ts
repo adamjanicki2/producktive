@@ -43,8 +43,8 @@ const DAILY_HEALTH_HIT = 5;
  * @return {number} current health of duck
  */
  export function health(
-  lastFeed: Date,
-  healthAfterLastFeed: number
+  lastFeed: Date, //don't need because running every day
+  healthAfterLastFeed: number ///todo change name
 ): number {
   const today = new Date();
   // time difference in days
@@ -71,7 +71,7 @@ const FOOD_UNIT_VALUE = 1;
   healthAfterLastFeed: number,
   feedAmount: number
 ): number {
-  const currentHealth = health(lastFeed, healthAfterLastFeed);
+  const currentHealth = health(lastFeed, healthAfterLastFeed); //todo pass into function
 
   //newHealth must be in range[1, 100]
   const newHealth = Math.min(Math.max(currentHealth + (feedAmount * FOOD_UNIT_VALUE), MIN_HEALTH), MAX_HEALTH);
