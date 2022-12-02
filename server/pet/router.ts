@@ -38,7 +38,7 @@ router.patch(
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
     const pet = await PetCollection.updateLastFeed(userId, req.body.feedAmount);
-    return res.status(200).json(pet);
+    return res.status(200).json({ pet: pet, message: `You successfully fed pet ${req.body.feedAmount}` });
   }
 );
 
@@ -59,6 +59,7 @@ router.patch(
   }
 );
 
+//update duck name
 router.patch(
   "/updateName",
   [userValidator.isUserLoggedIn],
@@ -67,6 +68,19 @@ router.patch(
     const { petName } = req.body;
     await PetCollection.updateName(userId, petName);
     return res.status(200).json({ message: "Pet name updated" });
+  }
+);
+
+//Daily pet health update
+router.patch(
+  "/updateHealth",
+  [
+    userValidator.isUserLoggedIn,
+  ],
+  async (req: Request, res: Response) => {
+    const userId = (req.session as any).userId as string;
+    const pet = await PetCollection.updateHealth(userId);
+    return res.status(200).json({ pet: pet, message: "Pet Health updated" });
   }
 );
 

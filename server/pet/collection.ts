@@ -97,7 +97,7 @@ class PetCollection {
   }
 
   /**
-   * Updates last feed date
+   * Feed Pet
    */
   static async updateLastFeed(
     //maybe also need to updateHealth differently
