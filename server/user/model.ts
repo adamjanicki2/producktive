@@ -7,6 +7,7 @@ export type User = {
   username: string;
   password: string;
   notifPeriod: "daily" | "weekly" | "monthly" | "none";
+  coins: number;
 };
 
 const UserSchema = new Schema({
@@ -29,6 +30,11 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     default: "daily",
+  },
+  // The user's coins
+  coins: {
+    type: Number,
+    required: true,
   },
 });
 

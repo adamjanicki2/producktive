@@ -63,6 +63,7 @@ export type User = {
   email: string;
   username: string;
   notifPeriod: "daily" | "weekly" | "montly" | "none";
+  coins: number;
 };
 
 export type Task = {
@@ -108,9 +109,9 @@ export type Pet = {
   lastFed: Date;
   health: number;
   itemsOn: {
-    duckColor: ColorOption;
-    beakColor: ColorOption;
-    hatcolor: string;
+    duck: ColorOption;
+    beak: ColorOption;
+    hat: string;
   };
 };
 
