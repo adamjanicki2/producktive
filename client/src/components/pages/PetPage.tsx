@@ -11,7 +11,7 @@ import {
 } from "../../util";
 import Duck from "../modules/Duck";
 import { Button, IconButton, MenuItem, Select, TextField } from "@mui/material";
-import { Edit, Lock, PetsSharp } from "@mui/icons-material";
+import { Edit, Lock } from "@mui/icons-material";
 
 const PetPage = ({ user }: { user?: User }) => {
   const [pet, setPet] = React.useState<Pet>();
