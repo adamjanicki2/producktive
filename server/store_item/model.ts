@@ -7,6 +7,7 @@ export type Item = {
   type: string;
   indentifier: string;
   properties: Record<string, string>;
+  cost: number;
 };
 
 const ItemSchema = new Schema({
@@ -26,6 +27,11 @@ const ItemSchema = new Schema({
     type: Object,
     required: true,
   },
+  cost: {
+    type: Number,
+    required: true,
+  },
+
 });
 
 const ItemModel = model<Item>("Item", ItemSchema);

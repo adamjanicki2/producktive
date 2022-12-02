@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import express from "express";
 import PetCollection from "./collection";
 import * as userValidator from "../user/middleware";
+import * as itemValidator from "../store_item/middleware";
 
 const router = express.Router();
 
@@ -33,7 +34,8 @@ router.patch(
   "/updateFeed",
   [
     userValidator.isUserLoggedIn,
-    //maybe need to check if they have valid amount of food for feeding
+    //need to check enough coins to feed
+    //need to check not overfeeding
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
@@ -47,7 +49,7 @@ router.patch(
   "/updateItemsOn",
   [
     userValidator.isUserLoggedIn,
-    //need check if have valid item in closet
+    itemValidator.isInStock
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
