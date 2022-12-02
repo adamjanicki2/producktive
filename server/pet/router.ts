@@ -2,8 +2,18 @@ import type { Request, Response } from "express";
 import express from "express";
 import PetCollection from "./collection";
 import * as userValidator from "../user/middleware";
+import * as middleware from "../email/middleware";
 
 const router = express.Router();
+
+router.get(
+  "/decrementHealth",
+  [middleware.verifyAPIKey],
+  async (req: Request, res: Response) => {
+    const numberUpdated = await PetCollection.decrementAllHealth();
+    return res.status(200).json({ message: `${numberUpdated} pets hurt!` });
+  }
+);
 
 //creation of new pet happens in user creation
 //deletion of pet happens in user deletion
