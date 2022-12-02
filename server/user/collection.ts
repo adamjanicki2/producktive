@@ -131,6 +131,25 @@ class UserCollection {
     await user!.save();
     return user!;
   }
+
+  /**
+   * Updates coin total for user
+   * 
+   * @param {string} userId - the id of the signed in user
+   * @param {string} amountChange - the number of coins added to total
+   * @return {Promsie<HydratedDocument<User>>} - the updated user
+   */
+  static async updateCoins(
+    userId: Types.ObjectId | string,
+    amountChange: number
+  ): Promise<HydratedDocument<User>> {
+    const user = await UserModel.findById(userId);
+    const currCoins = user!.coins;
+    const newCoins = currCoins + amountChange;
+    user!.coins = newCoins;
+    await user!.save();
+    return user!;
+  }
 }
 
 export default UserCollection;

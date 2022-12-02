@@ -110,6 +110,7 @@ class PetCollection {
     const newHealth = feed(pet!.health, feedAmount);
     pet!.health = newHealth;
     await pet!.save();
+    await UserCollection.updateCoins(userId, -15*feedAmount); //subtract cost of food of 15
     return pet!;
   }
 }
