@@ -100,13 +100,14 @@ class PetCollection {
    */
   static async updateLastFeed(
     //maybe also need to updateHealth differently
-    userId: Types.ObjectId | string
+    userId: Types.ObjectId | string,
+    feedAmount: number
   ): Promise<HydratedDocument<Pet>> {
     const pet = await PetModel.findOne({ userId: userId });
     const newDate = new Date();
     pet!.lastFed = newDate;
     await pet!.save();
-    await UserCollection.updateCoins(userId, -15); //subtract cost of food of 15
+    await UserCollection.updateCoins(userId, -15*feedAmount); //subtract cost of food of 15
     return pet!;
   }
 
