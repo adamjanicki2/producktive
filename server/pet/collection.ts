@@ -2,6 +2,7 @@ import type { HydratedDocument, Types } from "mongoose";
 import type { Pet } from "./model";
 import PetModel from "./model";
 import UserCollection from "../user/collection";
+import {coins, health, feed, foodNeeded} from "../common/util"
 
 class PetCollection {
   /**
@@ -62,8 +63,8 @@ class PetCollection {
   static async updateHealth(
     userId: Types.ObjectId | string
   ): Promise<HydratedDocument<Pet>> {
-    const newHealth = 0; //call health algorithm
     const pet = await PetModel.findOne({ userId: userId });
+    const newHealth = health(pet!.lastFed, pet!.healthAfterLastFeed); 
     pet!.health = newHealth;
     await pet!.save();
     return pet!;
@@ -92,6 +93,23 @@ class PetCollection {
     userId: Types.ObjectId | string
   ): Promise<HydratedDocument<Pet>> {
     const pet = await PetModel.findOne({ userId: userId });
+    const newDate = new Date();
+    pet!.lastFed = newDate;
+    await pet!.save();
+    return pet!;
+  }
+
+  /**
+   * Feed pet (Updates health after feed)
+   */
+   static async feedPet(
+    userId: Types.ObjectId | string,
+    feedAmount: number
+  ): Promise<HydratedDocument<Pet>> {
+    const pet = await PetModel.findOne({ userId: userId });
+    const newHealth = feed(pet!.lastFed, pet!.healthAfterLastFed, feedAmount); 
+    pet!.health = newHealth;
+    pet!.healthAfterLastFed = newHealth
     const newDate = new Date();
     pet!.lastFed = newDate;
     await pet!.save();
