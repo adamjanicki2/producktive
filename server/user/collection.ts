@@ -3,6 +3,8 @@ import type { User } from "./model";
 import UserModel from "./model";
 import { getRandomUsername } from "./util";
 
+const DEFAULT_COINS = 50;
+
 class UserCollection {
   /**
    * Add a new user
@@ -17,7 +19,13 @@ class UserCollection {
   ): Promise<HydratedDocument<User>> {
     const username = await getRandomUsername();
     const notifPeriod = "daily";
-    const user = new UserModel({ email, password, username, notifPeriod });
+    const user = new UserModel({
+      email,
+      password,
+      username,
+      notifPeriod,
+      coins: DEFAULT_COINS,
+    });
     await user.save(); // Saves user to MongoDB
     return user;
   }

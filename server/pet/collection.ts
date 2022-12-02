@@ -9,14 +9,16 @@ class PetCollection {
    * Get all available pets sorted by alphabetical order
    */
   static async getAllPets(): Promise<HydratedDocument<Pet>[]> {
-    const pets = await PetModel.find() ?? [];
-    const userIds = await Promise.all(pets.map(pet => pet.userId));
-    const users = await Promise.all(userIds.map(UserCollection.findOneByUserId));
-    const usernames = await Promise.all(users.map(user => user?.username));
+    const pets = (await PetModel.find()) ?? [];
+    const userIds = await Promise.all(pets.map((pet) => pet.userId));
+    const users = await Promise.all(
+      userIds.map(UserCollection.findOneByUserId)
+    );
+    const usernames = await Promise.all(users.map((user) => user?.username));
 
     const indices = Array.from(usernames.keys());
-    indices.sort((i1, i2) => usernames[i1]! < usernames[i2]! ? -1: 1);
-    const sortedPets = indices.map(i => pets[i]);
+    indices.sort((i1, i2) => (usernames[i1]! < usernames[i2]! ? -1 : 1));
+    const sortedPets = indices.map((i) => pets[i]);
     return sortedPets;
   }
 
@@ -29,7 +31,11 @@ class PetCollection {
   ): Promise<HydratedDocument<Pet>> {
     const lastFed = new Date();
     const health = 100;
-    const itemsOn = {"duckColor": '', "beakColor": '', "hatColor": ''};
+    const itemsOn = {
+      duck: "yellow",
+      beak: "orange",
+      hat: "red",
+    };
     const pet = new PetModel({ userId, petName, lastFed, health, itemsOn });
     await pet.save();
     return pet;
@@ -38,9 +44,7 @@ class PetCollection {
   /**
    * Deletes an existing pet
    */
-  static async deleteOne(
-    userId: Types.ObjectId | string
-  ): Promise<boolean> {
+  static async deleteOne(userId: Types.ObjectId | string): Promise<boolean> {
     const pet = await PetModel.deleteOne({ userId: userId });
     return pet !== null;
   }
@@ -55,6 +59,14 @@ class PetCollection {
     const userId = user!._id;
     const pet = await PetModel.findOne({ userId });
     return pet!;
+  }
+
+  static async findById(userId: string): Promise<HydratedDocument<Pet> | null> {
+    return PetModel.findOne({ userId });
+  }
+
+  static async updateName(userId: string, petName: string) {
+    await PetModel.findOneAndUpdate({ userId }, { petName });
   }
 
   /**
@@ -78,20 +90,19 @@ class PetCollection {
   static async updateItemOn(
     userId: Types.ObjectId | string,
     label: string,
-    itemId: Types.ObjectId | string
-  ): Promise<HydratedDocument<Pet>> {
-    const pet = await PetModel.findOne({ userId: userId });
-    const updatedItemsOn = pet!.itemsOn;
-    updatedItemsOn[label] = itemId;
-    pet!.itemsOn = updatedItemsOn;
-    await pet!.save();
-    return pet!;
+    value: Types.ObjectId | string
+  ) {
+    const pet = await PetModel.findOne({ userId });
+    if (!pet) return;
+    pet.itemsOn = { ...pet.itemsOn, [label]: value };
+    await pet.save();
   }
 
   /**
    * Updates last feed date
    */
-  static async updateLastFeed( //maybe also need to updateHealth differently 
+  static async updateLastFeed(
+    //maybe also need to updateHealth differently
     userId: Types.ObjectId | string
   ): Promise<HydratedDocument<Pet>> {
     const pet = await PetModel.findOne({ userId: userId });
