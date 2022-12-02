@@ -28,16 +28,16 @@ router.get(
   }
 );
 
-//update last feed
+//Feed Pet
 router.patch(
   "/updateFeed",
   [
     userValidator.isUserLoggedIn,
-    //maybe need to check if they have valid amount of food for feeding
+    //TODO need to check if they have enough coins for the feed
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
-    const pet = await PetCollection.updateLastFeed(userId);
+    const pet = await PetCollection.updateLastFeed(userId, req.body.feedAmount);
     return res.status(200).json(pet);
   }
 );

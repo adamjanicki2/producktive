@@ -35,24 +35,18 @@ const MIN_HEALTH = 1;
 const DAILY_HEALTH_HIT = 5;
 
 /**
- * Health Algorithm
+ * Daily Health Algorithm
  * 
- * @param {Date} lastFeed - date most recent feed
- * @param {number} healthAfterLastFeed - health of duck immediately after the last feed
+ * @param {number} currentHealth - health of duck
  * 
- * @return {number} current health of duck
+ * @return {number} updated health of duck
  */
- export function health(
-  lastFeed: Date, //don't need because running every day
-  healthAfterLastFeed: number ///todo change name
+ export function updateHealth(
+  currentHealth: number
 ): number {
-  const today = new Date();
-  // time difference in days
-  const timeDelta = Math.round(Math.floor((today.valueOf() - lastFeed.valueOf()) / (1000 * 3600 * 24)));
-
-  //currentHealth must be in range[1, 100]
-  const currentHealth = Math.min(Math.max(healthAfterLastFeed - (timeDelta * DAILY_HEALTH_HIT), MIN_HEALTH), MAX_HEALTH);
-  return Math.round(currentHealth);
+  //newHealth must be in range[1, 100]
+  const newHealth = Math.min(Math.max(currentHealth - DAILY_HEALTH_HIT, MIN_HEALTH), MAX_HEALTH);
+  return Math.round(newHealth);
 }
 
 const FOOD_UNIT_VALUE = 1;
@@ -60,18 +54,15 @@ const FOOD_UNIT_VALUE = 1;
 /**
  * Feeding Algorithm
  * 
- * @param {Date} lastFeed - date most recent feed
- * @param {number} healthAfterLastFeed - health of duck immediately after the last feed
+ * @param {number} currentHealth - health of duck
  * @param {number} feedAmount - positive integer amount of food to give duck
  * 
  * @return {number} health of duck immediately after feeding it `feedAmount`
  */
  export function feed(
-  lastFeed: Date,
-  healthAfterLastFeed: number,
+  currentHealth: number,
   feedAmount: number
 ): number {
-  const currentHealth = health(lastFeed, healthAfterLastFeed); //todo pass into function
 
   //newHealth must be in range[1, 100]
   const newHealth = Math.min(Math.max(currentHealth + (feedAmount * FOOD_UNIT_VALUE), MIN_HEALTH), MAX_HEALTH);
@@ -81,16 +72,13 @@ const FOOD_UNIT_VALUE = 1;
 /**
  * User Feed Insights
  * 
- * @param {Date} lastFeed - date most recent feed
- * @param {number} healthAfterLastFeed - health of duck immediately after the last feed
+ * @param {number} currentHealth - health of duck
  * 
  * @return {number} amount of food needed to fuel duck to full health
  */
  export function foodNeeded(
-  lastFeed: Date,
-  healthAfterLastFeed: number
+  currentHealth: number
 ): number {
-  const currentHealth = health(lastFeed, healthAfterLastFeed);
 
   return Math.round((MAX_HEALTH - currentHealth) / FOOD_UNIT_VALUE)
 }
