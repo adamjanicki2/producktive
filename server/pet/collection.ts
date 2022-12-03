@@ -129,6 +129,37 @@ class PetCollection {
     await UserCollection.updateCoins(userId, -15*feedAmount); //subtract cost of food of 15
     return pet!;
   }
+
+  /**
+   * Calculate how much food to feed based on num of coins and health
+   */
+  static async calculateAmount (userId: Types.ObjectId | string, foodPrice: number): Promise<number> {
+    const pet = await PetModel.findOne({ userId: userId });
+    const user = await UserCollection.findOneByUserId(userId);
+    const currHealth = pet!.health;
+    let feedAmount = 5;
+    if(currHealth > 95) {
+      feedAmount = 100-currHealth;
+    }
+
+    if (feedAmount*foodPrice > user!.coins) { //can only buy amount of food that user can afford
+      feedAmount = Math.floor(user!.coins/feedAmount);
+    }
+
+    return feedAmount;
+  }
+
+  /**
+   * Checking to make sure the duck is not overfed
+   */
+  static async isOverfed (userId: Types.ObjectId | string, foodAmount: number): Promise<boolean> {
+    const pet = await PetModel.findOne({ userId: userId });
+    if(pet!.health + foodAmount >= 100){
+      return true;
+    } 
+
+    return false;
+  }
 }
 
 export default PetCollection;

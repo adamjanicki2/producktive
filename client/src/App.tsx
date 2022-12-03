@@ -75,7 +75,12 @@ const App = () => {
             <LoginPage type="create" onFormSubmitCallback={createAccount} />
           }
         />
-        {user && <Route path="/pet/" element={<PetPage user={user} />} />}
+        {user && (
+          <Route
+            path="/pet/"
+            element={<PetPage user={user} updateUser={updateUser} />}
+          />
+        )}
         {user && (
           <Route
             path="/settings/"

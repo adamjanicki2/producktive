@@ -17,7 +17,7 @@ const isAlreadyPurchased = async(
   next: NextFunction
 ) => {
   if (req.body.type !== "food"){
-    if(ItemCollection.findByIdentifier((req.session as any).userId as string, req.body.identifier) !== null) {
+    if(await ItemCollection.findByIdentifier((req.session as any).userId as string, req.body.identifier) !== null) {
         res.status(402).json({
             error: 'You have already purchased this item'
         });

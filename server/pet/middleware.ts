@@ -5,7 +5,7 @@ import {foodNeeded} from "../common/util"
 
 const FOOD_PRICE = 15;
 /**
- * Checks if user has enough too purchase food
+ * Checks if user has enough to purchase food
  */
 const hasEnoughCoins = async (
     req: Request,
