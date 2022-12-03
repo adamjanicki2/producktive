@@ -148,6 +148,18 @@ class PetCollection {
 
     return feedAmount;
   }
+
+  /**
+   * Checking to make sure the duck is not overfed
+   */
+  static async isOverfed (userId: Types.ObjectId | string, foodAmount: number): Promise<boolean> {
+    const pet = await PetModel.findOne({ userId: userId });
+    if(pet!.health + foodAmount >= 100){
+      return true;
+    } 
+
+    return false;
+  }
 }
 
 export default PetCollection;

@@ -48,7 +48,11 @@ router.patch(
     const userId = (req.session as any).userId;
     const foodPrice = 15;
     const feedAmount = await PetCollection.calculateAmount(userId, foodPrice);
-    
+
+    if(await PetCollection.isOverfed(userId, feedAmount)) {
+      return res.status(403).json({message: "Your pet is at max health"})
+    } //making sure you don't overfeed the duck
+
     if(feedAmount === 0){ //cannot afford any food
       return res.status(405).json({message: "You do not have enough coins"});
     }
