@@ -129,6 +129,20 @@ class PetCollection {
     await UserCollection.updateCoins(userId, -15*feedAmount); //subtract cost of food of 15
     return pet!;
   }
+
+  /**
+   * Calculate how much food to feed
+   */
+  static async calculateAmount (userId: Types.ObjectId | string): Promise<number> {
+    const pet = await PetModel.findOne({ userId: userId });
+    const currHealth = pet!.health;
+    let feedAmount = 5;
+    if(currHealth > 95) {
+      feedAmount = 100-currHealth;
+    }
+
+    return feedAmount;
+  }
 }
 
 export default PetCollection;

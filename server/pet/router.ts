@@ -45,8 +45,10 @@ router.patch(
   "/feed",
   [userValidator.isUserLoggedIn],
   async (req: Request, res: Response) => {
-    const feedAmount = 5; // CHANGE THIS
-    await UserCollection.updateCoins((req.session as any).userId, -feedAmount);
+    const userId = (req.session as any).userId;
+    const foodPrice = 15;
+    const feedAmount = await PetCollection.calculateAmount(userId);
+    await UserCollection.updateCoins(userId, -feedAmount*foodPrice);
     await PetCollection.feed((req.session as any).userId, feedAmount);
     return res
       .status(200)
