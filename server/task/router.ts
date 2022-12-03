@@ -68,4 +68,16 @@ router.delete(
   }
 );
 
+router.get(
+  "/today",
+  [
+    userValidator.isUserLoggedIn
+  ],
+  async(req: Request, res: Response) => {
+    const userId = (req.session as any).userId as string;
+    const tasks = await TaskCollection.getTodayTask(userId);
+    return res.status(200).json(tasks.map(constructTaskResponse));
+  }
+);
+
 export { router as taskRouter };
