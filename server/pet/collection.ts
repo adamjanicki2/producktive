@@ -78,7 +78,7 @@ class PetCollection {
     const pets = await PetModel.find();
     let count = 0;
     for (const pet of pets) {
-      pet.health = Math.min(0, pet.health - HEALTH_HIT);
+      pet.health = Math.max(0, pet.health - HEALTH_HIT);
       await pet.save();
       count++;
     }
