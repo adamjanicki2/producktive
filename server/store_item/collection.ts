@@ -5,8 +5,8 @@ import UserCollection from "../user/collection";
 
 const PRICES = {
   "food": 15,
-  "beak": 500,
-  "duck": 650,
+  "beak": 200,
+  "duck": 250,
 } as const;
 
 class ItemCollection {
@@ -60,7 +60,9 @@ class ItemCollection {
     userId: Types.ObjectId | string,
     identifier: string
   ): Promise<HydratedDocument<Item> | null> {
-    const item = await ItemModel.findOne({userId: userId, indentifier: identifier});
+    console.log("HELLO");
+    console.log(identifier);
+    const item = await ItemModel.findOne({userId: userId, identifier: identifier});
     return item;
   }
 }

@@ -4,8 +4,8 @@ import ItemCollection from "./collection";
 
 const PRICES = {
   "food": 15,
-  "beak": 500,
-  "duck": 650,
+  "beak": 1,
+  "duck": 2,
 } as const;
 
 /**
@@ -17,7 +17,8 @@ const isAlreadyPurchased = async(
   next: NextFunction
 ) => {
   if (req.body.type !== "food"){
-    if(ItemCollection.findByIdentifier((req.session as any).userId as string, req.body.identifier) !== null) {
+    if(await ItemCollection.findByIdentifier((req.session as any).userId as string, req.body.identifier) !== null) {
+      console.log(req.body.identifier);
         res.status(402).json({
             error: 'You have already purchased this item'
         });
