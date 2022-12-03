@@ -131,14 +131,19 @@ class PetCollection {
   }
 
   /**
-   * Calculate how much food to feed
+   * Calculate how much food to feed based on num of coins and health
    */
-  static async calculateAmount (userId: Types.ObjectId | string): Promise<number> {
+  static async calculateAmount (userId: Types.ObjectId | string, foodPrice: number): Promise<number> {
     const pet = await PetModel.findOne({ userId: userId });
+    const user = await UserCollection.findOneByUserId(userId);
     const currHealth = pet!.health;
     let feedAmount = 5;
     if(currHealth > 95) {
       feedAmount = 100-currHealth;
+    }
+
+    if (feedAmount*foodPrice > user!.coins) { //can only buy amount of food that user can afford
+      feedAmount = Math.floor(user!.coins/feedAmount);
     }
 
     return feedAmount;

@@ -47,12 +47,17 @@ router.patch(
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId;
     const foodPrice = 15;
-    const feedAmount = await PetCollection.calculateAmount(userId);
+    const feedAmount = await PetCollection.calculateAmount(userId, foodPrice);
+    
+    if(feedAmount === 0){ //cannot afford any food
+      return res.status(405).json({message: "You do not have enough coins"});
+    }
+
     await UserCollection.updateCoins(userId, -feedAmount*foodPrice);
     await PetCollection.feed((req.session as any).userId, feedAmount);
     return res
       .status(200)
-      .json({ healthDelta: feedAmount, coinsDelta: -feedAmount });
+      .json({ healthDelta: feedAmount, coinsDelta: -feedAmount*foodPrice });
   }
 );
 
