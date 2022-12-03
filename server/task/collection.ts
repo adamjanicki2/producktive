@@ -126,6 +126,19 @@ class TaskCollection {
   static async deleteManyByParentId(id: Types.ObjectId | string) {
     return TaskModel.deleteMany({ parent: id });
   }
+
+  /**
+   * Gets all tasks for today
+   */
+  static async getTodayTask(userId: Types.ObjectId | string) {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const endOfDay = new Date();
+    endOfDay.setHours(23,59,59,999);
+    return TaskModel.find({ userId, deadline: { $gte: today, $lte: endOfDay}})
+      .sort({deadline: "asc"})
+      .populate("parent");
+  }
 }
 
 export default TaskCollection;
