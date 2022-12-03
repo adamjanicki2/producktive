@@ -60,8 +60,6 @@ class ItemCollection {
     userId: Types.ObjectId | string,
     identifier: string
   ): Promise<HydratedDocument<Item> | null> {
-    console.log("HELLO");
-    console.log(identifier);
     const item = await ItemModel.findOne({userId: userId, identifier: identifier});
     return item;
   }

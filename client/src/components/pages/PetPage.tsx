@@ -13,7 +13,13 @@ import Duck from "../modules/Duck";
 import { Button, IconButton, MenuItem, Select, TextField } from "@mui/material";
 import { Edit, Lock } from "@mui/icons-material";
 
-const PetPage = ({ user }: { user?: User }) => {
+const PetPage = ({
+  user,
+  updateUser,
+}: {
+  user?: User;
+  updateUser: (user: User) => void;
+}) => {
   const [pet, setPet] = React.useState<Pet>();
   const [beakColor, setbeakColor] = React.useState<ColorOption>("orange");
   const [bodyColor, setbodyColor] = React.useState<ColorOption>("yellow");
@@ -43,6 +49,16 @@ const PetPage = ({ user }: { user?: User }) => {
     );
   };
 
+  const feedDuck = () => {
+    patch("/api/pets/feed").then((res) => {
+      if (res) {
+        const { healthDelta, coinsDelta } = res;
+        setPet({ ...pet, health: pet.health + healthDelta });
+        updateUser({ ...user, coins: user.coins + coinsDelta });
+      }
+    });
+  };
+
   const saveName = () => {
     duckName !== pet.petName &&
       patch("/api/pets/updateName", { petName: duckName }).then(() => {
@@ -60,7 +76,15 @@ const PetPage = ({ user }: { user?: User }) => {
 
   return pet && user ? (
     <div className="flex flex-column primary-text items-center">
-      <h1 className="tc f-subheadline ma0 pa0">Your Duck</h1>
+      <h1 className="tc f-subheadline ma0 pa0 i">{pet.petName}</h1>
+      <Button
+        className="w-fc m-auto"
+        variant="contained"
+        style={MUI_BUTTON_STYLE}
+        onClick={feedDuck}
+      >
+        Feed Me!
+      </Button>
       <h2>
         Coins: {user.coins} | Health: {pet.health}
       </h2>
