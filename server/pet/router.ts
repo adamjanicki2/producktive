@@ -5,6 +5,7 @@ import * as userValidator from "../user/middleware";
 import * as middleware from "../email/middleware";
 import * as itemValidator from "../store_item/middleware";
 import * as petValidator from "./middleware";
+import UserCollection from "../user/collection";
 
 const router = express.Router();
 
@@ -40,28 +41,23 @@ router.get(
   }
 );
 
-//Feed Pet
 router.patch(
   "/feed",
-  [
-    userValidator.isUserLoggedIn,
-    petValidator.hasEnoughCoins,
-    petValidator.notOverfeed
-  ],
+  [userValidator.isUserLoggedIn],
   async (req: Request, res: Response) => {
-    const userId = (req.session as any).userId as string;
-    const pet = await PetCollection.feed(userId, req.body.feedAmount);
-    return res.status(200).json({ pet: pet, message: `You successfully fed pet ${req.body.feedAmount}` });
+    const feedAmount = 5; // CHANGE THIS
+    await UserCollection.updateCoins((req.session as any).userId, -feedAmount);
+    await PetCollection.feed((req.session as any).userId, feedAmount);
+    return res
+      .status(200)
+      .json({ healthDelta: feedAmount, coinsDelta: -feedAmount });
   }
 );
 
 //update items on
 router.patch(
   "/updateItemsOn",
-  [
-    userValidator.isUserLoggedIn,
-    itemValidator.isInStock
-  ],
+  [userValidator.isUserLoggedIn, itemValidator.isInStock],
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
     const { duck, beak } = req.body;
@@ -75,10 +71,7 @@ router.patch(
 //update duck name
 router.patch(
   "/updateName",
-  [
-    userValidator.isUserLoggedIn,
-    petValidator.validPetName
-  ],
+  [userValidator.isUserLoggedIn, petValidator.validPetName],
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
     const { petName } = req.body;
