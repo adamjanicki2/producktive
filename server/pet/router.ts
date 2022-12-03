@@ -3,6 +3,8 @@ import express from "express";
 import PetCollection from "./collection";
 import * as userValidator from "../user/middleware";
 import * as middleware from "../email/middleware";
+import * as itemValidator from "../store_item/middleware";
+import * as petValidator from "./middleware";
 
 const router = express.Router();
 
@@ -38,17 +40,18 @@ router.get(
   }
 );
 
-//update last feed
+//Feed Pet
 router.patch(
-  "/updateFeed",
+  "/feed",
   [
     userValidator.isUserLoggedIn,
-    //maybe need to check if they have valid amount of food for feeding
+    petValidator.hasEnoughCoins,
+    petValidator.notOverfeed
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
-    const pet = await PetCollection.updateLastFeed(userId);
-    return res.status(200).json(pet);
+    const pet = await PetCollection.feed(userId, req.body.feedAmount);
+    return res.status(200).json({ pet: pet, message: `You successfully fed pet ${req.body.feedAmount}` });
   }
 );
 
@@ -57,7 +60,7 @@ router.patch(
   "/updateItemsOn",
   [
     userValidator.isUserLoggedIn,
-    //need check if have valid item in closet
+    itemValidator.isInStock
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
@@ -69,9 +72,13 @@ router.patch(
   }
 );
 
+//update duck name
 router.patch(
   "/updateName",
-  [userValidator.isUserLoggedIn],
+  [
+    userValidator.isUserLoggedIn,
+    petValidator.validPetName
+  ],
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
     const { petName } = req.body;
@@ -79,5 +86,18 @@ router.patch(
     return res.status(200).json({ message: "Pet name updated" });
   }
 );
+
+// //Daily pet health update
+// router.patch(
+//   "/updateHealth",
+//   [
+//     userValidator.isUserLoggedIn,
+//   ],
+//   async (req: Request, res: Response) => {
+//     const userId = (req.session as any).userId as string;
+//     const pet = await PetCollection.updateHealth(userId);
+//     return res.status(200).json({ pet: pet, message: "Pet Health updated" });
+//   }
+// );
 
 export { router as petRouter };

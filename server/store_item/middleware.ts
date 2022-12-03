@@ -1,5 +1,12 @@
 import type { Request, Response, NextFunction } from "express";
+import UserCollection from "../user/collection";
 import ItemCollection from "./collection";
+
+const PRICES = {
+  "food": 15,
+  "beak": 500,
+  "duck": 650,
+} as const;
 
 /**
  * Checks to make sure the same item is not being purchased twice except for food
@@ -17,8 +24,12 @@ const isAlreadyPurchased = async(
         return;
     }
   }
+  next();
 };
 
+/**
+ * Checks if user has item in stock
+ */
 const isInStock = async (
   req: Request,
   res: Response,
@@ -31,9 +42,31 @@ const isInStock = async (
     });
     return;
   }
+  next();
+};
+
+/**
+ * checks if the user has enough coins to purchase the item
+ */
+const hasEnoughCoins = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = await UserCollection.findOneByUserId((req.session as any).userId as string);
+  const currCoins = user!.coins;
+  const cost = PRICES[req.body.type as string];
+  if (cost > currCoins) {
+    res.status(406).json({
+      error: "You do not have enough coins to purchase this item"
+    });
+    return;
+  }
+  next();
 };
 
 export {
     isAlreadyPurchased,
-    isInStock
+    isInStock,
+    hasEnoughCoins
 };

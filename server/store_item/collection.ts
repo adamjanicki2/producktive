@@ -1,6 +1,13 @@
 import type { HydratedDocument, Types } from "mongoose";
 import type { Item } from "./model";
 import ItemModel from "./model";
+import UserCollection from "../user/collection";
+
+const PRICES = {
+  "food": 15,
+  "beak": 500,
+  "duck": 650,
+} as const;
 
 class ItemCollection {
   /**
@@ -19,6 +26,7 @@ class ItemCollection {
     properties: Record<string, string>
   ): Promise<HydratedDocument<Item>> {
     const purchased = new ItemModel({ userId, type, identifier, properties });
+    await UserCollection.updateCoins(userId, -1*PRICES[type]); //negative to lose coins
     await purchased.save();
     return purchased;
   }

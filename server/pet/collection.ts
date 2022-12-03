@@ -2,6 +2,8 @@ import type { HydratedDocument, Types } from "mongoose";
 import type { Pet } from "./model";
 import PetModel from "./model";
 import UserCollection from "../user/collection";
+// import {updateHealth, feed} from "../common/util"
+import {feed} from "../common/util"
 
 const HEALTH_HIT = 5;
 class PetCollection {
@@ -69,28 +71,32 @@ class PetCollection {
     await PetModel.findOneAndUpdate({ userId }, { petName });
   }
 
+  /**
+   * Updates health for pet
+   */
   static async decrementAllHealth() {
     const pets = await PetModel.find();
     let count = 0;
     for (const pet of pets) {
-      pet.health = Math.max(1, pet.health - HEALTH_HIT);
+      pet.health = Math.min(0, pet.health - HEALTH_HIT);
       await pet.save();
       count++;
     }
     return count;
   }
-  /**
-   * Updates health for pet
-   */
-  static async updateHealth(
-    userId: Types.ObjectId | string
-  ): Promise<HydratedDocument<Pet>> {
-    const newHealth = 0; //call health algorithm
-    const pet = await PetModel.findOne({ userId: userId });
-    pet!.health = newHealth;
-    await pet!.save();
-    return pet!;
-  }
+
+  // /**
+  //  * Updates health for pet (designed to be called once daily)
+  //  */
+  // static async updateHealth(
+  //   userId: Types.ObjectId | string
+  // ): Promise<HydratedDocument<Pet>> {
+  //   const pet = await PetModel.findOne({ userId: userId });
+  //   const newHealth = updateHealth(pet!.health);
+  //   pet!.health = newHealth;
+  //   await pet!.save();
+  //   return pet!;
+  // }
 
   /**
    * Updates items on for pet
@@ -107,20 +113,22 @@ class PetCollection {
   }
 
   /**
-   * Updates last feed date
+   * Feed Pet
    */
-  static async updateLastFeed(
+  static async feed(
     //maybe also need to updateHealth differently
-    userId: Types.ObjectId | string
+    userId: Types.ObjectId | string,
+    feedAmount: number
   ): Promise<HydratedDocument<Pet>> {
     const pet = await PetModel.findOne({ userId: userId });
     const newDate = new Date();
     pet!.lastFed = newDate;
+    const newHealth = feed(pet!.health, feedAmount);
+    pet!.health = newHealth;
     await pet!.save();
+    await UserCollection.updateCoins(userId, -15*feedAmount); //subtract cost of food of 15
     return pet!;
   }
-
-  // need check for last feeding to see if it is past week to update health
 }
 
 export default PetCollection;
