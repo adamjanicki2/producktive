@@ -5,7 +5,6 @@ import {
   CardContent,
   Typography,
   Button,
-  CardMedia,
 } from "@mui/material";
 
 import { User, StoreItem, post } from "../../util";
