@@ -65,7 +65,7 @@ const StorePage = ({ user }: { user: User }) => {
           {beakOptions.map((item) =>
             ownedString.includes(item.identifier) ? (
               <Grid item xs={1.7}>
-                <StoreItemCard user={user} item={item} own={true} price={500} />
+                <StoreItemCard user={user} item={item} own={true} price={200} />
               </Grid>
             ) : (
               <Grid item xs={1.7}>
@@ -73,7 +73,7 @@ const StorePage = ({ user }: { user: User }) => {
                   user={user}
                   item={item}
                   own={false}
-                  price={500}
+                  price={200}
                 />
               </Grid>
             )
@@ -93,7 +93,7 @@ const StorePage = ({ user }: { user: User }) => {
           {duckOptions.map((item) =>
             ownedString.includes(item.identifier) ? (
               <Grid item xs={1.7}>
-                <StoreItemCard user={user} item={item} own={true} price={650} />
+                <StoreItemCard user={user} item={item} own={true} price={250} />
               </Grid>
             ) : (
               <Grid item xs={1.7}>
@@ -101,7 +101,7 @@ const StorePage = ({ user }: { user: User }) => {
                   user={user}
                   item={item}
                   own={false}
-                  price={650}
+                  price={250}
                 />
               </Grid>
             )

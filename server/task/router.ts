@@ -25,7 +25,7 @@ router.post(
   "/",
   [
     userValidator.isUserLoggedIn,
-    middleware.isInfoSupplied("body", ["listId", "content", "difficulty"]),
+    middleware.isInfoSupplied("body", ["listId", "content", "difficulty", "deadline"]),
     middleware.isInfoValidId("body", ["listId"]),
   ],
   async (req: Request, res: Response) => {
