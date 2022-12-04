@@ -4,8 +4,8 @@ import ItemCollection from "./collection";
 
 const PRICES = {
   "food": 15,
-  "beak": 1,
-  "duck": 2,
+  "beak": 200,
+  "duck": 250,
 } as const;
 
 /**

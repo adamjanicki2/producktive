@@ -3,7 +3,7 @@ import type { Pet } from "./model";
 import PetModel from "./model";
 import UserCollection from "../user/collection";
 // import {updateHealth, feed} from "../common/util"
-import { feed } from "../common/util";
+import { healthAfterFeed } from "../common/util";
 
 const HEALTH_HIT = 5;
 class PetCollection {
@@ -76,18 +76,18 @@ class PetCollection {
     return count;
   }
 
-  // /**
-  //  * Updates health for pet (designed to be called once daily)
-  //  */
-  // static async updateHealth(
-  //   userId: Types.ObjectId | string
-  // ): Promise<HydratedDocument<Pet>> {
-  //   const pet = await PetModel.findOne({ userId: userId });
-  //   const newHealth = updateHealth(pet!.health);
-  //   pet!.health = newHealth;
-  //   await pet!.save();
-  //   return pet!;
-  // }
+  /**
+   * Updates health for single pet
+   */
+  static async updateHealth(
+    userId: Types.ObjectId | string,
+    healthHit: number
+  ): Promise<HydratedDocument<Pet>> {
+    const pet = await PetModel.findOne({ userId: userId });
+    pet!.health = Math.max(0, pet!.health - healthHit);
+    await pet!.save();
+    return pet!;
+  }
 
   /**
    * Updates items on for pet
@@ -114,7 +114,7 @@ class PetCollection {
     const pet = await PetModel.findOne({ userId: userId });
     const newDate = new Date();
     pet!.lastFed = newDate;
-    const newHealth = feed(pet!.health, feedAmount);
+    const newHealth = healthAfterFeed(pet!.health, feedAmount);
     pet!.health = newHealth;
     await pet!.save();
     await UserCollection.updateCoins(userId, -15 * feedAmount); //subtract cost of food of 15
@@ -131,15 +131,13 @@ class PetCollection {
     const pet = await PetModel.findOne({ userId: userId });
     const user = await UserCollection.findOneByUserId(userId);
     const currHealth = pet!.health;
-    let feedAmount = 5;
-    if (currHealth > 95) {
-      feedAmount = 100 - currHealth;
-    }
+    let feedAmount = Math.min(5, 100 - currHealth);
 
     if (feedAmount * foodPrice > user!.coins) {
       //can only buy amount of food that user can afford
-      feedAmount = Math.floor(user!.coins / foodPrice);
+      feedAmount = Math.max(Math.floor(user!.coins / foodPrice), 0);
     }
+
     return feedAmount;
   }
 
@@ -154,7 +152,19 @@ class PetCollection {
     if (pet!.health + foodAmount > 100) {
       return true;
     }
+    return false;
+  }
 
+  /**
+   * Checking if duck at full health
+   */
+   static async isFullHealth(
+    userId: Types.ObjectId | string,
+  ): Promise<boolean> {
+    const pet = await PetModel.findOne({ userId: userId });
+    if (pet!.health === 100) {
+      return true;
+    }
     return false;
   }
 }

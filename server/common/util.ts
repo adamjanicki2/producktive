@@ -62,7 +62,7 @@ const FOOD_UNIT_VALUE = 1;
  * 
  * @return {number} health of duck immediately after feeding it `feedAmount`
  */
- export function feed(
+ export function healthAfterFeed(
   currentHealth: number,
   feedAmount: number
 ): number {

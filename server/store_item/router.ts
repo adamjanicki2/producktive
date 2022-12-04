@@ -20,6 +20,12 @@ router.get(
   }
 );
 
+const PRICES = {
+  "food": 15,
+  "beak": 200,
+  "duck": 250,
+} as const;
+
 router.post(
   "/",
   [
@@ -37,7 +43,7 @@ router.post(
       identifier,
       properties
     );
-    return res.status(201).json(purchasedItem);
+    return res.status(201).json({purchasedItem: purchasedItem, coinsDelta: -1*PRICES[type]});
   }
 );
 
