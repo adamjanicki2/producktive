@@ -3,7 +3,6 @@ import express from "express";
 import PetCollection from "./collection";
 import * as userValidator from "../user/middleware";
 import * as middleware from "../email/middleware";
-import * as itemValidator from "../store_item/middleware";
 import * as petValidator from "./middleware";
 import UserCollection from "../user/collection";
 
@@ -65,7 +64,7 @@ router.patch(
 //update items on
 router.patch(
   "/updateItemsOn",
-  [userValidator.isUserLoggedIn, itemValidator.isInStock],
+  [userValidator.isUserLoggedIn],
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
     const { duck, beak } = req.body;
