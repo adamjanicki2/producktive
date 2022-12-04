@@ -1,14 +1,8 @@
 import React from "react";
-import { styled } from '@mui/material/styles';
-import StoreItemCard from "../modules/StoreItemCard"
-import {Grid, Box } from "@mui/material";
+import StoreItemCard from "../modules/StoreItemCard";
+import { Grid, Box } from "@mui/material";
 
-import {
-  User,
-  StoreItem,
-  get,
-  COLOR_OPTIONS,
-} from "../../util";
+import { User, StoreItem, get, COLOR_OPTIONS } from "../../util";
 
 const StorePage = ({ user }: { user: User }) => {
   const [owned, setOwned] = React.useState<StoreItem[]>([]);
@@ -17,25 +11,32 @@ const StorePage = ({ user }: { user: User }) => {
     get(`/api/items/`).then((items) => {
       items && setOwned(items);
     });
-  }, [owned]);
+  }, []);
 
   // how to do this without a useEffect?
   let itemsList = [];
-    for (let i=0; i < COLOR_OPTIONS.length; i++) {
-      let newItemBeak = {type: "beak", properties: { "color": COLOR_OPTIONS[i] }, identifier: "beak_" + COLOR_OPTIONS[i]};
-      itemsList.push(newItemBeak);
-      let newItemBody = {type: "duck", properties: { "color": COLOR_OPTIONS[i] }, identifier: "duck_" + COLOR_OPTIONS[i]};
-      itemsList.push(newItemBody);
+  for (let i = 0; i < COLOR_OPTIONS.length; i++) {
+    let newItemBeak = {
+      type: "beak",
+      properties: { color: COLOR_OPTIONS[i] },
+      identifier: "beak_" + COLOR_OPTIONS[i],
     };
+    itemsList.push(newItemBeak);
+    let newItemBody = {
+      type: "duck",
+      properties: { color: COLOR_OPTIONS[i] },
+      identifier: "duck_" + COLOR_OPTIONS[i],
+    };
+    itemsList.push(newItemBody);
+  }
   const items = itemsList;
 
   let ownedList = [];
-  for (let i=0; i < owned.length; i++) {
+  for (let i = 0; i < owned.length; i++) {
     console.log(owned[i].identifier);
-    ownedList.push(owned[i].identifier)
-  };
+    ownedList.push(owned[i].identifier);
+  }
   const ownedString = ownedList;
-
 
   //dividing store between beak and duck
   const beakOptions = items
@@ -51,49 +52,63 @@ const StorePage = ({ user }: { user: User }) => {
       <div className="flex flex-column primary-text">
         <h1 className="tc f-subheadline ma0 pa0 primary-text">Store</h1>
       </div>
-      <Box className="ma4" sx={{ width: '100%' }}>
-      <h1 className="mr2 primary-text">Beak Color: </h1>
-        <Grid container direction="row"
-              wrap="wrap"
-              rowSpacing={4}
-              columnSpacing={4}>
-        {beakOptions.map((item) => (
-          ownedString.includes(item.identifier)  ? (
-            <Grid item xs={1.7} >
-              <StoreItemCard user={user} item={item} own={true} price={500}/>
-            </Grid>
-          ) : (
-            <Grid item xs={1.7}>
-            <StoreItemCard user={user} item={item} own={false} price={500}/>
-          </Grid>
-          )
-      ))}
+      <Box className="ma4" sx={{ width: "100%" }}>
+        <h1 className="mr2 primary-text">Beak Color: </h1>
+        <Grid
+          container
+          direction="row"
+          wrap="wrap"
+          rowSpacing={4}
+          columnSpacing={4}
+        >
+          {beakOptions.map((item) =>
+            ownedString.includes(item.identifier) ? (
+              <Grid item xs={1.7}>
+                <StoreItemCard user={user} item={item} own={true} price={500} />
+              </Grid>
+            ) : (
+              <Grid item xs={1.7}>
+                <StoreItemCard
+                  user={user}
+                  item={item}
+                  own={false}
+                  price={500}
+                />
+              </Grid>
+            )
+          )}
         </Grid>
       </Box>
 
-      <Box className="ma4" sx={{ width: '100%' }}>
-      <h1 className="mr2 primary-text">Duck Color: </h1>
-        <Grid container direction="row"
-              wrap="wrap"
-              rowSpacing={4}
-              columnSpacing={4}>
-        {duckOptions.map((item) => (
-          ownedString.includes(item.identifier)  ? (
-            <Grid item xs={1.7} >
-              <StoreItemCard user={user} item={item} own={true} price={650}/>
-            </Grid>
-          ) : (
-            <Grid item xs={1.7}>
-            <StoreItemCard user={user} item={item} own={false} price={650}/>
-          </Grid>
-          )
-      ))}
+      <Box className="ma4" sx={{ width: "100%" }}>
+        <h1 className="mr2 primary-text">Duck Color: </h1>
+        <Grid
+          container
+          direction="row"
+          wrap="wrap"
+          rowSpacing={4}
+          columnSpacing={4}
+        >
+          {duckOptions.map((item) =>
+            ownedString.includes(item.identifier) ? (
+              <Grid item xs={1.7}>
+                <StoreItemCard user={user} item={item} own={true} price={650} />
+              </Grid>
+            ) : (
+              <Grid item xs={1.7}>
+                <StoreItemCard
+                  user={user}
+                  item={item}
+                  own={false}
+                  price={650}
+                />
+              </Grid>
+            )
+          )}
         </Grid>
-      </Box> 
+      </Box>
     </div>
-
   );
-}
-
+};
 
 export default StorePage;

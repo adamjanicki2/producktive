@@ -1,7 +1,7 @@
 import React from "react";
 import type { ColorOption } from "../../util";
 
-const COLOR_TO_HEX = {
+export const COLOR_TO_HEX = {
   yellow: {
     primary: "#FFD527",
     secondary: "#FFC31A",
