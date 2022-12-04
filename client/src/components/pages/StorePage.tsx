@@ -1,7 +1,7 @@
 import React from "react";
 import { styled } from '@mui/material/styles';
 import StoreItemCard from "../modules/StoreItemCard"
-import {Grid, Paper, Box } from "@mui/material";
+import {Grid, Box } from "@mui/material";
 
 import {
   User,
@@ -17,7 +17,7 @@ const StorePage = ({ user }: { user: User }) => {
     get(`/api/items/`).then((items) => {
       items && setOwned(items);
     });
-  }, []);
+  }, [owned]);
 
   // how to do this without a useEffect?
   let itemsList = [];
@@ -46,17 +46,12 @@ const StorePage = ({ user }: { user: User }) => {
     .filter((item) => item.type === "duck")
     .map((item) => item);
 
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  }));
-
   return (
     <div>
-      <Box sx={{ width: '100%' }}>
+      <div className="flex flex-column primary-text">
+        <h1 className="tc f-subheadline ma0 pa0 primary-text">Store</h1>
+      </div>
+      <Box className="ma4" sx={{ width: '100%' }}>
       <h1 className="mr2 primary-text">Beak Color: </h1>
         <Grid container direction="row"
               wrap="wrap"
@@ -65,18 +60,18 @@ const StorePage = ({ user }: { user: User }) => {
         {beakOptions.map((item) => (
           ownedString.includes(item.identifier)  ? (
             <Grid item xs={1.7} >
-              <StoreItemCard user={user} item={item} own={true} price={1}/>
+              <StoreItemCard user={user} item={item} own={true} price={500}/>
             </Grid>
           ) : (
             <Grid item xs={1.7}>
-            <StoreItemCard user={user} item={item} own={false} price={1}/>
+            <StoreItemCard user={user} item={item} own={false} price={500}/>
           </Grid>
           )
       ))}
         </Grid>
       </Box>
 
-      <Box sx={{ width: '100%' }}>
+      <Box className="ma4" sx={{ width: '100%' }}>
       <h1 className="mr2 primary-text">Duck Color: </h1>
         <Grid container direction="row"
               wrap="wrap"
@@ -85,17 +80,16 @@ const StorePage = ({ user }: { user: User }) => {
         {duckOptions.map((item) => (
           ownedString.includes(item.identifier)  ? (
             <Grid item xs={1.7} >
-              <StoreItemCard user={user} item={item} own={true} price={2}/>
+              <StoreItemCard user={user} item={item} own={true} price={650}/>
             </Grid>
           ) : (
             <Grid item xs={1.7}>
-            <StoreItemCard user={user} item={item} own={false} price={2}/>
+            <StoreItemCard user={user} item={item} own={false} price={650}/>
           </Grid>
           )
       ))}
         </Grid>
-      </Box>
-      
+      </Box> 
     </div>
 
   );
