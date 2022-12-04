@@ -1,26 +1,15 @@
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import React from "react";
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { MenuItem, Select } from "@mui/material";
+import {Card, CardActions, CardContent, Divider, Typography, Button, CardMedia } from "@mui/material";
 
 import {
   User,
   StoreItem,
-  ColorOption,
-  get,
-  COLOR_OPTIONS,
   MUI_BUTTON_STYLE,
-  patch,
   post,
-  List
 } from "../../util";
 
-const StoreItemCard = ({ user, item , own}: { user?: User; item: StoreItem, own: boolean }) => {
-  let [items, setItems] = React.useState<StoreItem[]>([]);
+const StoreItemCard = ({ user, item , own, price}: { user?: User; item: StoreItem, own: boolean, price: number }) => {
+  // let [items, setItems] = React.useState<StoreItem[]>([]);
 
   const purchaseItem = () => {
     post("/api/items/", { type: item.type, identifier: item.identifier, properties: item.properties }).then((itemtobuy) => {
@@ -39,7 +28,12 @@ const StoreItemCard = ({ user, item , own}: { user?: User; item: StoreItem, own:
       />
       <CardContent>
         <div className="flex flex-row items-center justify-center">
-          <h3 className="mr2">{item.type}: {item.properties.color} </h3>
+          <h3 className="mr2">{item.properties.color} </h3>
+            <br />
+          <Typography variant="h6">
+            -- {price} coins
+           
+          </Typography>
         </div>
       </CardContent>
       <CardActions className="flex flex-row items-center justify-center">
