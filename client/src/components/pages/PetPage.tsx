@@ -55,6 +55,8 @@ const PetPage = ({
         const { healthDelta, coinsDelta } = res;
         setPet({ ...pet, health: pet.health + healthDelta });
         updateUser({ ...user, coins: user.coins + coinsDelta });
+      }else if (res?.error){
+        window.alert(res.error);
       }
     });
   };
