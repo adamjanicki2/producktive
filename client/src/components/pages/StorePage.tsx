@@ -4,7 +4,13 @@ import { Grid, Box } from "@mui/material";
 
 import { User, StoreItem, get, COLOR_OPTIONS } from "../../util";
 
-const StorePage = ({ user }: { user: User }) => {
+const StorePage = ({
+  user,
+  updateUser,
+}: {
+  user?: User;
+  updateUser: (user: User) => void;
+}) => {
   const [owned, setOwned] = React.useState<StoreItem[]>([]);
 
   React.useEffect(() => {
@@ -38,6 +44,15 @@ const StorePage = ({ user }: { user: User }) => {
   }
   const ownedString = ownedList;
 
+  //updates Owned List so user doesn't have to reload page
+  const purchase = () => {
+    get(`/api/items/`).then((res) => {
+      if (!res?.error) {
+        res && setOwned(res);
+      }
+    });
+  };
+
   //dividing store between beak and duck
   const beakOptions = items
     .filter((item) => item.type === "beak")
@@ -65,7 +80,14 @@ const StorePage = ({ user }: { user: User }) => {
           {beakOptions.map((item) =>
             ownedString.includes(item.identifier) ? (
               <Grid item xs={1.7}>
-                <StoreItemCard user={user} item={item} own={true} price={500} />
+                <StoreItemCard 
+                user={user} 
+                item={item} 
+                own={true} 
+                price={200}
+                purchase={purchase}
+                updateUser={updateUser}
+                />
               </Grid>
             ) : (
               <Grid item xs={1.7}>
@@ -73,7 +95,9 @@ const StorePage = ({ user }: { user: User }) => {
                   user={user}
                   item={item}
                   own={false}
-                  price={500}
+                  price={200}
+                  purchase={purchase}
+                  updateUser={updateUser}
                 />
               </Grid>
             )
@@ -93,7 +117,14 @@ const StorePage = ({ user }: { user: User }) => {
           {duckOptions.map((item) =>
             ownedString.includes(item.identifier) ? (
               <Grid item xs={1.7}>
-                <StoreItemCard user={user} item={item} own={true} price={650} />
+                <StoreItemCard 
+                user={user} 
+                item={item} 
+                own={true} 
+                price={250} 
+                purchase={purchase}
+                updateUser={updateUser}
+                />
               </Grid>
             ) : (
               <Grid item xs={1.7}>
@@ -101,7 +132,9 @@ const StorePage = ({ user }: { user: User }) => {
                   user={user}
                   item={item}
                   own={false}
-                  price={650}
+                  price={250}
+                  purchase={purchase}
+                  updateUser={updateUser}
                 />
               </Grid>
             )

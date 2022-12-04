@@ -15,20 +15,28 @@ const StoreItemCard = ({
   item,
   own,
   price,
+  purchase,
+  updateUser
 }: {
   user?: User;
   item: StoreItem;
   own: boolean;
   price: number;
+  purchase: () => void;
+  updateUser: (user: User) => void;
 }) => {
   const purchaseItem = () => {
     post("/api/items/", {
       type: item.type,
       identifier: item.identifier,
       properties: item.properties,
-    }).then((itemtobuy) => {
-      if (itemtobuy?.error) {
-        window.alert(itemtobuy.error);
+    }).then((res) => {
+      if (res?.error) {
+        window.alert(res.error);
+      }else{
+        const { purchasedItem, coinsDelta } = res;
+        purchase();
+        updateUser({ ...user, coins: user.coins + coinsDelta });
       }
     });
   };
@@ -67,3 +75,4 @@ const StoreItemCard = ({
 };
 
 export default StoreItemCard;
+
