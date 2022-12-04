@@ -195,16 +195,16 @@ const DIFF_TO_COLOR = {
   hard: "dark-red",
 } as const;
 
-const TaskNode = ({
+export const TaskNode = ({
   task,
   deleteTask,
   completeTask,
   editTask,
 }: {
   task: Task;
-  deleteTask: (id: string) => void;
-  completeTask: (id: string) => void;
-  editTask: (id: string, content: string) => void;
+  deleteTask?: (id: string) => void;
+  completeTask?: (id: string) => void;
+  editTask?: (id: string, content: string) => void;
 }) => {
   const [editing, setEditing] = React.useState<boolean>(false);
   const [content, setContent] = React.useState<string>(task.content);
@@ -226,7 +226,7 @@ const TaskNode = ({
         </Markdown>
       )}{" "}
       <div className="flex flex-row items-center">
-        {!task.completed && (
+        {!task.completed && editTask && (
           <Tooltip arrow title={editing ? "Done" : "Edit"}>
             <IconButton
               onClick={() => {
@@ -244,18 +244,20 @@ const TaskNode = ({
             </IconButton>
           </Tooltip>
         )}
-        {!task.completed && (
+        {!task.completed && completeTask && (
           <Tooltip arrow title="Complete">
             <IconButton onClick={() => completeTask(task._id)} className="w-fc">
               <CheckCircleOutline className="green" />
             </IconButton>
           </Tooltip>
         )}
-        <Tooltip arrow title="Delete">
-          <IconButton onClick={() => deleteTask(task._id)} className="w-fc">
-            <DeleteIcon className="dark-red" />
-          </IconButton>
-        </Tooltip>
+        {deleteTask && (
+          <Tooltip arrow title="Delete">
+            <IconButton onClick={() => deleteTask(task._id)} className="w-fc">
+              <DeleteIcon className="dark-red" />
+            </IconButton>
+          </Tooltip>
+        )}
       </div>
       <span>
         <span className={DIFF_TO_COLOR[task.difficulty] + " b i"}>

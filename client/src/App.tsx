@@ -63,7 +63,7 @@ const App = () => {
     <BrowserRouter>
       <Nav user={user} logout={logout} />
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomePage user={user} />} />
         <Route path="/about/" element={<AboutPage />} />
         <Route
           path="/login/"
