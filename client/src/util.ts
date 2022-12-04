@@ -12,7 +12,9 @@ export async function get(endpoint: string, params: Object = {}) {
 }
 
 export async function post(endpoint: string, body: Object = {}) {
+  console.log(body);
   try {
+    
     const res = await fetch(endpoint, {
       body: JSON.stringify(body),
       method: "POST",
@@ -117,7 +119,7 @@ export type Pet = {
 
 export type StoreItem = {
   _id: string;
-  userId: string;
+  userId?: string;
   properties: Record<string, string>;
   type: "beak" | "hat" | "duck";
   identifier: string;

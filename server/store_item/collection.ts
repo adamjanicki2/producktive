@@ -5,8 +5,8 @@ import UserCollection from "../user/collection";
 
 const PRICES = {
   "food": 15,
-  "beak": 500,
-  "duck": 650,
+  "beak": 200,
+  "duck": 250,
 } as const;
 
 class ItemCollection {

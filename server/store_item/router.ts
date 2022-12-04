@@ -15,6 +15,7 @@ router.get(
     const ownedItems = await ItemCollection.findItemsById(
       (req.session as any).userId as string
     );
+    // console.log(ownedItems);
     return res.status(200).json(ownedItems);
   }
 );

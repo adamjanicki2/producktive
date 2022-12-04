@@ -1,7 +1,7 @@
 import React from "react";
 import type { ColorOption } from "../../util";
 
-const COLOR_TO_HEX = {
+export const COLOR_TO_HEX = {
   yellow: {
     primary: "#FFD527",
     secondary: "#FFC31A",
@@ -11,7 +11,7 @@ const COLOR_TO_HEX = {
     secondary: "#FF6E0B",
   },
   green: {
-    primary: "#7BF1A8",
+    primary: "#52DF13",
     secondary: "#C1FBA4",
   },
   blue: {
@@ -19,16 +19,16 @@ const COLOR_TO_HEX = {
     secondary: "#00F2F2",
   },
   red: {
-    primary: "#F0386B",
-    secondary: "#FF5376",
+    primary: "#E52525",
+    secondary: "#FB7373",
   },
   black: {
     primary: "#070707",
     secondary: "#727072",
   },
   purple: {
-    primary: "#4464AD",
-    secondary: "#A4B0F5",
+    primary: "#800080",
+    secondary: "#f80bf8",
   },
 } as const;
 
