@@ -14,6 +14,7 @@ const PetSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     required: true,
+    ref: "User",
   },
   petName: {
     type: String,

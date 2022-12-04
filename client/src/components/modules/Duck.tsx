@@ -41,14 +41,15 @@ const Duck = ({
   beakColor: ColorOption;
   bodyColor: ColorOption;
 }) => {
+  console.log({ beakColor, bodyColor });
   const bodyPrimary =
-    COLOR_TO_HEX[bodyColor].primary ?? COLOR_TO_HEX.yellow.primary;
+    COLOR_TO_HEX[bodyColor]?.primary ?? COLOR_TO_HEX.yellow.primary;
   const bodySecondary =
-    COLOR_TO_HEX[bodyColor].secondary ?? COLOR_TO_HEX.yellow.secondary;
+    COLOR_TO_HEX[bodyColor]?.secondary ?? COLOR_TO_HEX.yellow.secondary;
   const beakPrimary =
-    COLOR_TO_HEX[beakColor].primary ?? COLOR_TO_HEX.orange.primary;
+    COLOR_TO_HEX[beakColor]?.primary ?? COLOR_TO_HEX.orange.primary;
   const beakSecondary =
-    COLOR_TO_HEX[beakColor].secondary ?? COLOR_TO_HEX.orange.secondary;
+    COLOR_TO_HEX[beakColor]?.secondary ?? COLOR_TO_HEX.orange.secondary;
   return (
     <svg
       style={{

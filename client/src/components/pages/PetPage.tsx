@@ -51,7 +51,7 @@ const PetPage = ({
 
   const feedDuck = () => {
     patch("/api/pets/feed").then((res) => {
-      if (res) {
+      if (!res?.error) {
         const { healthDelta, coinsDelta } = res;
         setPet({ ...pet, health: pet.health + healthDelta });
         updateUser({ ...user, coins: user.coins + coinsDelta });
