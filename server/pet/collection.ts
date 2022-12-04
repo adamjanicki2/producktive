@@ -76,18 +76,18 @@ class PetCollection {
     return count;
   }
 
-  // /**
-  //  * Updates health for pet (designed to be called once daily)
-  //  */
-  // static async updateHealth(
-  //   userId: Types.ObjectId | string
-  // ): Promise<HydratedDocument<Pet>> {
-  //   const pet = await PetModel.findOne({ userId: userId });
-  //   const newHealth = updateHealth(pet!.health);
-  //   pet!.health = newHealth;
-  //   await pet!.save();
-  //   return pet!;
-  // }
+  /**
+   * Updates health for single pet
+   */
+  static async updateHealth(
+    userId: Types.ObjectId | string,
+    healthHit: number
+  ): Promise<HydratedDocument<Pet>> {
+    const pet = await PetModel.findOne({ userId: userId });
+    pet!.health = Math.max(0, pet!.health - healthHit);
+    await pet!.save();
+    return pet!;
+  }
 
   /**
    * Updates items on for pet
@@ -152,7 +152,19 @@ class PetCollection {
     if (pet!.health + foodAmount > 100) {
       return true;
     }
+    return false;
+  }
 
+  /**
+   * Checking if duck at full health
+   */
+   static async isFullHealth(
+    userId: Types.ObjectId | string,
+  ): Promise<boolean> {
+    const pet = await PetModel.findOne({ userId: userId });
+    if (pet!.health === 100) {
+      return true;
+    }
     return false;
   }
 }
