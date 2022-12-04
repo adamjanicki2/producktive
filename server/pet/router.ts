@@ -18,6 +18,12 @@ router.get(
   }
 );
 
+//gets all pets in alphabetical order
+router.get("/all", async (req: Request, res: Response) => {
+  const pets = await PetCollection.getAllPets();
+  return res.status(200).json(pets);
+});
+
 //creation of new pet happens in user creation
 //deletion of pet happens in user deletion
 
@@ -31,16 +37,6 @@ router.get(
   }
 );
 
-//gets all pets in alphabetical order
-router.get(
-  "/",
-  [userValidator.isUserLoggedIn],
-  async (req: Request, res: Response) => {
-    const pets = await PetCollection.getAllPets();
-    return res.status(200).json(pets);
-  }
-);
-
 router.patch(
   "/feed",
   [userValidator.isUserLoggedIn],
@@ -49,19 +45,20 @@ router.patch(
     const foodPrice = 15;
     const feedAmount = await PetCollection.calculateAmount(userId, foodPrice);
 
-    if(await PetCollection.isOverfed(userId, feedAmount)) {
-      return res.status(403).json({message: "Your pet is at max health"})
+    if (await PetCollection.isOverfed(userId, feedAmount)) {
+      return res.status(403).json({ error: "Your pet is at max health" });
     } //making sure you don't overfeed the duck
 
-    if(feedAmount === 0){ //cannot afford any food
-      return res.status(405).json({message: "You do not have enough coins"});
+    if (feedAmount === 0) {
+      //cannot afford any food
+      return res.status(405).json({ error: "You do not have enough coins" });
     }
 
-    await UserCollection.updateCoins(userId, -feedAmount*foodPrice);
+    await UserCollection.updateCoins(userId, -feedAmount * foodPrice);
     await PetCollection.feed((req.session as any).userId, feedAmount);
     return res
       .status(200)
-      .json({ healthDelta: feedAmount, coinsDelta: -feedAmount*foodPrice });
+      .json({ healthDelta: feedAmount, coinsDelta: -feedAmount * foodPrice });
   }
 );
 

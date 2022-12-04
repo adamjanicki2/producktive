@@ -7,6 +7,14 @@ import { constructTaskResponse } from "./util";
 
 const router = express.Router();
 
+router.get("/today", async (req: Request, res: Response) => {
+  const tasks = await TaskCollection.getUpcomingTasks(
+    (req.session as any).userId,
+    "daily"
+  );
+  return res.status(200).json(tasks);
+});
+
 router.get("/:listId", async (req: Request, res: Response) => {
   const { listId } = req.params;
   const tasks = await TaskCollection.findByParentId(listId);
@@ -36,7 +44,7 @@ router.post(
 
 router.patch("/complete/:taskId", async (req: Request, res: Response) => {
   const { taskId } = req.params;
-  const userId = (req.session as any).userId as string
+  const userId = (req.session as any).userId as string;
   const task = await TaskCollection.completeOne(userId, taskId);
   if (!task) return res.status(404).json({ error: "Task not found" });
   return res.status(200).json({ status: "success" });
@@ -70,10 +78,8 @@ router.delete(
 
 router.get(
   "/today",
-  [
-    userValidator.isUserLoggedIn
-  ],
-  async(req: Request, res: Response) => {
+  [userValidator.isUserLoggedIn],
+  async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
     const tasks = await TaskCollection.getTodayTask(userId);
     return res.status(200).json(tasks.map(constructTaskResponse));
