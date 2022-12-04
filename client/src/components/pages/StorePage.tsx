@@ -51,6 +51,7 @@ const StorePage = ({ user }: { user: User }) => {
     <div>
       <div className="flex flex-column primary-text">
         <h1 className="tc f-subheadline ma0 pa0 primary-text">Store</h1>
+        <h2 className="tc f1 lh-copy ma0 pt3 primary-text">Coins: {user.coins}</h2>
       </div>
       <Box className="ma4" sx={{ width: "100%" }}>
         <h1 className="mr2 primary-text">Beak Color: </h1>
