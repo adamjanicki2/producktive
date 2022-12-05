@@ -88,7 +88,7 @@ const App = () => {
             element={<SettingsPage user={user} updateUser={updateUser} />}
           />
         )}
-        {user && <Route path="/store/" element={<StorePage user={user} />} />}
+        {user && <Route path="/store/" element={<StorePage user={user} updateUser={updateUser}/>} />}
         <Route path="/list/:listId" element={<ListPage />} />
         <Route path="/lists/" element={<ListViewPage />} />
         {/* Make sure this is the last route */}
