@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Button, TextField} from "@mui/material";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MUI_BUTTON_STYLE } from "../../util";
@@ -46,6 +46,7 @@ const Login = ({
         />
         <TextField
           style={{ margin: "4px" }}
+          type="password"
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
