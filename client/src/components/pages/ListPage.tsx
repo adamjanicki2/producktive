@@ -16,6 +16,7 @@ import {
   post,
   del,
   patch,
+  User
 } from "../../util";
 import Markdown from "../modules/Markdown";
 import NotFound from "./NotFoundPage";
@@ -31,7 +32,13 @@ const DEFAULT_TASK: Partial<Task> = {
   deadline: "",
 };
 
-const ListPage = () => {
+const ListPage = ({
+  user,
+  updateUser,
+}: {
+  user?: User;
+  updateUser: (user: User) => void;
+}) => {
   const { listId } = useParams();
   const [tasks, setTasks] = React.useState<Task[]>();
   const [list, setList] = React.useState<List>();
@@ -97,6 +104,8 @@ const ListPage = () => {
         setTasks(
           tasks.map((t) => (t._id === id ? { ...t, completed: true } : t))
         );
+        const { coinsDelta } = res;
+        updateUser({ ...user, coins: user.coins + coinsDelta });
       }
     });
   };

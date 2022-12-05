@@ -47,7 +47,7 @@ router.patch("/complete/:taskId", async (req: Request, res: Response) => {
   const userId = (req.session as any).userId as string;
   const task = await TaskCollection.completeOne(userId, taskId);
   if (!task) return res.status(404).json({ error: "Task not found" });
-  return res.status(200).json({ status: "success" });
+  return res.status(200).json({ status: "success", coinsDelta: task });
 });
 
 router.patch(
