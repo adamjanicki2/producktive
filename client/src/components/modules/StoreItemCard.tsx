@@ -30,9 +30,13 @@ const StoreItemCard = ({
       type: item.type,
       identifier: item.identifier,
       properties: item.properties,
-    }).then((itemtobuy) => {
-      if (itemtobuy?.error) {
-        window.alert(itemtobuy.error);
+    }).then((res) => {
+      if (res?.error) {
+        window.alert(res.error);
+      }else{
+        const { coinsDelta } = res;
+        purchase();
+        updateUser({ ...user, coins: user.coins + coinsDelta });
       }
     });
   };
