@@ -42,7 +42,7 @@ router.patch(
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId;
 
-    // const healthHit = 50
+    // const healthHit = 50;
     // await PetCollection.updateHealth(userId, healthHit);
     //   return res
     //     .status(200)
