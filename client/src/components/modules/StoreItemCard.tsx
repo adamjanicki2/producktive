@@ -15,11 +15,15 @@ const StoreItemCard = ({
   item,
   own,
   price,
+  purchase,
+  updateUser
 }: {
   user?: User;
   item: StoreItem;
   own: boolean;
   price: number;
+  purchase: () => void;
+  updateUser: (user: User) => void;
 }) => {
   const purchaseItem = () => {
     post("/api/items/", {

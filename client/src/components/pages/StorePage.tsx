@@ -44,6 +44,15 @@ const StorePage = ({
   }
   const ownedString = ownedList;
 
+  //updates Owned List so user doesn't have to reload page
+  const purchase = () => {
+    get(`/api/items/`).then((res) => {
+      if (!res?.error) {
+        res && setOwned(res);
+      }
+    });
+  };
+
   //dividing store between beak and duck
   const beakOptions = items
     .filter((item) => item.type === "beak")
@@ -71,16 +80,25 @@ const StorePage = ({
           {beakOptions.map((item) =>
             ownedString.includes(item.identifier) ? (
               <Grid item xs={1.7}>
-                <StoreItemCard user={user} item={item} own={true} price={200} />
+                <StoreItemCard 
+                 user={user} 
+                 item={item} 
+                 own={true} 
+                 price={200}
+                 purchase={purchase}
+                 updateUser={updateUser}
+                 />
               </Grid>
             ) : (
               <Grid item xs={1.7}>
-                <StoreItemCard
-                  user={user}
-                  item={item}
-                  own={false}
-                  price={200}
-                />
+                <StoreItemCard 
+                 user={user} 
+                 item={item} 
+                 own={false} 
+                 price={200}
+                 purchase={purchase}
+                 updateUser={updateUser}
+                 />
               </Grid>
             )
           )}
@@ -99,16 +117,25 @@ const StorePage = ({
           {duckOptions.map((item) =>
             ownedString.includes(item.identifier) ? (
               <Grid item xs={1.7}>
-                <StoreItemCard user={user} item={item} own={true} price={250} />
+                 <StoreItemCard 
+                 user={user} 
+                 item={item} 
+                 own={true} 
+                 price={250} 
+                 purchase={purchase}
+                 updateUser={updateUser}
+                 />
               </Grid>
             ) : (
               <Grid item xs={1.7}>
-                <StoreItemCard
-                  user={user}
-                  item={item}
-                  own={false}
-                  price={250}
-                />
+                 <StoreItemCard 
+                 user={user} 
+                 item={item} 
+                 own={false} 
+                 price={250} 
+                 purchase={purchase}
+                 updateUser={updateUser}
+                 />
               </Grid>
             )
           )}
