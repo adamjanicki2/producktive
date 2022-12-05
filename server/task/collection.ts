@@ -88,12 +88,22 @@ class TaskCollection {
     today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + NOTIF_TO_DELTA[notifPeriod]);
-    // return TaskModel.find({ userId, deadline: { $gte: today, $lt: tomorrow } })
-    return TaskModel.find({ userId, deadline: { $gte: today, $lte: tomorrow } })
+    return TaskModel.find({ userId, deadline: { $gte: today, $lt: tomorrow } })
       .sort({ deadline: "asc" })
       .limit(limit || 20)
       .populate("parent");
   }
+
+  static async getHomeTasks(
+    userId: Types.ObjectId | string,
+    limit?: number
+  ): Promise<HydratedDocument<Task>[]> {
+    return TaskModel.find({ userId, completed: false  })
+      .sort({ deadline: "asc" })
+      .limit(limit || 20)
+      .populate("parent");
+  }
+
 
   /**
    * Deletes a task form the collection
