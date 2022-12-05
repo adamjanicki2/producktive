@@ -4,7 +4,7 @@ import PetCollection from "./collection";
 import * as userValidator from "../user/middleware";
 import * as middleware from "../email/middleware";
 import * as petValidator from "./middleware";
-import UserCollection from "../user/collection";
+// import UserCollection from "../user/collection";
 
 const router = express.Router();
 
@@ -61,7 +61,6 @@ router.patch(
       //cannot afford any food
       return res.status(405).json({ error: "You do not have enough coins" });
     } else {
-      await UserCollection.updateCoins(userId, -feedAmount * foodPrice);
       await PetCollection.feed((req.session as any).userId, feedAmount);
       return res
         .status(200)
