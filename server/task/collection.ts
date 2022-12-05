@@ -88,7 +88,8 @@ class TaskCollection {
     today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + NOTIF_TO_DELTA[notifPeriod]);
-    return TaskModel.find({ userId, deadline: { $gte: today, $lt: tomorrow } })
+    // return TaskModel.find({ userId, deadline: { $gte: today, $lt: tomorrow } })
+    return TaskModel.find({ userId, deadline: { $gte: today, $lte: tomorrow } })
       .sort({ deadline: "asc" })
       .limit(limit || 20)
       .populate("parent");
