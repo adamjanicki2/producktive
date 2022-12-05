@@ -89,7 +89,7 @@ const App = () => {
           />
         )}
         {user && <Route path="/store/" element={<StorePage user={user} updateUser={updateUser}/>} />}
-        <Route path="/list/:listId" element={<ListPage />} />
+        {user && <Route path="/list/:listId" element={<ListPage user={user} updateUser={updateUser}/>} />}
         <Route path="/lists/" element={<ListViewPage />} />
         {/* Make sure this is the last route */}
         <Route path="*" element={<NotFoundPage />} />

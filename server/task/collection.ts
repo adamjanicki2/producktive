@@ -108,7 +108,7 @@ class TaskCollection {
   /**
    * Completes a task
    */
-  static async completeOne(userId: Types.ObjectId | string, taskId: Types.ObjectId | string): Promise<boolean> {
+  static async completeOne(userId: Types.ObjectId | string, taskId: Types.ObjectId | string): Promise<number> {
     const task = await TaskModel.findById(taskId);
     const completed = new Date();
     const deadline = task!.deadline;
@@ -117,10 +117,10 @@ class TaskCollection {
       addedCoins = coins(deadline, completed, task!.difficulty);
     }
     await UserCollection.updateCoins(userId, addedCoins);
-    if (!task) return false;
+    if (!task) return 0;
     task.completed = true;
     await task.save();
-    return true;
+    return addedCoins;
   }
 
   static async deleteManyByParentId(id: Types.ObjectId | string) {
