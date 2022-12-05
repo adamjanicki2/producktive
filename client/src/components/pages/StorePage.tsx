@@ -4,7 +4,13 @@ import { Grid, Box } from "@mui/material";
 
 import { User, StoreItem, get, COLOR_OPTIONS } from "../../util";
 
-const StorePage = ({ user }: { user: User }) => {
+const StorePage = ({
+  user,
+  updateUser,
+}: {
+  user?: User;
+  updateUser: (user: User) => void;
+}) => {
   const [owned, setOwned] = React.useState<StoreItem[]>([]);
 
   React.useEffect(() => {
