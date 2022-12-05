@@ -78,7 +78,27 @@ const PetPage = ({
 
   return pet && user ? (
     <div className="flex flex-column primary-text items-center">
-      <h1 className="tc f-subheadline ma0 pa0 i">{pet.petName}</h1>
+      <div className="flex flex-row items-center justify-center">
+        {editing ? (
+          <TextField
+            value={duckName}
+            onChange={(e) => setDuckName(e.target.value)}
+          />
+        ) : (
+          <h1 className="tc f-subheadline ma0 pa0 i">{pet.petName}</h1>
+        )}
+
+        <IconButton
+          onClick={() => {
+            if (editing) {
+              saveName();
+            }
+            setEditing(!editing);
+          }}
+        >
+          {editing ? <Lock /> : <Edit />}
+        </IconButton>
+      </div>
       <Button
         className="w-fc m-auto"
         variant="contained"
@@ -105,27 +125,7 @@ const PetPage = ({
       <div className="m-auto w-fc">
         <Duck size={450} beakColor={beakColor} bodyColor={bodyColor} />
       </div>
-      <div className="flex flex-row items-center justify-center">
-        {editing ? (
-          <TextField
-            value={duckName}
-            onChange={(e) => setDuckName(e.target.value)}
-          />
-        ) : (
-          <h2 className="i">{pet.petName}</h2>
-        )}
-
-        <IconButton
-          onClick={() => {
-            if (editing) {
-              saveName();
-            }
-            setEditing(!editing);
-          }}
-        >
-          {editing ? <Lock /> : <Edit />}
-        </IconButton>
-      </div>
+      
 
       <div className="flex flex-row items-center justify-center">
         <h3 className="mr2">Beak Color:</h3>

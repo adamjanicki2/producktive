@@ -17,14 +17,19 @@ const Nav = ({ user, logout }: { user?: User; logout: () => void }) => {
           <h1 className="i">PRODUCKTIVE</h1>
         </Link>
         <div className="flex flex-row items-center justify-around mr3">
+        {user && (
+            <Link className={LINK_CLASS_NAME} to="/">
+              Home
+            </Link>
+          )}
           {user && (
             <Link className={LINK_CLASS_NAME} to="/lists/">
-              Lists
+              Todos
             </Link>
           )}
           {user && (
             <Link className={LINK_CLASS_NAME} to="/pet/">
-              My Pet
+              Pet
             </Link>
           )}
           {user && (
@@ -38,9 +43,9 @@ const Nav = ({ user, logout }: { user?: User; logout: () => void }) => {
             </Link>
           )}
           {user ? (
-            <div className={LINK_CLASS_NAME + " pointer"} onClick={logout}>
+            <Link className={LINK_CLASS_NAME + " pointer"} onClick={logout} to= "/">
               Logout
-            </div>
+            </Link>
           ) : (
             <Link className={LINK_CLASS_NAME} to="/login/">
               Login

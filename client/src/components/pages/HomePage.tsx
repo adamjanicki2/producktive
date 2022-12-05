@@ -64,7 +64,38 @@ const Home = ({ user }: { user?: User }) => {
         ))}
     </div>
   ) : (
-    <p>Loading...</p>
+    <div>
+      <h1 className="tc f1">Check out everyone's ducks!</h1>
+      {ducks
+        .map((duck, index) => (
+          <div
+            key={`duck${index}`}
+            className="flex flex-column items-center justify-center"
+          >
+            <h2>Health: {duck.health}</h2>
+            <div className="ba bw1 br2 b--near-black w-50">
+              <div
+                className={
+                  duck.health < 33
+                    ? "bg-dark-red"
+                    : duck.health < 66
+                    ? "bg-yellow"
+                    : "bg-green"
+                }
+                style={{ height: 20, width: `${duck.health}%` }}
+              ></div>
+            </div>
+            <Duck
+              size={260}
+              beakColor={duck.itemsOn.beak}
+              bodyColor={duck.itemsOn.duck}
+            />
+            <h1 className="i ma0 pa0">{duck.petName}</h1>
+            <h2>({(duck.userId as any).username}'s Duck)</h2>
+            <hr className="moon-gray b--moon-gray ba bw1 w-60" />
+          </div>
+        ))}
+    </div>
   );
 };
 

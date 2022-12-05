@@ -57,7 +57,7 @@ const ListView = () => {
 
   return (
     <div className="flex flex-column primary-text">
-      <h1 className="tc f-subheadline ma0 pa0 ">List View</h1>
+      <h1 className="tc f-subheadline ma0 pa0 ">Todo Lists</h1>
       <div className="flex flex-column w-70 m-auto">
         {(!lists || !lists.length) && <h3>You don't have any lists!</h3>}
         {lists?.map((list, index) => (
