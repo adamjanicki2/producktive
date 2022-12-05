@@ -8,9 +8,8 @@ import { constructTaskResponse } from "./util";
 const router = express.Router();
 
 router.get("/today", async (req: Request, res: Response) => {
-  const tasks = await TaskCollection.getUpcomingTasks(
-    (req.session as any).userId,
-    "daily"
+  const tasks = await TaskCollection.getHomeTasks(
+    (req.session as any).userId
   );
   return res.status(200).json(tasks);
 });
