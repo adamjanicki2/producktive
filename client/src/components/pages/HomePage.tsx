@@ -21,7 +21,7 @@ const Home = ({ user }: { user?: User }) => {
   return user && ducks.length > 0 ? (
     <div className="flex flex-column primary-text">
       <h1 className="tc f-subheadline ma0 pa0">Home</h1>
-      <h1 className="tc f1">Your Tasks for Today</h1>
+      <h1 className="tc f1">Your Upcoming Tasks</h1>
       {!tasks.length && (
         <h2 className="tc">You do not have any tasks for today!</h2>
       )}
