@@ -1,9 +1,15 @@
 import React, { useEffect } from "react";
-import { get, Pet, Task, User } from "../../util";
+import { get, Pet, Task, User, del, patch,  } from "../../util";
 import Duck from "../modules/Duck";
 import { TaskNode } from "./ListPage";
 
-const Home = ({ user }: { user?: User }) => {
+const Home = ({
+  user,
+  updateUser,
+}: {
+  user?: User;
+  updateUser: (user: User) => void;
+}) => {
   const [ducks, setDucks] = React.useState<Pet[]>([]);
   const [tasks, setTasks] = React.useState<Task[]>([]);
 
@@ -18,6 +24,42 @@ const Home = ({ user }: { user?: User }) => {
     });
   }, []);
 
+  const deleteTask = (id: string) => {
+    if (window.confirm("Are you sure you want to delete this task?")) {
+      del(`/api/tasks/${id}`).then((task) => {
+        if (task?.error) {
+          return window.alert(task.error);
+        } else {
+          setTasks(tasks.filter((t) => t._id !== id));
+        }
+      });
+    }
+  };
+
+  const completeTask = (id: string) => {
+    patch(`/api/tasks/complete/${id}`).then((res) => {
+      if (res?.error) {
+        return window.alert(res.error);
+      } else {
+        setTasks(
+          tasks.map((t) => (t._id === id ? { ...t, completed: true } : t))
+        );
+        const { coinsDelta } = res;
+        updateUser({ ...user, coins: user.coins + coinsDelta });
+      }
+    });
+  };
+
+  const editTask = (id: string, content: string) => {
+    patch(`/api/tasks/${id}`, { content }).then((res) => {
+      if (res?.error) {
+        return window.alert(res.error);
+      } else {
+        setTasks(tasks.map((t) => (t._id === id ? { ...t, content } : t)));
+      }
+    });
+  };
+
   return user && ducks.length > 0 ? (
     <div className="flex flex-column primary-text">
       <h1 className="tc f-subheadline ma0 pa0">Home</h1>
@@ -27,7 +69,11 @@ const Home = ({ user }: { user?: User }) => {
       )}
       <div className="flex flex-column w-70 m-auto">
         {tasks.map((task, index) => (
-          <TaskNode key={`task${index}`} task={task} />
+          <TaskNode key={`task${index}`} 
+          task={task} 
+          deleteTask={deleteTask}
+          completeTask={completeTask}
+          editTask={editTask} />
         ))}
       </div>
       <hr className="near-black b--near-black ba bw1 w-80" />
