@@ -187,7 +187,7 @@ const ListPage = ({
           </Button>
         </div>
         <Button
-          onClick={submitTask}
+          onClick={() => { submitTask(); setNewTask({ ...newTask, deadline: null });}}
           style={MUI_BUTTON_STYLE}
           variant="contained"
         >
