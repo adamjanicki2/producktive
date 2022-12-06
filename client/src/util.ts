@@ -64,7 +64,7 @@ export type User = {
   _id: string;
   email: string;
   username: string;
-  notifPeriod: "daily" | "weekly" | "montly" | "none";
+  notifPeriod: "daily" | "weekly" | "monthly" | "none";
   coins: number;
 };
 
