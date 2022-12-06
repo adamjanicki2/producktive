@@ -5,13 +5,12 @@ import {
   StoreItem,
   ColorOption,
   get,
-  // COLOR_OPTIONS,
   MUI_BUTTON_STYLE,
   patch,
 } from "../../util";
 import Duck from "../modules/Duck";
 import { Button, IconButton, MenuItem, Select, TextField } from "@mui/material";
-import { Edit, Lock } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 
 const PetPage = ({
   user,
@@ -114,7 +113,7 @@ const PetPage = ({
               </IconButton>
         )}
       </div>
-      
+
       <hr className="moon-gray b--moon-gray ba bw1 w-60" />
       <div className="flex flex-row items-center justify-center">
         <h2 className="mr4">
