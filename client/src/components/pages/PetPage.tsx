@@ -142,7 +142,7 @@ const PetPage = ({
         ></div>
       </div>
       <div className="m-auto w-fc">
-        <Duck size={450} beakColor={beakColor} bodyColor={bodyColor} />
+        <Duck size={450} beakColor={beakColor} bodyColor={bodyColor} petHealth={pet.health} />
       </div>
       
 

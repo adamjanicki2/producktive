@@ -102,6 +102,7 @@ const Home = ({
               size={260}
               beakColor={duck.itemsOn.beak}
               bodyColor={duck.itemsOn.duck}
+              petHealth={duck.health}
             />
             <h1 className="i ma0 pa0">{duck.petName}</h1>
             <h2>({(duck.userId as any).username}'s Duck)</h2>
@@ -135,6 +136,7 @@ const Home = ({
               size={260}
               beakColor={duck.itemsOn.beak}
               bodyColor={duck.itemsOn.duck}
+              petHealth={duck.health}
             />
             <h1 className="i ma0 pa0">{duck.petName}</h1>
             <h2>({(duck.userId as any).username}'s Duck)</h2>
