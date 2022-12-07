@@ -25,7 +25,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { DesktopDatePicker as DatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { CheckCircleOutline, Edit, Lock } from "@mui/icons-material";
+import { CheckCircleOutline, Edit } from "@mui/icons-material";
 
 const DEFAULT_TASK: Partial<Task> = {
   content: "",
@@ -236,23 +236,28 @@ export const TaskNode = ({
         </Markdown>
       )}{" "}
       <div className="flex flex-row items-center">
-        {!task.completed && editTask && (
-          <Tooltip arrow title={editing ? "Done" : "Edit"}>
-            <IconButton
+        {!task.completed && editTask && editing? (
+          <div className="mv2">
+            <Button 
+              variant="contained"
               onClick={() => {
                 if (editing) {
                   editTask(task._id, content);
                 }
                 setEditing(!editing);
               }}
-            >
-              {editing ? (
-                <Lock className="black" />
-              ) : (
-                <Edit className="black" />
-              )}
-            </IconButton>
-          </Tooltip>
+            > 
+              Save 
+            </Button>
+          </div>
+        ) : (
+          <IconButton>
+            <Edit 
+            className="black" 
+            onClick={() => {
+                setEditing(!editing);
+              }} />
+          </IconButton>
         )}
         {!task.completed && completeTask && (
           <Tooltip arrow title="Complete">
