@@ -3,7 +3,7 @@ import { Button, IconButton, TextField, Tooltip } from "@mui/material";
 import { Link } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { del, get, List, MUI_BUTTON_STYLE, patch, post } from "../../util";
-import { Edit, Lock } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 
 const ListView = () => {
   const [lists, setLists] = React.useState<List[]>();
@@ -111,19 +111,30 @@ const ListNode = ({
           {title}
         </Link>
       )}{" "}
-      <Tooltip arrow title={editing ? "Save" : "Edit"}>
-        <IconButton
+      {editing? (
+        <div className="mv2">
+          <Button 
+            variant="contained"
+            sx={{ml: 2}}
+            onClick={() => {
+              if (editing) {
+                editListName(list._id, title);
+              }
+              setEditing(!editing);
+            }}
+          > 
+            Save 
+          </Button>
+        </div>
+      ) : (
+        <IconButton>
+          <Edit 
+          className="black" 
           onClick={() => {
-            if (editing) {
-              editListName(list._id, title);
-            }
-            setEditing(!editing);
-          }}
-          className="w-fc"
-        >
-          {editing ? <Lock className="black" /> : <Edit className="black" />}
+              setEditing(!editing);
+            }} />
         </IconButton>
-      </Tooltip>
+      )}
       <Tooltip arrow title="Delete">
         <IconButton onClick={() => deleteList(list._id)} className="w-fc">
           <DeleteIcon className="dark-red" />

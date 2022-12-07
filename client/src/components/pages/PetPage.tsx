@@ -5,13 +5,12 @@ import {
   StoreItem,
   ColorOption,
   get,
-  // COLOR_OPTIONS,
   MUI_BUTTON_STYLE,
   patch,
 } from "../../util";
 import Duck from "../modules/Duck";
 import { Button, IconButton, MenuItem, Select, TextField } from "@mui/material";
-import { Edit, Lock } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 
 const PetPage = ({
   user,
@@ -80,36 +79,56 @@ const PetPage = ({
     <div className="flex flex-column primary-text items-center">
       <div className="flex flex-row items-center justify-center">
         {editing ? (
-          <TextField
-            value={duckName}
-            onChange={(e) => setDuckName(e.target.value)}
-          />
-        ) : (
-          <h1 className="tc f-subheadline ma0 pa0 i">{pet.petName}</h1>
-        )}
+            <TextField
+              sx={{mt: 3, mb: 3}}
+              value={duckName}
+              onChange={(e) => setDuckName(e.target.value)}
+            />
+          ) : (
+            <h1 className="tc f-subheadline mv3 ph4 pv2 ba b--primary-text i">{pet.petName}</h1>
+          )}
 
-        <IconButton
-          onClick={() => {
-            if (editing) {
-              saveName();
-            }
-            setEditing(!editing);
-          }}
-        >
-          {editing ? <Lock /> : <Edit />}
-        </IconButton>
+        {editing ? (
+            <div className="mv2">
+              <Button 
+                  variant="contained"
+                  sx={{ml: 2}}
+                  onClick={() => {
+                    if (editing) {
+                      saveName();
+                    }
+                    setEditing(!editing);
+                  }}
+                > 
+                  Save 
+                </Button>
+          </div>
+        ) : (
+            <IconButton>
+                <Edit 
+                className="black" 
+                onClick={() => {
+                    setEditing(!editing);
+                  }} />
+              </IconButton>
+        )}
       </div>
-      <Button
-        className="w-fc m-auto"
-        variant="contained"
-        style={MUI_BUTTON_STYLE}
-        onClick={feedDuck}
-      >
-        Feed Me!
-      </Button>
-      <h2>
-        Coins: {user.coins} | Health: {pet.health}
-      </h2>
+
+      <hr className="moon-gray b--moon-gray ba bw1 w-60" />
+      <div className="flex flex-row items-center justify-center">
+        <h2 className="mr4">
+          Coins: {user.coins} | Health: {pet.health}
+        </h2>
+        <Button
+          className="w-fc m-auto"
+          variant="contained"
+          style={MUI_BUTTON_STYLE}
+          onClick={feedDuck}
+        >
+          Feed Me!
+        </Button>
+      </div>
+      
       <div className="ba bw1 br2 b--near-black w-50">
         <div
           className={
