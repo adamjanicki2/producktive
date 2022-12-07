@@ -76,7 +76,7 @@ const ListView = () => {
           onChange={(e) => setNewList({ ...newList, title: e.target.value })}
         />
         <Button
-          onClick={submitList}
+          onClick={() => {submitList(); setNewList({ ...newList, title: ''});}}
           style={MUI_BUTTON_STYLE}
           variant="contained"
         >

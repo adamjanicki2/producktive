@@ -17,7 +17,7 @@ class TaskCollection {
     listId: Types.ObjectId | string,
     content: string,
     difficulty: "easy" | "medium" | "hard",
-    date?: string
+    date: string
   ): Promise<HydratedDocument<Task>> {
     let taskObj: Object = {
       userId,
