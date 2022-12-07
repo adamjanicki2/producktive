@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import moment from 'moment'
 import {
   Button,
   IconButton,
@@ -272,7 +273,7 @@ export const TaskNode = ({
         <span className={DIFF_TO_COLOR[task.difficulty] + " b i"}>
           {task.difficulty}
         </span>{" "}
-        {task.deadline && <span>Complete by: {task.deadline}</span>}
+        {task.deadline && <span>Complete by: {moment(task.deadline).format('MM/DD/YYYY')}</span>}
       </span>
     </div>
   );

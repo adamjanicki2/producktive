@@ -31,7 +31,7 @@ const Home = ({ user }: { user?: User }) => {
         ))}
       </div>
       <hr className="near-black b--near-black ba bw1 w-80" />
-      <h1 className="tc f1">Check out everyone's ducks!</h1>
+      <h1 className="tc f1 primary-text">Check out everyone's ducks!</h1>
       {ducks
         .filter((duck) => (duck.userId as any)._id !== user._id)
         .map((duck, index) => (
@@ -65,7 +65,7 @@ const Home = ({ user }: { user?: User }) => {
     </div>
   ) : (
     <div>
-      <h1 className="tc f1">Check out everyone's ducks!</h1>
+      <h1 className="tc f1 primary-text">Check out everyone's ducks!</h1>
       {ducks
         .map((duck, index) => (
           <div
