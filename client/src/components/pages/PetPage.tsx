@@ -62,7 +62,7 @@ const PetPage = ({
   };
 
   const saveName = () => {
-    duckName !== pet.petName &&
+    duckName !== pet.petName && duckName.trim() !== "" &&
       patch("/api/pets/updateName", { petName: duckName }).then(() => {
         setPet({ ...pet, petName: duckName });
       });
