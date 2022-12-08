@@ -44,7 +44,7 @@ const ListView = () => {
     }
   };
 
-  const editListName = (id: string, title: string) => {
+  const editListName = async (id: string, title: string) => {
     const list = await patch(`/api/lists/${id}`, { title });
     if (list?.error) {
       window.alert(list.error);
