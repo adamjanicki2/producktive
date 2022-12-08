@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import moment from 'moment'
+import moment from "moment";
 import {
   Button,
   IconButton,
@@ -17,7 +17,7 @@ import {
   post,
   del,
   patch,
-  User
+  User,
 } from "../../util";
 import Markdown from "../modules/Markdown";
 import NotFound from "./NotFoundPage";
@@ -48,22 +48,23 @@ const ListPage = ({
   });
 
   useEffect(() => {
-    get(`/api/lists/${listId}`).then((list) => {
+    const setup = async () => {
+      const list = await get(`/api/lists/${listId}`);
       if (list.error) {
         setList(null);
         setTasks(null);
       } else {
         setList(list);
-        get(`/api/tasks/${listId}`).then((tasks) => {
-          if (tasks?.error) {
-            setTasks([]);
-            window.alert("Error getting tasks");
-          } else {
-            setTasks(tasks);
-          }
-        });
+        const tasks = await get(`/api/tasks/${listId}`);
+        if (tasks?.error) {
+          setTasks([]);
+          window.alert("Error getting tasks");
+        } else {
+          setTasks(tasks);
+        }
       }
-    });
+    };
+    setup();
   }, [listId]);
 
   const submitTask = () => {
@@ -188,7 +189,10 @@ const ListPage = ({
           </Button>
         </div>
         <Button
-          onClick={() => { submitTask(); setNewTask({ ...newTask, deadline: null });}}
+          onClick={() => {
+            submitTask();
+            setNewTask({ ...newTask, deadline: null });
+          }}
           style={MUI_BUTTON_STYLE}
           variant="contained"
         >
@@ -236,9 +240,9 @@ export const TaskNode = ({
         </Markdown>
       )}{" "}
       <div className="flex flex-row items-center">
-        {!task.completed && editTask && editing? (
+        {!task.completed && editTask && editing ? (
           <div className="mv2">
-            <Button 
+            <Button
               variant="contained"
               onClick={() => {
                 if (editing) {
@@ -246,17 +250,18 @@ export const TaskNode = ({
                 }
                 setEditing(!editing);
               }}
-            > 
-              Save 
+            >
+              Save
             </Button>
           </div>
         ) : (
           <IconButton>
-            <Edit 
-            className="black" 
-            onClick={() => {
+            <Edit
+              className="black"
+              onClick={() => {
                 setEditing(!editing);
-              }} />
+              }}
+            />
           </IconButton>
         )}
         {!task.completed && completeTask && (
@@ -278,7 +283,9 @@ export const TaskNode = ({
         <span className={DIFF_TO_COLOR[task.difficulty] + " b i"}>
           {task.difficulty}
         </span>{" "}
-        {task.deadline && <span>Complete by: {moment(task.deadline).format('MM/DD/YYYY')}</span>}
+        {task.deadline && (
+          <span>Complete by: {moment(task.deadline).format("MM/DD/YYYY")}</span>
+        )}
       </span>
     </div>
   );

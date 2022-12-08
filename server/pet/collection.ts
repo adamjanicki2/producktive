@@ -50,7 +50,7 @@ class PetCollection {
   ): Promise<HydratedDocument<Pet>> {
     const user = await UserCollection.findOneByUsername(username);
     const userId = user!._id;
-    const pet = await PetModel.findOne({ userId });
+    const pet = await PetModel.findOne({ userId }).populate("userId");
     return pet!;
   }
 
@@ -158,9 +158,7 @@ class PetCollection {
   /**
    * Checking if duck at full health
    */
-   static async isFullHealth(
-    userId: Types.ObjectId | string,
-  ): Promise<boolean> {
+  static async isFullHealth(userId: Types.ObjectId | string): Promise<boolean> {
     const pet = await PetModel.findOne({ userId: userId });
     if (pet!.health === 100) {
       return true;

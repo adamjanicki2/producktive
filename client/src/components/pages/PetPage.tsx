@@ -25,6 +25,7 @@ const PetPage = ({
   const [items, setItems] = React.useState<StoreItem[]>([]);
   const [editing, setEditing] = React.useState(false);
   const [duckName, setDuckName] = React.useState("");
+  const [disabled, setDisabled] = React.useState(false);
 
   React.useEffect(() => {
     get(`/api/pets/${user.username}`).then((pet) => {
@@ -49,6 +50,7 @@ const PetPage = ({
   };
 
   const feedDuck = () => {
+    setDisabled(true);
     patch("/api/pets/feed").then((res) => {
       if (!res?.error) {
         const { healthDelta, coinsDelta } = res;
@@ -57,11 +59,13 @@ const PetPage = ({
       } else {
         window.alert(res.error);
       }
+      setDisabled(false);
     });
   };
 
   const saveName = () => {
-    duckName !== pet.petName && duckName.trim() !== "" &&
+    duckName !== pet.petName &&
+      duckName.trim() !== "" &&
       patch("/api/pets/updateName", { petName: duckName }).then(() => {
         setPet({ ...pet, petName: duckName });
       });
@@ -79,38 +83,41 @@ const PetPage = ({
     <div className="flex flex-column primary-text items-center">
       <div className="flex flex-row items-center justify-center">
         {editing ? (
-            <TextField
-              sx={{mt: 3, mb: 3}}
-              value={duckName}
-              onChange={(e) => setDuckName(e.target.value)}
-            />
-          ) : (
-            <h1 className="tc f-subheadline mv3 ph4 pv2 ba b--primary-text i">{pet.petName}</h1>
-          )}
+          <TextField
+            sx={{ mt: 3, mb: 3 }}
+            value={duckName}
+            onChange={(e) => setDuckName(e.target.value)}
+          />
+        ) : (
+          <h1 className="tc f-subheadline mv3 ph4 pv2 ba b--primary-text i">
+            {pet.petName}
+          </h1>
+        )}
 
         {editing ? (
-            <div className="mv2">
-              <Button 
-                  variant="contained"
-                  sx={{ml: 2}}
-                  onClick={() => {
-                    if (editing) {
-                      saveName();
-                    }
-                    setEditing(!editing);
-                  }}
-                > 
-                  Save 
-                </Button>
+          <div className="mv2">
+            <Button
+              variant="contained"
+              sx={{ ml: 2 }}
+              onClick={() => {
+                if (editing) {
+                  saveName();
+                }
+                setEditing(!editing);
+              }}
+            >
+              Save
+            </Button>
           </div>
         ) : (
-            <IconButton>
-                <Edit 
-                className="black" 
-                onClick={() => {
-                    setEditing(!editing);
-                  }} />
-              </IconButton>
+          <IconButton>
+            <Edit
+              className="black"
+              onClick={() => {
+                setEditing(!editing);
+              }}
+            />
+          </IconButton>
         )}
       </div>
 
@@ -124,11 +131,12 @@ const PetPage = ({
           variant="contained"
           style={MUI_BUTTON_STYLE}
           onClick={feedDuck}
+          disabled={disabled}
         >
           Feed Me!
         </Button>
       </div>
-      
+
       <div className="ba bw1 br2 b--near-black w-50">
         <div
           className={
@@ -142,9 +150,13 @@ const PetPage = ({
         ></div>
       </div>
       <div className="m-auto w-fc">
-        <Duck size={450} beakColor={beakColor} bodyColor={bodyColor} petHealth={pet.health} />
+        <Duck
+          size={450}
+          beakColor={beakColor}
+          bodyColor={bodyColor}
+          petHealth={pet.health}
+        />
       </div>
-      
 
       <div className="flex flex-row items-center justify-center">
         <h3 className="mr2">Beak Color:</h3>

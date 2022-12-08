@@ -15,16 +15,17 @@ import "./app.css";
 import { get, post, del } from "./util";
 import type { User } from "./util";
 
-
 const { useState, useEffect } = React;
 
 const App = () => {
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    get("/api/users/session").then((user) => {
-      user && setUser(user.user);
-    });
+    const setup = async () => {
+      const res = await get("/api/users/session");
+      res && setUser(res.user);
+    };
+    setup();
   }, []);
 
   const updateUser = (user: User) => {
@@ -54,17 +55,19 @@ const App = () => {
     return false;
   };
 
-  const logout = () => {
-    del("/api/users/session").then(() => {
-      setUser(undefined);
-    });
+  const logout = async () => {
+    await del("/api/users/session");
+    setUser(undefined);
   };
 
   return (
     <BrowserRouter>
       <Nav user={user} logout={logout} />
       <Routes>
-        <Route path="/" element={<HomePage user={user} updateUser={updateUser}/>} />
+        <Route
+          path="/"
+          element={<HomePage user={user} updateUser={updateUser} />}
+        />
         <Route path="/about/" element={<AboutPage />} />
         <Route
           path="/login/"
@@ -88,8 +91,18 @@ const App = () => {
             element={<SettingsPage user={user} updateUser={updateUser} />}
           />
         )}
-        {user && <Route path="/store/" element={<StorePage user={user} updateUser={updateUser}/>} />}
-        {user && <Route path="/list/:listId" element={<ListPage user={user} updateUser={updateUser}/>} />}
+        {user && (
+          <Route
+            path="/store/"
+            element={<StorePage user={user} updateUser={updateUser} />}
+          />
+        )}
+        {user && (
+          <Route
+            path="/list/:listId"
+            element={<ListPage user={user} updateUser={updateUser} />}
+          />
+        )}
         <Route path="/lists/" element={<ListViewPage />} />
         {/* Make sure this is the last route */}
         <Route path="*" element={<NotFoundPage />} />
