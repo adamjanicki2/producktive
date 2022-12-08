@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import moment from 'moment'
+import moment from "moment";
 import {
   Button,
   IconButton,
@@ -17,7 +17,7 @@ import {
   post,
   del,
   patch,
-  User
+  User,
 } from "../../util";
 import Markdown from "../modules/Markdown";
 import NotFound from "./NotFoundPage";
@@ -48,25 +48,26 @@ const ListPage = ({
   });
 
   useEffect(() => {
-    get(`/api/lists/${listId}`).then((list) => {
+    const setup = async () => {
+      const list = await get(`/api/lists/${listId}`);
       if (list.error) {
         setList(null);
         setTasks(null);
       } else {
         setList(list);
-        get(`/api/tasks/${listId}`).then((tasks) => {
-          if (tasks?.error) {
-            setTasks([]);
-            window.alert("Error getting tasks");
-          } else {
-            setTasks(tasks);
-          }
-        });
+        const tasks = await get(`/api/tasks/${listId}`);
+        if (tasks?.error) {
+          setTasks([]);
+          window.alert("Error getting tasks");
+        } else {
+          setTasks(tasks);
+        }
       }
-    });
+    };
+    setup();
   }, [listId]);
 
-  const submitTask = () => {
+  const submitTask = async () => {
     const taskToSubmit = newTask.deadline
       ? {
           listId,
@@ -75,50 +76,46 @@ const ListPage = ({
           deadline: newTask.deadline,
         }
       : { listId, content: newTask.content, difficulty: newTask.difficulty };
-    post(`/api/tasks/`, taskToSubmit).then((task) => {
-      if (task?.error) {
-        window.alert(task.error);
-      } else {
-        setTasks([...(tasks || []), task]);
-        setNewTask({ ...DEFAULT_TASK });
-      }
-    });
-  };
-
-  const deleteTask = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this task?")) {
-      del(`/api/tasks/${id}`).then((task) => {
-        if (task?.error) {
-          return window.alert(task.error);
-        } else {
-          setTasks(tasks.filter((t) => t._id !== id));
-        }
-      });
+    const task = await post(`/api/tasks/`, taskToSubmit);
+    if (task?.error) {
+      window.alert(task.error);
+    } else {
+      setTasks([...(tasks || []), task]);
+      setNewTask({ ...DEFAULT_TASK });
     }
   };
 
-  const completeTask = (id: string) => {
-    patch(`/api/tasks/complete/${id}`).then((res) => {
-      if (res?.error) {
-        return window.alert(res.error);
+  const deleteTask = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this task?")) {
+      const task = await del(`/api/tasks/${id}`);
+      if (task?.error) {
+        window.alert(task.error);
       } else {
-        setTasks(
-          tasks.map((t) => (t._id === id ? { ...t, completed: true } : t))
-        );
-        const { coinsDelta } = res;
-        updateUser({ ...user, coins: user.coins + coinsDelta });
+        setTasks(tasks.filter((t) => t._id !== id));
       }
-    });
+    }
   };
 
-  const editTask = (id: string, content: string) => {
-    patch(`/api/tasks/${id}`, { content }).then((res) => {
-      if (res?.error) {
-        return window.alert(res.error);
-      } else {
-        setTasks(tasks.map((t) => (t._id === id ? { ...t, content } : t)));
-      }
-    });
+  const completeTask = async (id: string) => {
+    const res = await patch(`/api/tasks/complete/${id}`);
+    if (res?.error) {
+      window.alert(res.error);
+    } else {
+      setTasks(
+        tasks.map((t) => (t._id === id ? { ...t, completed: true } : t))
+      );
+      const { coinsDelta } = res;
+      updateUser({ ...user, coins: user.coins + coinsDelta });
+    }
+  };
+
+  const editTask = async (id: string, content: string) => {
+    const res = await patch(`/api/tasks/${id}`, { content });
+    if (res?.error) {
+      return window.alert(res.error);
+    } else {
+      setTasks(tasks.map((t) => (t._id === id ? { ...t, content } : t)));
+    }
   };
 
   if (list === undefined) return <></>;
@@ -188,7 +185,10 @@ const ListPage = ({
           </Button>
         </div>
         <Button
-          onClick={() => { submitTask(); setNewTask({ ...newTask, deadline: null });}}
+          onClick={() => {
+            submitTask();
+            setNewTask({ ...newTask, deadline: null });
+          }}
           style={MUI_BUTTON_STYLE}
           variant="contained"
         >
@@ -236,9 +236,9 @@ export const TaskNode = ({
         </Markdown>
       )}{" "}
       <div className="flex flex-row items-center">
-        {!task.completed && editTask && editing? (
+        {!task.completed && editTask && editing ? (
           <div className="mv2">
-            <Button 
+            <Button
               variant="contained"
               onClick={() => {
                 if (editing) {
@@ -246,17 +246,18 @@ export const TaskNode = ({
                 }
                 setEditing(!editing);
               }}
-            > 
-              Save 
+            >
+              Save
             </Button>
           </div>
         ) : (
           <IconButton>
-            <Edit 
-            className="black" 
-            onClick={() => {
+            <Edit
+              className="black"
+              onClick={() => {
                 setEditing(!editing);
-              }} />
+              }}
+            />
           </IconButton>
         )}
         {!task.completed && completeTask && (
@@ -278,7 +279,9 @@ export const TaskNode = ({
         <span className={DIFF_TO_COLOR[task.difficulty] + " b i"}>
           {task.difficulty}
         </span>{" "}
-        {task.deadline && <span>Complete by: {moment(task.deadline).format('MM/DD/YYYY')}</span>}
+        {task.deadline && (
+          <span>Complete by: {moment(task.deadline).format("MM/DD/YYYY")}</span>
+        )}
       </span>
     </div>
   );

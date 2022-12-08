@@ -16,7 +16,7 @@ const StoreItemCard = ({
   own,
   price,
   purchase,
-  updateUser
+  updateUser,
 }: {
   user?: User;
   item: StoreItem;
@@ -25,20 +25,19 @@ const StoreItemCard = ({
   purchase: () => void;
   updateUser: (user: User) => void;
 }) => {
-  const purchaseItem = () => {
-    post("/api/items/", {
+  const purchaseItem = async () => {
+    const res = await post("/api/items/", {
       type: item.type,
       identifier: item.identifier,
       properties: item.properties,
-    }).then((res) => {
-      if (res?.error) {
-        window.alert(res.error);
-      }else{
-        const { coinsDelta } = res;
-        purchase();
-        updateUser({ ...user, coins: user.coins + coinsDelta });
-      }
     });
+    if (res?.error) {
+      window.alert(res.error);
+    } else {
+      const { coinsDelta } = res;
+      purchase();
+      updateUser({ ...user, coins: user.coins + coinsDelta });
+    }
   };
 
   return (

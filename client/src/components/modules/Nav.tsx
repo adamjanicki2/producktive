@@ -1,11 +1,12 @@
 import React from "react";
 import logo from "../../logo.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import type { User } from "../../util";
 
 const LINK_CLASS_NAME = "no-underline primary-text dim f3 fw3 mh2";
 
 const Nav = ({ user, logout }: { user?: User; logout: () => void }) => {
+  const navigate = useNavigate();
   return (
     <nav className="bg-primary w-100 ma0 pa0">
       <div className="flex flex-row items-center justify-between ml3">
@@ -17,7 +18,7 @@ const Nav = ({ user, logout }: { user?: User; logout: () => void }) => {
           <h1 className="i">PRODUCKTIVE</h1>
         </Link>
         <div className="flex flex-row items-center justify-around mr3">
-        {user && (
+          {user && (
             <Link className={LINK_CLASS_NAME} to="/">
               Home
             </Link>
@@ -43,9 +44,15 @@ const Nav = ({ user, logout }: { user?: User; logout: () => void }) => {
             </Link>
           )}
           {user ? (
-            <Link className={LINK_CLASS_NAME + " pointer"} onClick={logout} to= "/">
+            <div
+              className={LINK_CLASS_NAME + " pointer"}
+              onClick={() => {
+                logout();
+                navigate("/");
+              }}
+            >
               Logout
-            </Link>
+            </div>
           ) : (
             <Link className={LINK_CLASS_NAME} to="/login/">
               Login
