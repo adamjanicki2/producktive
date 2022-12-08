@@ -67,7 +67,7 @@ const ListPage = ({
     setup();
   }, [listId]);
 
-  const submitTask = () => {
+  const submitTask = async () => {
     const taskToSubmit = newTask.deadline
       ? {
           listId,
@@ -76,50 +76,46 @@ const ListPage = ({
           deadline: newTask.deadline,
         }
       : { listId, content: newTask.content, difficulty: newTask.difficulty };
-    post(`/api/tasks/`, taskToSubmit).then((task) => {
-      if (task?.error) {
-        window.alert(task.error);
-      } else {
-        setTasks([...(tasks || []), task]);
-        setNewTask({ ...DEFAULT_TASK });
-      }
-    });
-  };
-
-  const deleteTask = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this task?")) {
-      del(`/api/tasks/${id}`).then((task) => {
-        if (task?.error) {
-          return window.alert(task.error);
-        } else {
-          setTasks(tasks.filter((t) => t._id !== id));
-        }
-      });
+    const task = await post(`/api/tasks/`, taskToSubmit);
+    if (task?.error) {
+      window.alert(task.error);
+    } else {
+      setTasks([...(tasks || []), task]);
+      setNewTask({ ...DEFAULT_TASK });
     }
   };
 
-  const completeTask = (id: string) => {
-    patch(`/api/tasks/complete/${id}`).then((res) => {
-      if (res?.error) {
-        return window.alert(res.error);
+  const deleteTask = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this task?")) {
+      const task = await del(`/api/tasks/${id}`);
+      if (task?.error) {
+        window.alert(task.error);
       } else {
-        setTasks(
-          tasks.map((t) => (t._id === id ? { ...t, completed: true } : t))
-        );
-        const { coinsDelta } = res;
-        updateUser({ ...user, coins: user.coins + coinsDelta });
+        setTasks(tasks.filter((t) => t._id !== id));
       }
-    });
+    }
   };
 
-  const editTask = (id: string, content: string) => {
-    patch(`/api/tasks/${id}`, { content }).then((res) => {
-      if (res?.error) {
-        return window.alert(res.error);
-      } else {
-        setTasks(tasks.map((t) => (t._id === id ? { ...t, content } : t)));
-      }
-    });
+  const completeTask = async (id: string) => {
+    const res = await patch(`/api/tasks/complete/${id}`);
+    if (res?.error) {
+      window.alert(res.error);
+    } else {
+      setTasks(
+        tasks.map((t) => (t._id === id ? { ...t, completed: true } : t))
+      );
+      const { coinsDelta } = res;
+      updateUser({ ...user, coins: user.coins + coinsDelta });
+    }
+  };
+
+  const editTask = async (id: string, content: string) => {
+    const res = await patch(`/api/tasks/${id}`, { content });
+    if (res?.error) {
+      return window.alert(res.error);
+    } else {
+      setTasks(tasks.map((t) => (t._id === id ? { ...t, content } : t)));
+    }
   };
 
   if (list === undefined) return <></>;

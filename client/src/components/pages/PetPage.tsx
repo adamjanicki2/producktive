@@ -28,47 +28,46 @@ const PetPage = ({
   const [disabled, setDisabled] = React.useState(false);
 
   React.useEffect(() => {
-    get(`/api/pets/${user.username}`).then((pet) => {
+    const setup = async () => {
+      const pet = await get(`/api/pets/${user.username}`);
       if (pet) {
         setPet(pet);
         setbeakColor(pet.itemsOn.beak);
         setbodyColor(pet.itemsOn.duck);
         setDuckName(pet.petName);
       }
-    });
-    get(`/api/items/`).then((items) => {
+      const items = await get(`/api/items/`);
       items && setItems(items);
-    });
+    };
+    setup();
   }, [user.username]);
 
-  const saveDuck = () => {
-    patch("/api/pets/updateItemsOn", { duck: bodyColor, beak: beakColor }).then(
-      (duck) => {
-        duck && setPet(duck);
-      }
-    );
-  };
-
-  const feedDuck = () => {
-    setDisabled(true);
-    patch("/api/pets/feed").then((res) => {
-      if (!res?.error) {
-        const { healthDelta, coinsDelta } = res;
-        setPet({ ...pet, health: pet.health + healthDelta });
-        updateUser({ ...user, coins: user.coins + coinsDelta });
-      } else {
-        window.alert(res.error);
-      }
-      setDisabled(false);
+  const saveDuck = async () => {
+    const duck = await patch("/api/pets/updateItemsOn", {
+      duck: bodyColor,
+      beak: beakColor,
     });
+    duck && setPet(duck);
   };
 
-  const saveName = () => {
-    duckName !== pet.petName &&
-      duckName.trim() !== "" &&
-      patch("/api/pets/updateName", { petName: duckName }).then(() => {
-        setPet({ ...pet, petName: duckName });
-      });
+  const feedDuck = async () => {
+    setDisabled(true);
+    const res = await patch("/api/pets/feed");
+    if (!res?.error) {
+      const { healthDelta, coinsDelta } = res;
+      setPet({ ...pet, health: pet.health + healthDelta });
+      updateUser({ ...user, coins: user.coins + coinsDelta });
+    } else {
+      window.alert(res.error);
+    }
+    setDisabled(false);
+  };
+
+  const saveName = async () => {
+    if (duckName !== pet.petName && duckName.trim() !== "") {
+      await patch("/api/pets/updateName", { petName: duckName });
+      setPet({ ...pet, petName: duckName });
+    }
   };
 
   const beakOptions = items

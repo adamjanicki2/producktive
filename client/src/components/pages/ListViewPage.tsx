@@ -13,46 +13,44 @@ const ListView = () => {
   });
 
   React.useEffect(() => {
-    get("/api/lists/all").then((lists) => {
-      if (lists?.error) {
+    const setup = async () => {
+      const lists = await get("/api/lists/all");
+      if (lists.error) {
         setLists([]);
-        window.alert("Error getting lists");
       } else {
         setLists(lists);
       }
-    });
+    };
+    setup();
   }, []);
 
-  const submitList = () => {
-    post("/api/lists/", { title: newList.title }).then((list) => {
+  const submitList = async () => {
+    const list = await post("/api/lists/", { title: newList.title });
+    if (list?.error) {
+      window.alert(list.error);
+    } else {
+      setLists([...(lists || []), list]);
+    }
+  };
+
+  const deleteList = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this list?")) {
+      const list = await del(`/api/lists/${id}`);
       if (list?.error) {
         window.alert(list.error);
       } else {
-        setLists([...(lists || []), list]);
+        setLists(lists.filter((l) => l._id !== id));
       }
-    });
-  };
-
-  const deleteList = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this list?")) {
-      del(`/api/lists/${id}`).then((list) => {
-        if (list?.error) {
-          window.alert(list.error);
-        } else {
-          setLists(lists.filter((l) => l._id !== id));
-        }
-      });
     }
   };
 
   const editListName = (id: string, title: string) => {
-    patch(`/api/lists/${id}`, { title }).then((list) => {
-      if (list?.error) {
-        window.alert(list.error);
-      } else {
-        setLists(lists.map((l) => (l._id === id ? list : l)));
-      }
-    });
+    const list = await patch(`/api/lists/${id}`, { title });
+    if (list?.error) {
+      window.alert(list.error);
+    } else {
+      setLists(lists.map((l) => (l._id === id ? list : l)));
+    }
   };
 
   return (
@@ -76,7 +74,10 @@ const ListView = () => {
           onChange={(e) => setNewList({ ...newList, title: e.target.value })}
         />
         <Button
-          onClick={() => {submitList(); setNewList({ ...newList, title: ''});}}
+          onClick={() => {
+            submitList();
+            setNewList({ ...newList, title: "" });
+          }}
           style={MUI_BUTTON_STYLE}
           variant="contained"
         >
@@ -111,28 +112,29 @@ const ListNode = ({
           {title}
         </Link>
       )}{" "}
-      {editing? (
+      {editing ? (
         <div className="mv2">
-          <Button 
+          <Button
             variant="contained"
-            sx={{ml: 2}}
+            sx={{ ml: 2 }}
             onClick={() => {
               if (editing) {
                 editListName(list._id, title);
               }
               setEditing(!editing);
             }}
-          > 
-            Save 
+          >
+            Save
           </Button>
         </div>
       ) : (
         <IconButton>
-          <Edit 
-          className="black" 
-          onClick={() => {
+          <Edit
+            className="black"
+            onClick={() => {
               setEditing(!editing);
-            }} />
+            }}
+          />
         </IconButton>
       )}
       <Tooltip arrow title="Delete">

@@ -14,9 +14,11 @@ const StorePage = ({
   const [owned, setOwned] = React.useState<StoreItem[]>([]);
 
   React.useEffect(() => {
-    get(`/api/items/`).then((items) => {
+    const setup = async () => {
+      const items = await get("/api/items/");
       items && setOwned(items);
-    });
+    };
+    setup();
   }, []);
 
   // how to do this without a useEffect?
@@ -45,12 +47,11 @@ const StorePage = ({
   const ownedString = ownedList;
 
   //updates Owned List so user doesn't have to reload page
-  const purchase = () => {
-    get(`/api/items/`).then((res) => {
-      if (!res?.error) {
-        res && setOwned(res);
-      }
-    });
+  const purchase = async () => {
+    const res = await get("/api/items/");
+    if (!res?.error) {
+      res && setOwned(res);
+    }
   };
 
   //dividing store between beak and duck
@@ -66,7 +67,9 @@ const StorePage = ({
     <div>
       <div className="flex flex-column primary-text">
         <h1 className="tc f-subheadline ma0 pa0 primary-text">Store</h1>
-        <h2 className="tc f1 lh-copy ma0 pt3 primary-text">Coins: {user.coins}</h2>
+        <h2 className="tc f1 lh-copy ma0 pt3 primary-text">
+          Coins: {user.coins}
+        </h2>
       </div>
       <Box className="ma4" sx={{ width: "100%" }}>
         <h1 className="mr2 primary-text">Beak Color: </h1>
@@ -80,25 +83,25 @@ const StorePage = ({
           {beakOptions.map((item) =>
             ownedString.includes(item.identifier) ? (
               <Grid item xs={1.7}>
-                <StoreItemCard 
-                 user={user} 
-                 item={item} 
-                 own={true} 
-                 price={200}
-                 purchase={purchase}
-                 updateUser={updateUser}
-                 />
+                <StoreItemCard
+                  user={user}
+                  item={item}
+                  own={true}
+                  price={200}
+                  purchase={purchase}
+                  updateUser={updateUser}
+                />
               </Grid>
             ) : (
               <Grid item xs={1.7}>
-                <StoreItemCard 
-                 user={user} 
-                 item={item} 
-                 own={false} 
-                 price={200}
-                 purchase={purchase}
-                 updateUser={updateUser}
-                 />
+                <StoreItemCard
+                  user={user}
+                  item={item}
+                  own={false}
+                  price={200}
+                  purchase={purchase}
+                  updateUser={updateUser}
+                />
               </Grid>
             )
           )}
@@ -117,25 +120,25 @@ const StorePage = ({
           {duckOptions.map((item) =>
             ownedString.includes(item.identifier) ? (
               <Grid item xs={1.7}>
-                 <StoreItemCard 
-                 user={user} 
-                 item={item} 
-                 own={true} 
-                 price={250} 
-                 purchase={purchase}
-                 updateUser={updateUser}
-                 />
+                <StoreItemCard
+                  user={user}
+                  item={item}
+                  own={true}
+                  price={250}
+                  purchase={purchase}
+                  updateUser={updateUser}
+                />
               </Grid>
             ) : (
               <Grid item xs={1.7}>
-                 <StoreItemCard 
-                 user={user} 
-                 item={item} 
-                 own={false} 
-                 price={250} 
-                 purchase={purchase}
-                 updateUser={updateUser}
-                 />
+                <StoreItemCard
+                  user={user}
+                  item={item}
+                  own={false}
+                  price={250}
+                  purchase={purchase}
+                  updateUser={updateUser}
+                />
               </Grid>
             )
           )}
