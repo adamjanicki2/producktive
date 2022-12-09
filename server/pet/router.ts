@@ -76,7 +76,7 @@ router.get(
   async (req: Request, res: Response) => {
     const foodPrice = 15; 
     const feedAmount = await PetCollection.calculateAmount((req.session as any).userId, foodPrice);
-    return res.status(200).json({amount: feedAmount});
+    return res.status(200).json({ amount: feedAmount });
   }
 
 );
