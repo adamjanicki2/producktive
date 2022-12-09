@@ -26,6 +26,7 @@ import { DesktopDatePicker as DatePicker } from "@mui/x-date-pickers/DesktopDate
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { CheckCircleOutline, Edit } from "@mui/icons-material";
+import SideNav from "../modules/SideNav";
 
 const DEFAULT_TASK: Partial<Task> = {
   content: "",
@@ -58,7 +59,7 @@ const ListPage = ({
         const tasks = await get(`/api/tasks/${listId}`);
         if (tasks?.error) {
           setTasks([]);
-          window.alert("Error getting tasks");
+          // window.alert("Error getting tasks");
         } else {
           setTasks(tasks);
         }
@@ -119,81 +120,91 @@ const ListPage = ({
   };
 
   if (list === undefined) return <></>;
-  if (list === null) return <NotFound />;
   return (
-    <div className="flex flex-column primary-text">
-      <h1 className="tc f-subheadline ma0 pa0 ">{list.title}</h1>
-      {tasks?.length && <h2 className="tc mh4">Tasks ({tasks.length})</h2>}
-      <div className="flex flex-column w-70 m-auto">
-        {!tasks?.length && <h3>You do not have any tasks on this list!</h3>}
-        {tasks?.map((task, index) => (
-          <TaskNode
-            key={`task${index}`}
-            task={task}
-            deleteTask={deleteTask}
-            completeTask={completeTask}
-            editTask={editTask}
-          />
-        ))}
-        <hr />
-        <TextField
-          placeholder="Write a new task (markdown enabled!)"
-          className="bg-near-white mv2"
-          value={newTask.content}
-          onChange={(e) => setNewTask({ ...newTask, content: e.target.value })}
-        />
-        <Select
-          value={newTask.difficulty}
-          onChange={(e) =>
-            setNewTask({
-              ...newTask,
-              difficulty: e.target.value as Task["difficulty"],
-            })
-          }
-          className="bg-near-white mv2"
-        >
-          <MenuItem value="easy">Easy</MenuItem>
-          <MenuItem value="medium">Medium</MenuItem>
-          <MenuItem value="hard">Hard</MenuItem>
-        </Select>
-        <div className="flex flex-row items-center m-auto">
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              minDate={new Date()}
+    <div className="flex flex-row w-100">
+      <SideNav />
+      <div className="flex flex-column primary-text w-80">
+        <h1 className="tc f-subheadline ma0 pa0 ">
+          {list?.title ?? "Select or Create a List"}
+        </h1>
+        {tasks?.length && <h2 className="tc mh4">Tasks ({tasks.length})</h2>}
+        {list && (
+          <div className="flex flex-column w-70 m-auto">
+            {!tasks?.length && <h3>You do not have any tasks on this list!</h3>}
+            {tasks?.map((task, index) => (
+              <TaskNode
+                key={`task${index}`}
+                task={task}
+                deleteTask={deleteTask}
+                completeTask={completeTask}
+                editTask={editTask}
+              />
+            ))}
+            <hr />
+            <TextField
+              placeholder="Write a new task (markdown enabled!)"
               className="bg-near-white mv2"
-              inputFormat="MM/DD/YYYY"
-              value={newTask.deadline}
-              onChange={(value) => {
-                const date = (value as any).$d.toLocaleDateString() as string;
-                setNewTask({ ...newTask, deadline: date });
-              }}
-              renderInput={(params) => (
-                <TextField
-                  placeholder="leave blank for no deadline"
-                  onKeyDown={(e) => e.preventDefault()}
-                  {...params}
-                />
-              )}
+              value={newTask.content}
+              onChange={(e) =>
+                setNewTask({ ...newTask, content: e.target.value })
+              }
             />
-          </LocalizationProvider>
-          <Button
-            style={MUI_BUTTON_STYLE}
-            variant="contained"
-            onClick={() => setNewTask({ ...newTask, deadline: null })}
-          >
-            Clear
-          </Button>
-        </div>
-        <Button
-          onClick={() => {
-            submitTask();
-            setNewTask({ ...newTask, deadline: null });
-          }}
-          style={MUI_BUTTON_STYLE}
-          variant="contained"
-        >
-          Create Task
-        </Button>
+            <Select
+              value={newTask.difficulty}
+              onChange={(e) =>
+                setNewTask({
+                  ...newTask,
+                  difficulty: e.target.value as Task["difficulty"],
+                })
+              }
+              className="bg-near-white mv2"
+            >
+              <MenuItem value="easy">Easy</MenuItem>
+              <MenuItem value="medium">Medium</MenuItem>
+              <MenuItem value="hard">Hard</MenuItem>
+            </Select>
+            <div className="flex flex-row items-center m-auto">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  minDate={new Date()}
+                  className="bg-near-white mv2"
+                  inputFormat="MM/DD/YYYY"
+                  value={newTask.deadline}
+                  onChange={(value) => {
+                    const date = (
+                      value as any
+                    ).$d.toLocaleDateString() as string;
+                    setNewTask({ ...newTask, deadline: date });
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      placeholder="leave blank for no deadline"
+                      onKeyDown={(e) => e.preventDefault()}
+                      {...params}
+                    />
+                  )}
+                />
+              </LocalizationProvider>
+              <Button
+                style={MUI_BUTTON_STYLE}
+                variant="contained"
+                onClick={() => setNewTask({ ...newTask, deadline: null })}
+              >
+                Clear
+              </Button>
+            </div>
+            <Button
+              onClick={() => {
+                submitTask();
+                setNewTask({ ...newTask, deadline: null });
+              }}
+              style={MUI_BUTTON_STYLE}
+              variant="contained"
+            >
+              Create Task
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

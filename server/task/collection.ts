@@ -88,7 +88,11 @@ class TaskCollection {
     today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + NOTIF_TO_DELTA[notifPeriod]);
-    return TaskModel.find({ userId, deadline: { $gte: today, $lt: tomorrow } })
+    return TaskModel.find({
+      userId,
+      completed: false,
+      deadline: { $gte: today, $lt: tomorrow },
+    })
       .sort({ deadline: "asc" })
       .limit(limit || 20)
       .populate("parent");
@@ -98,12 +102,11 @@ class TaskCollection {
     userId: Types.ObjectId | string,
     limit?: number
   ): Promise<HydratedDocument<Task>[]> {
-    return TaskModel.find({ userId, completed: false  })
+    return TaskModel.find({ userId, completed: false })
       .sort({ deadline: "asc" })
       .limit(limit || 20)
       .populate("parent");
   }
-
 
   /**
    * Deletes a task form the collection
@@ -119,12 +122,15 @@ class TaskCollection {
   /**
    * Completes a task
    */
-  static async completeOne(userId: Types.ObjectId | string, taskId: Types.ObjectId | string): Promise<number> {
+  static async completeOne(
+    userId: Types.ObjectId | string,
+    taskId: Types.ObjectId | string
+  ): Promise<number> {
     const task = await TaskModel.findById(taskId);
     const completed = new Date();
     const deadline = task!.deadline;
     let addedCoins = 0;
-    if(deadline){
+    if (deadline) {
       addedCoins = coins(deadline, completed, task!.difficulty);
     }
     await UserCollection.updateCoins(userId, addedCoins);
@@ -143,11 +149,11 @@ class TaskCollection {
    */
   static async getTodayTask(userId: Types.ObjectId | string) {
     const today = new Date();
-    today.setHours(0,0,0,0);
+    today.setHours(0, 0, 0, 0);
     const endOfDay = new Date();
-    endOfDay.setHours(23,59,59,999);
-    return TaskModel.find({ userId, deadline: { $gte: today, $lte: endOfDay}})
-      .sort({deadline: "asc"})
+    endOfDay.setHours(23, 59, 59, 999);
+    return TaskModel.find({ userId, deadline: { $gte: today, $lte: endOfDay } })
+      .sort({ deadline: "asc" })
       .populate("parent");
   }
 }
