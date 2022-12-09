@@ -23,13 +23,29 @@ router.get("/all", async (req: Request, res: Response) => {
   return res.status(200).json(pets);
 });
 
+//calculates feedAmount for front end display
+router.get(
+  "/feedAmount",
+  [userValidator.isUserLoggedIn],
+  async (req: Request, res: Response) => {
+    const foodPrice = 15; 
+    const feedAmount = await PetCollection.calculateAmount((req.session as any).userId, foodPrice);
+    return res.status(200).json({ amount: feedAmount });
+  }
+
+);
+
+
 //creation of new pet happens in user creation
 //deletion of pet happens in user deletion
 
 //get pet by username
 router.get(
   "/:username",
-  [userValidator.isUserLoggedIn],
+  [
+    userValidator.isUserLoggedIn,
+    userValidator.isUsernameExists
+  ],
   async (req: Request, res: Response) => {
     const pet = await PetCollection.findOneByUsername(req.params.username);
     return res.status(200).json(pet);
@@ -66,7 +82,7 @@ router.patch(
         .status(200)
         .json({ healthDelta: feedAmount, coinsDelta: -feedAmount * foodPrice });
     }
-    } 
+  } 
 );
 
 //update items on
@@ -95,17 +111,6 @@ router.patch(
   }
 );
 
-// //Daily pet health update
-// router.patch(
-//   "/updateHealth",
-//   [
-//     userValidator.isUserLoggedIn,
-//   ],
-//   async (req: Request, res: Response) => {
-//     const userId = (req.session as any).userId as string;
-//     const pet = await PetCollection.updateHealth(userId);
-//     return res.status(200).json({ pet: pet, message: "Pet Health updated" });
-//   }
-// );
+
 
 export { router as petRouter };

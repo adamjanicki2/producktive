@@ -26,6 +26,7 @@ const PetPage = ({
   const [editing, setEditing] = React.useState(false);
   const [duckName, setDuckName] = React.useState("");
   const [disabled, setDisabled] = React.useState(false);
+  const [feedCount, setFeedCount] = React.useState(0);
 
   React.useEffect(() => {
     const setup = async () => {
@@ -39,7 +40,15 @@ const PetPage = ({
       const items = await get(`/api/items/`);
       items && setItems(items);
     };
+
+    const getFeedCount = async () => {
+      const feedCount = await get(`/api/pets/feedAmount`);
+      
+      feedCount && setFeedCount(feedCount.amount);
+    };
+
     setup();
+    getFeedCount();
   }, [user.username]);
 
   const saveDuck = async () => {
@@ -134,6 +143,7 @@ const PetPage = ({
         >
           Feed Me!
         </Button>
+        Feeds Needed: {feedCount}
       </div>
 
       <div className="ba bw1 br2 b--near-black w-50">

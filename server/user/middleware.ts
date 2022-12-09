@@ -211,17 +211,17 @@ const isUsernameExists = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.query.username) {
+  if (!(req.params.username as string).trim()) {
     res.status(400).json({
       error: 'Provided username must be nonempty'
     });
     return;
   }
 
-  const user = await UserCollection.findOneByUsername(req.query.username as string);
+  const user = await UserCollection.findOneByUsername(req.params.username as string);
   if(!user) {
     res.status(404).json({
-      error: `A user with username ${req.query.author as string} does not exist.`
+      error: `A user with username ${req.params.username as string} does not exist.`
     });
     return;
   }
