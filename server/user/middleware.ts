@@ -211,7 +211,7 @@ const isUsernameExists = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.params.username) {
+  if (!(req.params.username as string).trim()) {
     res.status(400).json({
       error: 'Provided username must be nonempty'
     });
