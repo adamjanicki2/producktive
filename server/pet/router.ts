@@ -23,6 +23,19 @@ router.get("/all", async (req: Request, res: Response) => {
   return res.status(200).json(pets);
 });
 
+//calculates feedAmount for front end display
+router.get(
+  "/feedAmount",
+  [userValidator.isUserLoggedIn],
+  async (req: Request, res: Response) => {
+    const foodPrice = 15; 
+    const feedAmount = await PetCollection.calculateAmount((req.session as any).userId, foodPrice);
+    return res.status(200).json({ amount: feedAmount });
+  }
+
+);
+
+
 //creation of new pet happens in user creation
 //deletion of pet happens in user deletion
 
@@ -70,18 +83,6 @@ router.patch(
         .json({ healthDelta: feedAmount, coinsDelta: -feedAmount * foodPrice });
     }
   } 
-);
-
-//calculates feedAmount for front end display
-router.get(
-  "/feedAmount",
-  [userValidator.isUserLoggedIn],
-  async (req: Request, res: Response) => {
-    const foodPrice = 15; 
-    const feedAmount = await PetCollection.calculateAmount((req.session as any).userId, foodPrice);
-    return res.status(200).json({ amount: feedAmount });
-  }
-
 );
 
 //update items on
