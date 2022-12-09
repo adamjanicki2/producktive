@@ -29,7 +29,10 @@ router.get("/all", async (req: Request, res: Response) => {
 //get pet by username
 router.get(
   "/:username",
-  [userValidator.isUserLoggedIn],
+  [
+    userValidator.isUserLoggedIn,
+    userValidator.isUsernameExists
+  ],
   async (req: Request, res: Response) => {
     const pet = await PetCollection.findOneByUsername(req.params.username);
     return res.status(200).json(pet);

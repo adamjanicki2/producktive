@@ -41,7 +41,12 @@ const Home = ({
   const searchDucks = async () => {
     const endpoint = `/api/pets/${search || "all"}`;
     const pets = await get(endpoint);
-    setDucks(search ? [pets] : pets);
+    if (pets?.error) {
+      setSearch("");
+      return window.alert(pets.error);
+    } else {
+      setDucks(search ? [pets] : pets);
+    }
     setSearch("");
   };
 
