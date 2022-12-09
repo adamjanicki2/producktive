@@ -141,8 +141,9 @@ const PetPage = ({
           onClick={feedDuck}
           disabled={disabled}
         >
-          Feed Me! Feeds Needed: {feedCount}
+          Feed Me!
         </Button>
+        Feeds Needed: {feedCount}
       </div>
 
       <div className="ba bw1 br2 b--near-black w-50">
