@@ -20,7 +20,6 @@ import {
   User,
 } from "../../util";
 import Markdown from "../modules/Markdown";
-import NotFound from "./NotFoundPage";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DesktopDatePicker as DatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";

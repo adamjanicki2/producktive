@@ -1,7 +1,7 @@
 import React from "react";
 import SideNav from "../modules/SideNav";
 
-export default () => {
+const View = () => {
   return (
     <div className="flex flex-row w-100">
       <SideNav />
@@ -11,3 +11,5 @@ export default () => {
     </div>
   );
 };
+
+export default View;
