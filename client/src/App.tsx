@@ -9,8 +9,8 @@ import LoginPage from "./components/pages/LoginPage";
 import PetPage from "./components/pages/PetPage";
 import SettingsPage from "./components/pages/SettingsPage";
 import ListPage from "./components/pages/ListPage";
-import ListViewPage from "./components/pages/ListViewPage";
 import StorePage from "./components/pages/StorePage";
+import ListViewPage from "./components/pages/ListViewPage";
 import "./app.css";
 import { get, post, del } from "./util";
 import type { User } from "./util";
@@ -103,7 +103,7 @@ const App = () => {
             element={<ListPage user={user} updateUser={updateUser} />}
           />
         )}
-        <Route path="/lists/" element={<ListViewPage />} />
+        {user && <Route path="/lists/" element={<ListViewPage />} />}
         {/* Make sure this is the last route */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
