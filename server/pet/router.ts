@@ -66,7 +66,19 @@ router.patch(
         .status(200)
         .json({ healthDelta: feedAmount, coinsDelta: -feedAmount * foodPrice });
     }
-    } 
+  } 
+);
+
+//calculates feedAmount for front end display
+router.get(
+  "/feedAmount",
+  [userValidator.isUserLoggedIn],
+  async (req: Request, res: Response) => {
+    const foodPrice = 15; 
+    const feedAmount = await PetCollection.calculateAmount((req.session as any).userId, foodPrice);
+    return res.status(200).json({amount: feedAmount});
+  }
+
 );
 
 //update items on
@@ -95,17 +107,6 @@ router.patch(
   }
 );
 
-// //Daily pet health update
-// router.patch(
-//   "/updateHealth",
-//   [
-//     userValidator.isUserLoggedIn,
-//   ],
-//   async (req: Request, res: Response) => {
-//     const userId = (req.session as any).userId as string;
-//     const pet = await PetCollection.updateHealth(userId);
-//     return res.status(200).json({ pet: pet, message: "Pet Health updated" });
-//   }
-// );
+
 
 export { router as petRouter };

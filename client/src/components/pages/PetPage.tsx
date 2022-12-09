@@ -26,6 +26,7 @@ const PetPage = ({
   const [editing, setEditing] = React.useState(false);
   const [duckName, setDuckName] = React.useState("");
   const [disabled, setDisabled] = React.useState(false);
+  const [feedAmount, setAmount] = React.useState(0);
 
   React.useEffect(() => {
     const setup = async () => {
@@ -37,6 +38,9 @@ const PetPage = ({
         setDuckName(pet.petName);
       }
       const items = await get(`/api/items/`);
+      const amount = await get(`/api/pet/feedAmount`);
+      console.log(amount);
+      feedAmount && setAmount(amount);
       items && setItems(items);
     };
     setup();
@@ -69,6 +73,14 @@ const PetPage = ({
       setPet({ ...pet, petName: duckName });
     }
   };
+
+  // const getAmount = async () => {
+  //   const res = await get("/api/pets/feedAmount");
+  //   if(!res?.error){
+  //     const { amount } = res;
+  //     console.log(amount);
+  //   }
+  // }
 
   const beakOptions = items
     .filter((item) => item.type === "beak")
@@ -132,7 +144,7 @@ const PetPage = ({
           onClick={feedDuck}
           disabled={disabled}
         >
-          Feed Me!
+          Feed Me {feedAmount}!
         </Button>
       </div>
 

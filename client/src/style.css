@@ -53,3 +53,15 @@ body {
 .w-fc {
   width: fit-content;
 }
+
+.sidenav {
+  border-right: 4px solid var(--secondary);
+}
+
+.b--primary {
+  border-color: var(--secondary);
+}
+
+.primary {
+  color: var(--secondary);
+}
