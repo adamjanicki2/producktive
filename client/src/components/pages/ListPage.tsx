@@ -351,9 +351,12 @@ export const TaskNode = ({
           {task.difficulty}
         </span>{" "}
         {task.deadline && !task.completed &&(
-          <span>Complete by: {moment(task.deadline).format("MM/DD/YYYY")} and earn {task.reward} coins!</span>
+          <span>Due by: {moment(task.deadline).format("MM/DD/YYYY")}</span>
         )}{" "}
       </span>
+      {task.deadline && !task.completed &&(
+          <span>Complete Today For {task.reward} coins!</span>
+        )}{" "}
     </div>
   );
 };
