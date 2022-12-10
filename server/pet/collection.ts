@@ -23,7 +23,7 @@ class PetCollection {
     petName: string
   ): Promise<HydratedDocument<Pet>> {
     const lastFed = new Date();
-    const health = 100;
+    const health = 90;
     const itemsOn = {
       duck: "yellow",
       beak: "orange",
