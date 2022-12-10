@@ -140,7 +140,7 @@ const PetPage = ({
       <div className="flex flex-row items-center justify-center">
         <Tooltip
           title={
-            <div className="f3 fw3">Complete tasks to earn more coins!</div>
+            <div className="f3 fw3">Complete tasks to earn more coins and feed your duck to increase health!</div>
           }
           arrow
         >
