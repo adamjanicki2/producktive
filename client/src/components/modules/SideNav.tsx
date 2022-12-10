@@ -124,6 +124,7 @@ const ListNode = ({
                   if(title.trim() !== "" && title.trim() !== list.title){
                     editListName(list._id, title);
                   } else {
+                    window.alert("The list name cannot be blank");
                     setTitle(list.title);
                   }
                 }
