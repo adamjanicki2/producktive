@@ -162,7 +162,7 @@ const PetPage = ({
         </Button>
       </div> )}
       { feedCount === 0 && pet.health !== 100 &&(<div className="flex flex-row items-center justify-center">
-          Earn More Coins to Buy Food (15 coins per unit food)
+          Complete Todos to Earn Coins and Buy Food (15 coins per unit food)
       </div> )}
       { feedCount === 0 && pet.health === 100 &&(<div className="flex flex-row items-center justify-center">
           Come Back Tomorrow to Feed Duck!
