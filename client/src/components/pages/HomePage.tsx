@@ -1,7 +1,6 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
 import { get, Pet, User } from "../../util";
 import Duck from "../modules/Duck";
 import ListSection from "../modules/ListSection";
