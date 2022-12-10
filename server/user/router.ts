@@ -117,12 +117,24 @@ router.post(
   async (req: Request, res: Response) => {
     const user = await UserCollection.addOne(req.body.email, req.body.password);
     await PetCollection.addOne(user._id, `${user.username}'s ducky`);
-    await ItemCollection.addOne(user._id, "beak", "beak_orange", {
-      color: "orange",
-    });
-    await ItemCollection.addOne(user._id, "duck", "duck_yellow", {
-      color: "yellow",
-    });
+    await ItemCollection.addOne(
+      user._id,
+      "beak",
+      "beak_orange",
+      {
+        color: "orange",
+      },
+      true
+    );
+    await ItemCollection.addOne(
+      user._id,
+      "duck",
+      "duck_yellow",
+      {
+        color: "yellow",
+      },
+      true
+    );
     (req.session as any).userId = user._id.toString();
     res.status(201).json({
       message: `Your account was created successfully. You have been logged in as ${user.username}`,

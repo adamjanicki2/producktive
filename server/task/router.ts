@@ -8,23 +8,27 @@ import { constructTaskResponse } from "./util";
 const router = express.Router();
 
 router.get("/today", async (req: Request, res: Response) => {
-  const tasks = await TaskCollection.getHomeTasks(
-    (req.session as any).userId
-  );
+  const tasks = await TaskCollection.getHomeTasks((req.session as any).userId);
   return res.status(200).json(tasks);
 });
 
 router.get("/:listId", async (req: Request, res: Response) => {
   const { listId } = req.params;
   const tasks = await TaskCollection.findByParentId(listId);
-  return res.status(200).json(tasks.map(constructTaskResponse));
+  const tasksToSend = await Promise.all(tasks.map(constructTaskResponse));
+  return res.status(200).json(tasksToSend);
 });
 
 router.post(
   "/",
   [
     userValidator.isUserLoggedIn,
-    middleware.isInfoSupplied("body", ["listId", "content", "difficulty", "deadline"]),
+    middleware.isInfoSupplied("body", [
+      "listId",
+      "content",
+      "difficulty",
+      "deadline",
+    ]),
     middleware.isInfoValidId("body", ["listId"]),
   ],
   async (req: Request, res: Response) => {
@@ -37,7 +41,8 @@ router.post(
       difficulty,
       deadline
     );
-    return res.status(201).json(constructTaskResponse(task));
+    const tasksToSend = await constructTaskResponse(task);
+    return res.status(200).json(tasksToSend);
   }
 );
 
@@ -58,7 +63,8 @@ router.patch(
   async (req: Request, res: Response) => {
     const { taskId } = req.params;
     const task = await TaskCollection.updateOne(taskId, req.body);
-    return res.status(200).json(constructTaskResponse(task));
+    const tasksToSend = await constructTaskResponse(task);
+    return res.status(200).json(tasksToSend);
   }
 );
 
@@ -81,7 +87,8 @@ router.get(
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
     const tasks = await TaskCollection.getTodayTask(userId);
-    return res.status(200).json(tasks.map(constructTaskResponse));
+    const tasksToSend = await Promise.all(tasks.map(constructTaskResponse));
+    return res.status(200).json(tasksToSend);
   }
 );
 

@@ -9,7 +9,14 @@ import {
   patch,
 } from "../../util";
 import Duck from "../modules/Duck";
-import { Button, IconButton, MenuItem, Select, TextField } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  MenuItem,
+  Select,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import { Edit } from "@mui/icons-material";
 
 const PetPage = ({
@@ -43,7 +50,7 @@ const PetPage = ({
 
     const getFeedCount = async () => {
       const feedCount = await get(`/api/pets/feedAmount`);
-      
+
       feedCount && setFeedCount(feedCount.amount);
     };
 
@@ -63,9 +70,10 @@ const PetPage = ({
     setDisabled(true);
     const res = await patch("/api/pets/feed");
     if (!res?.error) {
-      const { healthDelta, coinsDelta } = res;
+      const { healthDelta, coinsDelta, feedCount } = res;
       setPet({ ...pet, health: pet.health + healthDelta });
       updateUser({ ...user, coins: user.coins + coinsDelta });
+      setFeedCount(feedCount);
     } else {
       window.alert(res.error);
     }
@@ -97,7 +105,7 @@ const PetPage = ({
             onChange={(e) => setDuckName(e.target.value)}
           />
         ) : (
-          <h1 className="tc f-subheadline mv3 ph4 pv2 ba b--primary-text i">
+          <h1 className="tc f-subheadline mv3 ph4 pv2 i">
             {pet.petName}
           </h1>
         )}
@@ -131,9 +139,16 @@ const PetPage = ({
 
       <hr className="moon-gray b--moon-gray ba bw1 w-60" />
       <div className="flex flex-row items-center justify-center">
-        <h2 className="mr4">
-          Coins: {user.coins} | Health: {pet.health}
-        </h2>
+        <Tooltip
+          title={
+            <div className="f3 fw3">Complete tasks to earn more coins!</div>
+          }
+          arrow
+        >
+          <h2 className="mr4 pointer">
+            Coins: {user.coins} | Health: {pet.health}
+          </h2>
+        </Tooltip>
         <Button
           className="w-fc m-auto"
           variant="contained"
@@ -143,7 +158,7 @@ const PetPage = ({
         >
           Feed Me!
         </Button>
-        Feeds Needed: {feedCount}
+        <p className="pl3 ">Expected number of feeds: {feedCount}</p>
       </div>
 
       <div className="ba bw1 br2 b--near-black w-50">

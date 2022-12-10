@@ -156,6 +156,19 @@ class TaskCollection {
       .sort({ deadline: "asc" })
       .populate("parent");
   }
+
+  /**
+   * Get expected coins from a task completion
+   */
+  static async getCoin(
+    taskId: Types.ObjectId | string
+  ): Promise<number> {
+    const task = await TaskModel.findById(taskId);
+    const currDate = new Date();
+    const deadline = task!.deadline;
+    const addedCoins = coins(deadline, currDate, task!.difficulty);
+    return addedCoins;
+  }
 }
 
 export default TaskCollection;

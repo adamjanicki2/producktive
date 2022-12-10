@@ -12,9 +12,7 @@ export async function get(endpoint: string, params: Object = {}) {
 }
 
 export async function post(endpoint: string, body: Object = {}) {
-  console.log(body);
   try {
-    
     const res = await fetch(endpoint, {
       body: JSON.stringify(body),
       method: "POST",
@@ -75,7 +73,8 @@ export type Task = {
   content: string;
   difficulty: "easy" | "medium" | "hard";
   completed: boolean;
-  deadline?: string;
+  deadline: string;
+  reward: number;
   // ADD MORE PROPERTIES HERE
 };
 

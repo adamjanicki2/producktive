@@ -3,25 +3,23 @@ import {
   Card,
   CardActions,
   CardContent,
-  Typography,
   Button,
+  CardMedia,
 } from "@mui/material";
 
 import { User, StoreItem, post } from "../../util";
-import { COLOR_TO_HEX } from "./Duck";
+// import { COLOR_TO_HEX } from "./Duck";
 
 const StoreItemCard = ({
   user,
   item,
   own,
-  price,
   purchase,
   updateUser,
 }: {
   user?: User;
   item: StoreItem;
   own: boolean;
-  price: number;
   purchase: () => void;
   updateUser: (user: User) => void;
 }) => {
@@ -42,26 +40,20 @@ const StoreItemCard = ({
 
   return (
     <Card sx={{ maxWidth: 275 }}>
-      <div
-        style={{
-          height: 220,
-          width: "100%",
-          backgroundColor: COLOR_TO_HEX[item.properties.color].primary,
-        }}
-      ></div>
+      <CardMedia
+        component="img"
+        height="50%"
+        image={require('../../color_cards/' + item.type + '_' + item.properties.color  + '.png')}
+      />
       <CardContent>
         <div className="flex flex-row items-center justify-center">
-          <h3 className="mr2">{item.properties.color} </h3>
-          <br />
-          <Typography variant="h6">-- {price} coins</Typography>
+          <h3 className="mr2 primary-text">{item.properties.color.toUpperCase()}</h3>
         </div>
       </CardContent>
       <CardActions className="flex flex-row items-center justify-center">
         <div>
           {own ? (
-            <Button size="small" variant="outlined">
-              Already Own
-            </Button>
+            <p className="primary-text pa0 ma2 fw5">Already Own</p>
           ) : (
             <Button onClick={purchaseItem} size="small" variant="contained">
               Buy
