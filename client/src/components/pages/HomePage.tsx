@@ -38,6 +38,13 @@ const Home = ({
  
  return user && ducks.length > 0 ? (
    <div className="flex flex-column primary-text">
+     <Link
+       to="/about/"
+       className="tc f1 primary-text no-underline underline-hover tc"
+     >
+       How does Producktive Work?
+     </Link>
+     <hr className="near-black b--near-black ba bw1 w-80" />
      <h1 className="tc f1">Your Upcoming Tasks</h1>
      <ListSection
        user={user}
@@ -90,6 +97,13 @@ const Home = ({
    </div>
  ) : (
    <div className="flex flex-column primary-text">
+     <Link
+       to="/about/"
+       className="tc f1 primary-text no-underline underline-hover tc"
+     >
+       How does Producktive Work?
+     </Link>
+     <hr className="near-black b--near-black ba bw1 w-80" />
      <h1 className="tc f1 primary-text">Check out everyone's ducks!</h1>
      {ducks.map((duck, index) => (
        <div
