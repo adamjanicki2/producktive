@@ -8,9 +8,7 @@ import { constructTaskResponse } from "./util";
 const router = express.Router();
 
 router.get("/today", async (req: Request, res: Response) => {
-  const tasks = await TaskCollection.getHomeTasks(
-    (req.session as any).userId
-  );
+  const tasks = await TaskCollection.getHomeTasks((req.session as any).userId);
   return res.status(200).json(tasks);
 });
 
@@ -24,7 +22,12 @@ router.post(
   "/",
   [
     userValidator.isUserLoggedIn,
-    middleware.isInfoSupplied("body", ["listId", "content", "difficulty", "deadline"]),
+    middleware.isInfoSupplied("body", [
+      "listId",
+      "content",
+      "difficulty",
+      "deadline",
+    ]),
     middleware.isInfoValidId("body", ["listId"]),
   ],
   async (req: Request, res: Response) => {
