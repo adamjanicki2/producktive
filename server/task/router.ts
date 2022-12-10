@@ -15,7 +15,8 @@ router.get("/today", async (req: Request, res: Response) => {
 router.get("/:listId", async (req: Request, res: Response) => {
   const { listId } = req.params;
   const tasks = await TaskCollection.findByParentId(listId);
-  return res.status(200).json(tasks.map(constructTaskResponse));
+  const tasksToSend = await Promise.all(tasks.map(constructTaskResponse));
+  return res.status(200).json(tasksToSend);
 });
 
 router.post(

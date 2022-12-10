@@ -56,6 +56,7 @@ const ListPage = ({
       } else {
         setList(list);
         const tasks = await get(`/api/tasks/${listId}`);
+        console.log({tasks})
         if (tasks?.error) {
           setTasks([]);
           // window.alert("Error getting tasks");
@@ -119,6 +120,7 @@ const ListPage = ({
   };
 
   if (list === undefined) return <></>;
+
   return (
     <div className="flex flex-row w-100">
       <SideNav />
@@ -138,7 +140,6 @@ const ListPage = ({
                 completeTask={completeTask}
                 editTask={editTask}
               />
-              
             ))}
             <hr />
             <TextField
@@ -292,7 +293,8 @@ export const TaskNode = ({
         </span>{" "}
         {task.deadline && (
           <span>Complete by: {moment(task.deadline).format("MM/DD/YYYY")}</span>
-        )}
+        )}{" "}
+        <span>Earn {task.reward} coins!</span>
       </span>
     </div>
   );

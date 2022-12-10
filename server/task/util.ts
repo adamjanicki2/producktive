@@ -1,8 +1,9 @@
 import type { Task } from "./model";
+import TaskCollection from "./collection";
 
 export const formatDate = (date: Date) => date.toLocaleDateString();
 
-export const constructTaskResponse = (task: Task) => {
+export const constructTaskResponse = async (task: Task): Promise<Object> => {
   const def = {
     _id: task._id.toString(),
     userId: task.userId.toString(),
@@ -10,6 +11,8 @@ export const constructTaskResponse = (task: Task) => {
     difficulty: task.difficulty,
     parent: task.parent,
     completed: task.completed,
+    reward: await TaskCollection.getCoin(task._id)
   };
-  return task.deadline ? { ...def, deadline: formatDate(task.deadline) } : def;
+  return await { ...def, deadline: formatDate(task.deadline) };
 };
+
