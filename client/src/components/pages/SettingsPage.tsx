@@ -95,7 +95,7 @@ const Settings = ({
 
             <Button
               variant="contained"
-              onClick={() => deleteAccount()}
+              onClick={() => console.log("DELETE USER")}
               style={MUI_BUTTON_STYLE}
             >
               Delete Your Account
