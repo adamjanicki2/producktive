@@ -63,9 +63,10 @@ const PetPage = ({
     setDisabled(true);
     const res = await patch("/api/pets/feed");
     if (!res?.error) {
-      const { healthDelta, coinsDelta } = res;
+      const { healthDelta, coinsDelta, feedCount } = res;
       setPet({ ...pet, health: pet.health + healthDelta });
       updateUser({ ...user, coins: user.coins + coinsDelta });
+      setFeedCount(feedCount);
     } else {
       window.alert(res.error);
     }
@@ -143,7 +144,7 @@ const PetPage = ({
         >
           Feed Me!
         </Button>
-        Feeds Needed: {feedCount}
+        <p className="pl3 ">Expected number of feeds: {feedCount}</p>
       </div>
 
       <div className="ba bw1 br2 b--near-black w-50">
