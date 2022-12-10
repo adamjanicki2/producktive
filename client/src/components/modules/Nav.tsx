@@ -24,7 +24,7 @@ const Nav = ({
           <h1 className="i">PRODUCKTIVE</h1>
         </Link>
         <div className="flex flex-row items-center justify-around mr3">
-          {user && (
+          {(
             <Link className={LINK_CLASS_NAME} to="/">
               Home
             </Link>
@@ -42,6 +42,11 @@ const Nav = ({
           {user && (
             <Link className={LINK_CLASS_NAME} to="/store/">
               Store
+            </Link>
+          )}
+          {(
+            <Link className={LINK_CLASS_NAME} to="/about/">
+              About
             </Link>
           )}
           {user && (
