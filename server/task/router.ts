@@ -9,7 +9,8 @@ const router = express.Router();
 
 router.get("/today", async (req: Request, res: Response) => {
   const tasks = await TaskCollection.getHomeTasks((req.session as any).userId);
-  return res.status(200).json(tasks);
+  const tasksToSend = await Promise.all(tasks.map(constructTaskResponse));
+  return res.status(200).json(tasksToSend);
 });
 
 router.get("/:listId", async (req: Request, res: Response) => {
