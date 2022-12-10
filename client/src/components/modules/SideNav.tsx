@@ -58,7 +58,7 @@ const SideNav = () => {
       <h1 className="tc f2 ph3">Todo Lists</h1>
       <hr className="b--primary bw1 ba primary w-100" />
       {lists &&
-        lists.length !== 0 &&
+        lists.length &&
         lists.map((list, index) => (
           <div className="pa2" key={`list${index}`}>
             <ListNode
