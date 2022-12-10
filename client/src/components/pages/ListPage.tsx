@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import moment from "moment";
 import {
   Button,
@@ -223,14 +223,27 @@ export const TaskNode = ({
   deleteTask,
   completeTask,
   editTask,
+  showList,
 }: {
   task: Task;
   deleteTask?: (id: string) => void;
   completeTask?: (id: string) => void;
-  editTask?: (id: string, content: string) => void;
+  editTask?: (
+    id: string,
+    content: string,
+    difficulty: Task["difficulty"],
+    deadline: Task["deadline"]
+  ) => void;
+  showList?: boolean;
 }) => {
   const [editing, setEditing] = React.useState<boolean>(false);
   const [content, setContent] = React.useState<string>(task.content);
+  const [difficulty, setDifficulty] = React.useState<Task["difficulty"]>(
+    task.difficulty
+  );
+  const [deadline, setDeadline] = React.useState<Task["deadline"]>(
+    task.deadline
+  );
 
   return (
     <div
@@ -238,40 +251,85 @@ export const TaskNode = ({
         task.completed ? "bg-moon-gray" : "bg-near-white"
       }`}
     >
+      {showList && (
+        <Link
+          className="no-underline underline-hover f3 fw4"
+          to={`/list/${task.parent._id}`}
+        >
+          {task.parent.title}
+        </Link>
+      )}
       {editing ? (
-        <TextField
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
+        <div className="flex flex-row items-center">
+          <TextField
+            className="mr2"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              minDate={new Date()}
+              className="bg-near-white ma2"
+              inputFormat="MM/DD/YYYY"
+              value={deadline}
+              onChange={(value) => {
+                const date = (value as any).$d.toLocaleDateString() as string;
+                setDeadline(date);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  placeholder="leave blank for no deadline"
+                  onKeyDown={(e) => e.preventDefault()}
+                  {...params}
+                />
+              )}
+            />
+          </LocalizationProvider>
+          <Select
+            value={difficulty}
+            onChange={(e) =>
+              setDifficulty(e.target.value as Task["difficulty"])
+            }
+            className="bg-near-white mv2 ml2"
+          >
+            <MenuItem value="easy">Easy</MenuItem>
+            <MenuItem value="medium">Medium</MenuItem>
+            <MenuItem value="hard">Hard</MenuItem>
+          </Select>
+        </div>
       ) : (
         <Markdown>
           {task.completed ? `~~${task.content}~~` : task.content}
         </Markdown>
       )}{" "}
       <div className="flex flex-row items-center">
-        {!task.completed && editTask && editing ? (
-          <div className="mv2">
-            <Button
-              variant="contained"
-              onClick={() => {
-                if (editing) {
-                  editTask(task._id, content);
-                }
-                setEditing(!editing);
-              }}
-            >
-              Save
-            </Button>
-          </div>
-        ) : (
-          <IconButton>
-            <Edit
-              className="black"
-              onClick={() => {
-                setEditing(!editing);
-              }}
-            />
-          </IconButton>
+        {!task.completed && (
+          <>
+            {!task.completed && editTask && editing ? (
+              <div className="mv2">
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    if (editing) {
+                      editTask(task._id, content, difficulty, deadline);
+                    }
+                    setEditing(!editing);
+                  }}
+                >
+                  Save
+                </Button>
+              </div>
+            ) : (
+              <IconButton>
+                <Edit
+                  className="black"
+                  onClick={() => {
+                    setEditing(!editing);
+                  }}
+                />
+              </IconButton>
+            )}
+          </>
         )}
         {!task.completed && completeTask && (
           <Tooltip arrow title="Complete">

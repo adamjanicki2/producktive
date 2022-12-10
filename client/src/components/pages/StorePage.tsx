@@ -1,6 +1,6 @@
 import React from "react";
 import StoreItemCard from "../modules/StoreItemCard";
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Tooltip } from "@mui/material";
 
 import { User, StoreItem, get, COLOR_OPTIONS } from "../../util";
 
@@ -41,7 +41,7 @@ const StorePage = ({
 
   let ownedList = [];
   for (let i = 0; i < owned.length; i++) {
-    console.log(owned[i].identifier);
+    // console.log(owned[i].identifier);
     ownedList.push(owned[i].identifier);
   }
   const ownedString = ownedList;
@@ -67,9 +67,16 @@ const StorePage = ({
     <div>
       <div className="flex flex-column primary-text">
         <h1 className="tc f-subheadline ma0 pa0 primary-text">Store</h1>
-        <h2 className="tc f1 lh-copy ma0 pt3 primary-text">
-          Coins: {user.coins}
-        </h2>
+        <Tooltip
+          title={
+            <div className="f3 fw3">Complete tasks to earn more coins!</div>
+          }
+          arrow
+        >
+          <h2 className="tc f1 lh-copy ma0 pt3 primary-text">
+            Coins: {user.coins}
+          </h2>
+        </Tooltip>
       </div>
       <Box className="ma4" sx={{ width: "100%" }}>
         <h1 className="mr2 primary-text">Beak Color: </h1>
