@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import express from "express";
 import ListCollection from "./collection";
 import * as userValidator from "../user/middleware";
+import * as listValidator from "./middleware";
 import * as middleware from "../common/middleware";
 import TaskCollection from "../task/collection";
 
@@ -32,7 +33,12 @@ router.get(
 
 router.post(
   "/",
-  [userValidator.isUserLoggedIn, middleware.isInfoSupplied("body", ["title"])],
+  [
+    userValidator.isUserLoggedIn, 
+    listValidator.isValidTitle,
+    listValidator.isAlreadyExists,
+    middleware.isInfoSupplied("body", ["title"])
+  ],
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
     const { title } = req.body;
@@ -45,6 +51,8 @@ router.patch(
   "/:listId",
   [
     userValidator.isUserLoggedIn,
+    listValidator.isValidTitle,
+    listValidator.isAlreadyExists,
     middleware.isInfoValidId("params", ["listId"]),
     middleware.isInfoSupplied("body", ["title"]),
   ],

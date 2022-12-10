@@ -48,6 +48,7 @@ const SideNav = () => {
     const list = await patch(`/api/lists/${id}`, { title: updatedTitle });
     if (list?.error) {
       window.alert(list.error);
+
     } else {
       setLists(lists.map((l) => (l._id === id ? list : l)));
     }
@@ -78,6 +79,7 @@ const SideNav = () => {
       <Button
         onClick={() => {
           submitList();
+          setTitle("");
         }}
         style={MUI_BUTTON_STYLE}
         variant="contained"
@@ -103,7 +105,7 @@ const ListNode = ({
   return (
     <div className="flex flex-row items-center justify-between">
       {editing ? (
-        <TextField value={title} onChange={(e) => setTitle(e.target.value)} />
+        <TextField value={title}  onChange={(e) => setTitle(e.target.value)}/>
       ) : (
         <Link
           className="f2 fw4 no-underline underline-hover primary-text"
