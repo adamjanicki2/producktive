@@ -1,6 +1,6 @@
 import React from "react";
 import type { User } from "../../util";
-import { patch, MUI_BUTTON_STYLE } from "../../util";
+import { patch, MUI_BUTTON_STYLE, del } from "../../util";
 import { Button, TextField } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
@@ -36,6 +36,11 @@ const Settings = ({
     } else {
       window.alert(updatedUser?.error ?? "Error updating account information.");
     }
+  };
+
+  const deleteAccount = async () => {
+    const pet = await del(`/api/users`);
+    
   };
 
   return (
