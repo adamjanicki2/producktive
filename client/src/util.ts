@@ -74,6 +74,7 @@ export type Task = {
   difficulty: "easy" | "medium" | "hard";
   completed: boolean;
   deadline: string;
+  reward: number;
   // ADD MORE PROPERTIES HERE
 };
 

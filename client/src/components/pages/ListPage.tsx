@@ -56,6 +56,7 @@ const ListPage = ({
       } else {
         setList(list);
         const tasks = await get(`/api/tasks/${listId}`);
+        console.log({tasks})
         if (tasks?.error) {
           setTasks([]);
           // window.alert("Error getting tasks");
@@ -77,6 +78,7 @@ const ListPage = ({
         }
       : { listId, content: newTask.content, difficulty: newTask.difficulty };
     const task = await post(`/api/tasks/`, taskToSubmit);
+    console.log({task});
     if (task?.error) {
       window.alert(task.error);
     } else {
@@ -119,6 +121,7 @@ const ListPage = ({
   };
 
   if (list === undefined) return <></>;
+
   return (
     <div className="flex flex-row w-100">
       <SideNav />
@@ -349,7 +352,8 @@ export const TaskNode = ({
         </span>{" "}
         {task.deadline && (
           <span>Complete by: {moment(task.deadline).format("MM/DD/YYYY")}</span>
-        )}
+        )}{" "}
+        <span>and earn {task.reward} coins!</span>
       </span>
     </div>
   );
