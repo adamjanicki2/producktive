@@ -78,6 +78,7 @@ const ListPage = ({
         }
       : { listId, content: newTask.content, difficulty: newTask.difficulty };
     const task = await post(`/api/tasks/`, taskToSubmit);
+    console.log({task});
     if (task?.error) {
       window.alert(task.error);
     } else {
@@ -294,7 +295,7 @@ export const TaskNode = ({
         {task.deadline && (
           <span>Complete by: {moment(task.deadline).format("MM/DD/YYYY")}</span>
         )}{" "}
-        <span>Earn {task.reward} coins!</span>
+        <span>and earn {task.reward} coins!</span>
       </span>
     </div>
   );

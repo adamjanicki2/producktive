@@ -41,7 +41,8 @@ router.post(
       difficulty,
       deadline
     );
-    return res.status(201).json(constructTaskResponse(task));
+    const tasksToSend = await constructTaskResponse(task);
+    return res.status(200).json(tasksToSend);
   }
 );
 
@@ -62,7 +63,8 @@ router.patch(
   async (req: Request, res: Response) => {
     const { taskId } = req.params;
     const task = await TaskCollection.updateOne(taskId, req.body);
-    return res.status(200).json(constructTaskResponse(task));
+    const tasksToSend = await constructTaskResponse(task);
+    return res.status(200).json(tasksToSend);
   }
 );
 
@@ -85,7 +87,8 @@ router.get(
   async (req: Request, res: Response) => {
     const userId = (req.session as any).userId as string;
     const tasks = await TaskCollection.getTodayTask(userId);
-    return res.status(200).json(tasks.map(constructTaskResponse));
+    const tasksToSend = await Promise.all(tasks.map(constructTaskResponse));
+    return res.status(200).json(tasksToSend);
   }
 );
 
