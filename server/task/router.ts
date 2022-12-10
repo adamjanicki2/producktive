@@ -20,18 +20,6 @@ router.get("/:listId", async (req: Request, res: Response) => {
   return res.status(200).json(tasks.map(constructTaskResponse));
 });
 
-router.get(
-  "/coins/:taskId",
-  [
-    userValidator.isUserLoggedIn
-  ],
-  async (req: Request, res: Response) => {
-    const { taskId } = req.params;
-    const coins = await TaskCollection.getCoin(taskId);
-    return res.status(200).json({ coinsAdd: coins });
-  }
-)
-
 router.post(
   "/",
   [
