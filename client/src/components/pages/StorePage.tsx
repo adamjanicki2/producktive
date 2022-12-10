@@ -79,7 +79,7 @@ const StorePage = ({
         </Tooltip>
       </div>
       <Box className="ma4" sx={{ width: "100%" }}>
-        <h1 className="mr2 primary-text">Beak Color: </h1>
+        <h1 className="mr2 primary-text">Beak Color | 200 Coins</h1>
         <Grid
           container
           direction="row"
@@ -94,7 +94,6 @@ const StorePage = ({
                   user={user}
                   item={item}
                   own={true}
-                  price={200}
                   purchase={purchase}
                   updateUser={updateUser}
                 />
@@ -105,7 +104,6 @@ const StorePage = ({
                   user={user}
                   item={item}
                   own={false}
-                  price={200}
                   purchase={purchase}
                   updateUser={updateUser}
                 />
@@ -116,7 +114,7 @@ const StorePage = ({
       </Box>
 
       <Box className="ma4" sx={{ width: "100%" }}>
-        <h1 className="mr2 primary-text">Duck Color: </h1>
+        <h1 className="mr2 primary-text">Duck Color | 250 Coins</h1>
         <Grid
           container
           direction="row"
@@ -131,7 +129,6 @@ const StorePage = ({
                   user={user}
                   item={item}
                   own={true}
-                  price={250}
                   purchase={purchase}
                   updateUser={updateUser}
                 />
@@ -142,7 +139,6 @@ const StorePage = ({
                   user={user}
                   item={item}
                   own={false}
-                  price={250}
                   purchase={purchase}
                   updateUser={updateUser}
                 />

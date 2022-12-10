@@ -78,9 +78,10 @@ router.patch(
       return res.status(405).json({ error: "You do not have enough coins" });
     } else {
       await PetCollection.feed((req.session as any).userId, feedAmount);
+      const countFeed = await PetCollection.calculateAmount(userId, foodPrice);
       return res
         .status(200)
-        .json({ healthDelta: feedAmount, coinsDelta: -feedAmount * foodPrice });
+        .json({ healthDelta: feedAmount, coinsDelta: -feedAmount * foodPrice , feedCount: countFeed});
     }
   } 
 );
