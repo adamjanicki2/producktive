@@ -5,7 +5,13 @@ import type { User } from "../../util";
 
 const LINK_CLASS_NAME = "no-underline primary-text dim f3 fw3 mh2";
 
-const Nav = ({ user, logout }: { user?: User; logout: () => void }) => {
+const Nav = ({
+  user,
+  logout,
+}: {
+  user?: User;
+  logout: () => Promise<void>;
+}) => {
   const navigate = useNavigate();
   return (
     <nav className="bg-primary w-100 ma0 pa0">
@@ -47,8 +53,9 @@ const Nav = ({ user, logout }: { user?: User; logout: () => void }) => {
             <div
               className={LINK_CLASS_NAME + " pointer"}
               onClick={() => {
-                logout();
-                navigate("/");
+                logout().then(() => {
+                  navigate("/");
+                });
               }}
             >
               Logout
