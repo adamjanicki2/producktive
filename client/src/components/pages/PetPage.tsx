@@ -9,7 +9,14 @@ import {
   patch,
 } from "../../util";
 import Duck from "../modules/Duck";
-import { Button, IconButton, MenuItem, Select, TextField } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  MenuItem,
+  Select,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import { Edit } from "@mui/icons-material";
 
 const PetPage = ({
@@ -43,7 +50,7 @@ const PetPage = ({
 
     const getFeedCount = async () => {
       const feedCount = await get(`/api/pets/feedAmount`);
-      
+
       feedCount && setFeedCount(feedCount.amount);
     };
 
@@ -132,9 +139,16 @@ const PetPage = ({
 
       <hr className="moon-gray b--moon-gray ba bw1 w-60" />
       <div className="flex flex-row items-center justify-center">
-        <h2 className="mr4">
-          Coins: {user.coins} | Health: {pet.health}
-        </h2>
+        <Tooltip
+          title={
+            <div className="f3 fw3">Complete tasks to earn more coins!</div>
+          }
+          arrow
+        >
+          <h2 className="mr4 pointer">
+            Coins: {user.coins} | Health: {pet.health}
+          </h2>
+        </Tooltip>
         <Button
           className="w-fc m-auto"
           variant="contained"
