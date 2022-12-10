@@ -48,7 +48,6 @@ const SideNav = () => {
     const list = await patch(`/api/lists/${id}`, { title: updatedTitle });
     if (list?.error) {
       window.alert(list.error);
-
     } else {
       setLists(lists.map((l) => (l._id === id ? list : l)));
     }
@@ -122,7 +121,11 @@ const ListNode = ({
               sx={{ ml: 2 }}
               onClick={() => {
                 if (editing) {
-                  editListName(list._id, title);
+                  if(title.trim() !== "" && title.trim() !== list.title){
+                    editListName(list._id, title);
+                  } else {
+                    setTitle(list.title);
+                  }
                 }
                 setEditing(!editing);
               }}

@@ -36,7 +36,6 @@ router.post(
   [
     userValidator.isUserLoggedIn, 
     listValidator.isValidTitle,
-    listValidator.isAlreadyExists,
     middleware.isInfoSupplied("body", ["title"])
   ],
   async (req: Request, res: Response) => {
@@ -52,7 +51,6 @@ router.patch(
   [
     userValidator.isUserLoggedIn,
     listValidator.isValidTitle,
-    listValidator.isAlreadyExists,
     middleware.isInfoValidId("params", ["listId"]),
     middleware.isInfoSupplied("body", ["title"]),
   ],
