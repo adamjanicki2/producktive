@@ -103,7 +103,12 @@ const App = () => {
             element={<ListPage user={user} updateUser={updateUser} />}
           />
         )}
-        {user && <Route path="/lists/" element={<ListViewPage />} />}
+        {user && (
+          <Route
+            path="/lists/"
+            element={<ListViewPage user={user} updateUser={updateUser} />}
+          />
+        )}
         {/* Make sure this is the last route */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
