@@ -145,22 +145,29 @@ const PetPage = ({
           }
           arrow
         >
-          <h2 className="mr4 pointer">
+          <h2 className="flex flex-row items-center justify-center">
             Coins: {user.coins} | Health: {pet.health}
           </h2>
         </Tooltip>
-        <Button
+      </div>
+      { feedCount !== 0 && (<div className="flex flex-row items-center justify-center">
+      <Button
           className="w-fc m-auto"
           variant="contained"
           style={MUI_BUTTON_STYLE}
           onClick={feedDuck}
           disabled={disabled}
         >
-          Feed Me!
+          Feed Me {feedCount} Health ({feedCount * 15} coins)
         </Button>
-        <p className="pl3 ">Expected number of feeds: {feedCount}</p>
-      </div>
-
+      </div> )}
+      { feedCount === 0 && pet.health !== 100 &&(<div className="flex flex-row items-center justify-center">
+          Earn More Coins to Buy Food (15 coins per unit food)
+      </div> )}
+      { feedCount === 0 && pet.health === 100 &&(<div className="flex flex-row items-center justify-center">
+          Can't Feed Duck Past 100% Health
+      </div> )}
+      <br></br>
       <div className="ba bw1 br2 b--near-black w-50">
         <div
           className={
