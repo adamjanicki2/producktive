@@ -87,6 +87,14 @@ const Settings = ({
             >
               Change Password
             </Button>
+
+            <Button
+              variant="contained"
+              onClick={() => deleteAccount()}
+              style={MUI_BUTTON_STYLE}
+            >
+              Delete Your Account
+            </Button>
           </div>
           <div className="flex flex flex-column m-auto items-center pa3">
             <ToggleButtonGroup
