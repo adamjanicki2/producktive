@@ -105,7 +105,7 @@ const PetPage = ({
             onChange={(e) => setDuckName(e.target.value)}
           />
         ) : (
-          <h1 className="tc f-subheadline mv3 ph4 pv2 ba b--primary-text i">
+          <h1 className="tc f-subheadline mv3 ph4 pv2 i">
             {pet.petName}
           </h1>
         )}
