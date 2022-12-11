@@ -25,7 +25,7 @@ export function coins(
 ): number {
   // time difference in days
   // negative if completed late
-  const timeDelta = Math.round(Math.floor((due.valueOf() - completed.valueOf()) / (1000 * 3600 * 24)));
+  const timeDelta = Math.round(Math.floor((due.valueOf() - completed.valueOf()) / (1000 * 3600 * 24))) + 1;
   let onTimeFactor = 1.1 ** timeDelta;
   onTimeFactor = Math.min(onTimeFactor, MAX_TIME_FACTOR); //make sure they don't get too many coins for completing a task far out in advance
   const difficultyScale = DIFFICULTY_TO_REWARD[difficulty];
