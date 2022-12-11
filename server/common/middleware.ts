@@ -19,7 +19,7 @@ export const isInfoSupplied = (
     for (const field of fields) {
       if (!information[field]) {
         return res.status(400).json({
-          error: `field '${field}' not supplied in req.${reqInfoType}`,
+          error: `'${field}' required`,
         });
       }
     }
