@@ -8,6 +8,7 @@ const DIFFICULTY_TO_REWARD = {
 } as const;
 
 const MAX_TIME_FACTOR = 3;
+const MIN_TIME_FACTOR = 0.1;
 
 /**
  * Coin Algorithm
@@ -27,7 +28,7 @@ export function coins(
   // negative if completed late
   const timeDelta = Math.round(Math.floor((due.valueOf() - completed.valueOf()) / (1000 * 3600 * 24))) + 1; //+ 1 to account for UTC time difference
   let onTimeFactor = 1.1 ** timeDelta;
-  onTimeFactor = Math.min(onTimeFactor, MAX_TIME_FACTOR); //make sure they don't get too many coins for completing a task far out in advance
+  onTimeFactor = Math.max(MIN_TIME_FACTOR, Math.min(onTimeFactor, MAX_TIME_FACTOR)); //make sure they don't get too many/too few coins
   const difficultyScale = DIFFICULTY_TO_REWARD[difficulty];
   const coins = Math.round(difficultyScale * onTimeFactor);
   return coins;
