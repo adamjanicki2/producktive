@@ -4,14 +4,18 @@ import { patch, MUI_BUTTON_STYLE, del } from "../../util";
 import { Button, TextField } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { useNavigate } from "react-router";
 
 const Settings = ({
   user,
   updateUser,
+  deleteAccount,
 }: {
   user?: User;
   updateUser: (user: User) => void;
+  deleteAccount: () => Promise<void>;
 }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = React.useState<string>(user?.email);
   const [password, setPassword] = React.useState<string>("");
   const [username, setUsername] = React.useState<string>(user?.username);
@@ -36,11 +40,6 @@ const Settings = ({
     } else {
       window.alert(updatedUser?.error ?? "Error updating account information.");
     }
-  };
-
-  const deleteAccount = async () => {
-    const pet = await del(`/api/users`);
-    
   };
 
   return (
@@ -95,7 +94,7 @@ const Settings = ({
 
             <Button
               variant="contained"
-              onClick={() => console.log("DELETE USER")}
+              onClick={() => deleteAccount().then(() => navigate("/"))}
               style={MUI_BUTTON_STYLE}
             >
               Delete Your Account
