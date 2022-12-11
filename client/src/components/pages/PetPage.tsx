@@ -34,6 +34,8 @@ const PetPage = ({
   const [duckName, setDuckName] = React.useState("");
   const [disabled, setDisabled] = React.useState(false);
   const [feedCount, setFeedCount] = React.useState(0);
+  const [editingDuck, setEditingDuck] = React.useState(false);
+  const [editingBeak, setEditingBeak] = React.useState(false);
 
   React.useEffect(() => {
     const setup = async () => {
@@ -64,6 +66,9 @@ const PetPage = ({
       beak: beakColor,
     });
     duck && setPet(duck);
+    setEditingBeak(false);
+    setEditingDuck(false);
+    window.alert("Changes to your duck have been saved!");
   };
 
   const feedDuck = async () => {
@@ -94,6 +99,16 @@ const PetPage = ({
   const duckOptions = items
     .filter((item) => item.type === "duck")
     .map((item) => item.properties.color) as ColorOption[];
+
+  function editBeak(e) {
+    setbeakColor(e.target.value as ColorOption);
+    setEditingBeak(true);
+  }
+
+  function editDuck(e) {
+    setEditingDuck(true);
+    setbodyColor(e.target.value as ColorOption);
+  }
 
   return pet && user ? (
     <div className="flex flex-column primary-text items-center">
@@ -193,7 +208,7 @@ const PetPage = ({
         <h3 className="mr2">Beak Color:</h3>
         <Select
           value={beakColor}
-          onChange={(e) => setbeakColor(e.target.value as ColorOption)}
+          onChange={editBeak}
           className="bg-near-white mv2"
           variant="outlined"
         >
@@ -208,7 +223,7 @@ const PetPage = ({
         <h3 className="mr2">Duck Color:</h3>
         <Select
           value={bodyColor}
-          onChange={(e) => setbodyColor(e.target.value as ColorOption)}
+          onChange={editDuck}
           className="bg-near-white mv2"
           variant="outlined"
         >
@@ -219,14 +234,20 @@ const PetPage = ({
           ))}
         </Select>
       </div>
-      <Button
-        onClick={saveDuck}
-        className="w-fc m-auto"
-        variant="contained"
-        style={MUI_BUTTON_STYLE}
-      >
-        Save
-      </Button>
+      
+      {editingBeak || editingDuck ? (
+          <Button
+          onClick={saveDuck}
+          className="w-fc m-auto"
+          variant="contained"
+          style={MUI_BUTTON_STYLE}
+        >
+          Save
+        </Button>
+        ) : (
+          <></>
+        )}
+
     </div>
   ) : (
     <></>
