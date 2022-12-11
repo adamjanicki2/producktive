@@ -350,11 +350,13 @@ export const TaskNode = ({
         <span className={DIFF_TO_COLOR[task.difficulty] + " b i"}>
           {task.difficulty}
         </span>{" "}
-        {task.deadline && (
-          <span>Complete by: {moment(task.deadline).format("MM/DD/YYYY")}</span>
+        {task.deadline && !task.completed &&(
+          <span>Due by: {moment(task.deadline).format("MM/DD/YYYY")}</span>
         )}{" "}
-        <span>and earn {task.reward} coins!</span>
       </span>
+      {task.deadline && !task.completed &&(
+          <span>Complete Today For {task.reward} coins!</span>
+        )}{" "}
     </div>
   );
 };

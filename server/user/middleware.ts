@@ -119,7 +119,7 @@ const isAccountExists = async (
   if (user) {
     next();
   } else {
-    res.status(401).json({ error: "Invalid user login credentials provided." });
+    res.status(401).json({ error: "Account with those credentials does not exist." });
   }
 };
 
