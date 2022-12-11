@@ -1,6 +1,6 @@
 import React from "react";
 import type { User } from "../../util";
-import { patch, MUI_BUTTON_STYLE, del } from "../../util";
+import { patch, MUI_BUTTON_STYLE } from "../../util";
 import { Button, TextField } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
