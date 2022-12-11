@@ -4,14 +4,18 @@ import { patch, MUI_BUTTON_STYLE } from "../../util";
 import { Button, TextField } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { useNavigate } from "react-router";
 
 const Settings = ({
   user,
   updateUser,
+  deleteAccount,
 }: {
   user?: User;
   updateUser: (user: User) => void;
+  deleteAccount: () => Promise<void>;
 }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = React.useState<string>(user?.email);
   const [password, setPassword] = React.useState<string>("");
   const [username, setUsername] = React.useState<string>(user?.username);
@@ -86,6 +90,14 @@ const Settings = ({
               style={MUI_BUTTON_STYLE}
             >
               Change Password
+            </Button>
+
+            <Button
+              variant="contained"
+              onClick={() => deleteAccount().then(() => navigate("/"))}
+              style={MUI_BUTTON_STYLE}
+            >
+              Delete Your Account
             </Button>
           </div>
           <div className="flex flex flex-column m-auto items-center pa3">

@@ -60,6 +60,11 @@ const App = () => {
     setUser(undefined);
   };
 
+  const deleteAccount = async () => {
+    await del("/api/users");
+    setUser(undefined);
+  };
+
   return (
     <BrowserRouter>
       <Nav user={user} logout={logout} />
@@ -88,7 +93,13 @@ const App = () => {
         {user && (
           <Route
             path="/settings/"
-            element={<SettingsPage user={user} updateUser={updateUser} />}
+            element={
+              <SettingsPage
+                user={user}
+                updateUser={updateUser}
+                deleteAccount={deleteAccount}
+              />
+            }
           />
         )}
         {user && (
