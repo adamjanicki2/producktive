@@ -60,11 +60,7 @@ const ListSection = ({
     if (res?.error) {
       return window.alert(res.error);
     } else {
-      setTasks(
-        tasks.map((t) =>
-          t._id === id ? { ...t, content, difficulty, deadline } : t
-        )
-      );
+      setTasks(tasks.map((t) => (t._id === id ? res : t)));
     }
   };
 

@@ -56,7 +56,7 @@ const ListPage = ({
       } else {
         setList(list);
         const tasks = await get(`/api/tasks/${listId}`);
-        console.log({tasks})
+        console.log({ tasks });
         if (tasks?.error) {
           setTasks([]);
           // window.alert("Error getting tasks");
@@ -78,7 +78,7 @@ const ListPage = ({
         }
       : { listId, content: newTask.content, difficulty: newTask.difficulty };
     const task = await post(`/api/tasks/`, taskToSubmit);
-    console.log({task});
+    console.log({ task });
     if (task?.error) {
       window.alert(task.error);
     } else {
@@ -111,12 +111,21 @@ const ListPage = ({
     }
   };
 
-  const editTask = async (id: string, content: string) => {
-    const res = await patch(`/api/tasks/${id}`, { content });
+  const editTask = async (
+    id: string,
+    content: string,
+    difficulty: Task["difficulty"],
+    deadline: Task["deadline"]
+  ) => {
+    const res = await patch(`/api/tasks/${id}`, {
+      content,
+      difficulty,
+      date: deadline,
+    });
     if (res?.error) {
       return window.alert(res.error);
     } else {
-      setTasks(tasks.map((t) => (t._id === id ? { ...t, content } : t)));
+      setTasks(tasks.map((t) => (t._id === id ? res : t)));
     }
   };
 
@@ -350,13 +359,13 @@ export const TaskNode = ({
         <span className={DIFF_TO_COLOR[task.difficulty] + " b i"}>
           {task.difficulty}
         </span>{" "}
-        {task.deadline && !task.completed &&(
+        {task.deadline && !task.completed && (
           <span>Due by: {moment(task.deadline).format("MM/DD/YYYY")}</span>
         )}{" "}
       </span>
-      {task.deadline && !task.completed &&(
-          <span>Complete Today For {task.reward} coins!</span>
-        )}{" "}
+      {task.deadline && !task.completed && (
+        <span>Complete Today For {task.reward} coins!</span>
+      )}{" "}
     </div>
   );
 };
