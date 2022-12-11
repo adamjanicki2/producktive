@@ -78,6 +78,7 @@ const SideNav = () => {
       <Button
         onClick={() => {
           submitList();
+          setTitle("");
         }}
         style={MUI_BUTTON_STYLE}
         variant="contained"
@@ -103,7 +104,7 @@ const ListNode = ({
   return (
     <div className="flex flex-row items-center justify-between">
       {editing ? (
-        <TextField value={title} onChange={(e) => setTitle(e.target.value)} />
+        <TextField value={title}  onChange={(e) => setTitle(e.target.value)}/>
       ) : (
         <Link
           className="f2 fw4 no-underline underline-hover primary-text"
@@ -120,7 +121,12 @@ const ListNode = ({
               sx={{ ml: 2 }}
               onClick={() => {
                 if (editing) {
-                  editListName(list._id, title);
+                  if(title.trim() !== "" && title.trim() !== list.title){
+                    editListName(list._id, title);
+                  } else {
+                    window.alert("The list name cannot be blank");
+                    setTitle(list.title);
+                  }
                 }
                 setEditing(!editing);
               }}
