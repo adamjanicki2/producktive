@@ -204,6 +204,7 @@ const PetPage = ({
         />
       </div>
 
+    <div className="flex flex-row items-center justify-center">
       <div className="flex flex-row items-center justify-center">
         <h3 className="mr2">Beak Color:</h3>
         <Select
@@ -220,7 +221,7 @@ const PetPage = ({
         </Select>
       </div>
       <div className="flex flex-row items-center justify-center">
-        <h3 className="mr2">Duck Color:</h3>
+        <h3 className="mr2 ml3">Duck Color:</h3>
         <Select
           value={bodyColor}
           onChange={editDuck}
@@ -234,19 +235,22 @@ const PetPage = ({
           ))}
         </Select>
       </div>
-      
-      {editingBeak || editingDuck ? (
+
+      <div className="ml3">
+        {editingBeak || editingDuck ? (
           <Button
-          onClick={saveDuck}
-          className="w-fc m-auto"
-          variant="contained"
-          style={MUI_BUTTON_STYLE}
-        >
-          Save
-        </Button>
+            onClick={saveDuck}
+            className="w-fc m-auto"
+            variant="contained"
+            style={MUI_BUTTON_STYLE}
+          >
+            Save
+          </Button>
         ) : (
           <></>
         )}
+      </div> 
+    </div>
 
     </div>
   ) : (
